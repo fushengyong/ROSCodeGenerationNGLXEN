@@ -1,0 +1,48 @@
+﻿<#@ template language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.IO" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#+
+    public abstract class RosFile
+    {
+        private string[] _rosPackageFolderNameList = { "msg", "srv", "msgs", "srvs" };
+
+        public FileInfo RosFileInfo {get; private set; }
+        public DirectoryInfo PackageDirectoryInfo { get; private set; }
+        public IEnumerable<string> FileContentLineList { get; private set; }
+        public string Namespace { get; private set; }
+        public string ClassName { get; private set; }
+        public bool HasHeader { get; private set; }
+        public bool IsMeta { get; private set; }
+        public string Type { get; private set; }
+
+        public RosFile(FileInfo file){
+            this.RosFileInfo = file;
+            SetPackageDirectoryInfo();
+            SetFileContentLineListWithoutComments();
+            this.Namespace = this.PackageDirectoryInfo.Name;
+            this.ClassName = this.RosFileInfo.Name;
+            SetType();
+        }
+
+        private void SetPackageDirectoryInfo(){
+            if(_rosPackageFolderNameList.Contains(this.RosFileInfo.Directory.Name)){
+                this.PackageDirectoryInfo = this.RosFileInfo.Directory.Parent;
+            }
+            else
+            {                       
+                this.PackageDirectoryInfo = this.RosFileInfo.Directory;
+            }
+        }
+
+        private void SetFileContentLineListWithoutComments()
+        {
+            this.FileContentLineList = File.ReadAllLines(this.RosFileInfo.FullName).Where(line => !string.IsNullOrWhiteSpace(line) && line[0] != '#');
+        }
+
+        private void SetType(){
+            Type = string.Format("{0}__{1}", Namespace, ClassName);
+        }
+    }
+#>

@@ -41,17 +41,44 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Templates\Main.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>Main.txt</LastGenOutput>
-    </Content>
-    <Content Include="Templates\Main.txt">
+    <Compile Include="_Templates\Main.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Main.tt</DependentUpon>
+    </Compile>
+    <Compile Include="_Templates\MsgFile.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MsgFile.ttinclude</DependentUpon>
+    </Compile>
+    <Compile Include="_Templates\RosFile.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>RosFile.ttinclude</DependentUpon>
+    </Compile>
+    <Compile Include="_Templates\SrvFile1.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SrvFile.ttinclude</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="_Templates\Main.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Main.cs</LastGenOutput>
     </Content>
+    <None Include="_Templates\SrvFile.ttinclude">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>SrvFile1.cs</LastGenOutput>
+    </None>
+    <None Include="_Templates\RosFile.ttinclude">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>RosFile.cs</LastGenOutput>
+    </None>
+    <None Include="_Templates\MsgFile.ttinclude">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>MsgFile.cs</LastGenOutput>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
