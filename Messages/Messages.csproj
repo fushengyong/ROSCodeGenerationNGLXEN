@@ -41,43 +41,34 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="_Templates\Helpers\FileLoader.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>FileLoader.ttinclude</DependentUpon>
+    </Compile>
     <Compile Include="_Templates\Main.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Main.tt</DependentUpon>
     </Compile>
-    <Compile Include="_Templates\MsgFile.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>MsgFile.ttinclude</DependentUpon>
-    </Compile>
-    <Compile Include="_Templates\RosFile.cs">
+    <Compile Include="_Templates\BaseClasses\RosFile.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>RosFile.ttinclude</DependentUpon>
     </Compile>
-    <Compile Include="_Templates\SrvFile1.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>SrvFile.ttinclude</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="_Templates\Helpers\FileLoader.ttinclude">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>FileLoader.cs</LastGenOutput>
+    </None>
     <Content Include="_Templates\Main.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>Main.cs</LastGenOutput>
     </Content>
-    <None Include="_Templates\SrvFile.ttinclude">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>SrvFile1.cs</LastGenOutput>
-    </None>
-    <None Include="_Templates\RosFile.ttinclude">
+    <None Include="_Templates\BaseClasses\RosFile.ttinclude">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>RosFile.cs</LastGenOutput>
-    </None>
-    <None Include="_Templates\MsgFile.ttinclude">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>MsgFile.cs</LastGenOutput>
     </None>
   </ItemGroup>
   <ItemGroup>

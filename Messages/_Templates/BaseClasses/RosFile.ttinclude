@@ -22,7 +22,7 @@
             SetPackageDirectoryInfo();
             SetFileContentLineListWithoutComments();
             this.Namespace = this.PackageDirectoryInfo.Name;
-            this.ClassName = this.RosFileInfo.Name;
+            this.ClassName = Path.GetFileNameWithoutExtension(this.RosFileInfo.Name);
             SetType();
         }
 
@@ -38,11 +38,44 @@
 
         private void SetFileContentLineListWithoutComments()
         {
-            this.FileContentLineList = File.ReadAllLines(this.RosFileInfo.FullName).Where(line => !string.IsNullOrWhiteSpace(line) && line[0] != '#');
+            this.FileContentLineList = File.ReadAllLines(this.RosFileInfo.FullName).Where(line => !string.IsNullOrWhiteSpace(line) && line[0] != '#').ToList();
         }
 
         private void SetType(){
             Type = string.Format("{0}__{1}", Namespace, ClassName);
+        }
+    }
+
+    public class MsgFile : RosFile
+    {
+        public enum ServiceMessageTypeEnum { Not = 0, Request = 1, Response = 2 }
+
+        public ServiceMessageTypeEnum ServiceMessageType { get; private set; }
+        public IDictionary<string, string> MessageFields { get; private set; }
+
+        public MsgFile(FileInfo file) : base(file){
+            this.MessageFields = ProcessMessageFields();
+        }
+
+        private IDictionary<string, string> ProcessMessageFields(){
+            IDictionary<string, string> result = new Dictionary<string, string>();
+            foreach(string line in this.FileContentLineList)
+            {
+                string[] splittedLine = line.Split(new char[0], StringSplitOptions.RemoveEmptyEntries);
+                result.Add(splittedLine[1], splittedLine[0]);
+            }  
+            return result;
+        }
+
+    }
+
+    public class SrvFile : RosFile
+    {
+        public MsgFile Response { get; private set; }
+        public MsgFile Request { get; private set; }
+
+        public SrvFile(FileInfo file) : base(file){
+
         }
     }
 #>

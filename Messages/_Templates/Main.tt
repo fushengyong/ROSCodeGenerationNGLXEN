@@ -2,8 +2,13 @@
 <#@ output extension=".cs" #>
 <#@ assembly name="System.Core" #>
 <#@ import namespace="System.Linq" #>
-<#@ import namespace="System.Text" #>
 <#@ import namespace="System.Collections.Generic" #>
-<#@ include file="MsgFile.ttinclude" #>
-<# var msgTest = new MsgFile();
-#>
+<#@ include file="Helpers\FileLoader.ttinclude" #>
+<# 
+    string rosAbsolutePath = @"C:\Users\tothc\git\ROS.NET\common_msgs";
+
+    HashSet<MsgFile> msgFileSet = new HashSet<MsgFile>();
+    HashSet<SrvFile> srvFileSet = new HashSet<SrvFile>();
+    LoadRosFiles(msgFileSet, srvFileSet, rosAbsolutePath);
+
+ #>

@@ -1,0 +1,19 @@
+﻿<#@ template language="C#" #>
+<#@ include file="..\BaseClasses\RosFile.ttinclude" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ import namespace="System.IO" #>
+<#@ import namespace="System.Linq" #>
+<#+
+    void LoadRosFiles(HashSet<MsgFile> msgFileSet, HashSet<SrvFile> srvFileSet, string path){
+        if(msgFileSet == null || srvFileSet == null || string.IsNullOrWhiteSpace(path)){
+            //exception
+            return;
+        }
+
+        HashSet<FileInfo> msgFileInfoSet = new HashSet<FileInfo>(Directory.GetFiles(path, "*.msg", SearchOption.AllDirectories).Select(filePath => new FileInfo(filePath)));
+        HashSet<FileInfo> srvFileInfoSet = new HashSet<FileInfo>(Directory.GetFiles(path, "*.srv", SearchOption.AllDirectories).Select(filePath => new FileInfo(filePath)));
+
+        msgFileSet.UnionWith(msgFileInfoSet.Select(FileInfo => new MsgFile(FileInfo)));
+        srvFileSet.UnionWith(msgFileInfoSet.Select(FileInfo => new SrvFile(FileInfo)));
+    }
+#>
