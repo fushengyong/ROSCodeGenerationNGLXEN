@@ -24,7 +24,10 @@
             this.Namespace = this.PackageDirectoryInfo.Name;
             this.ClassName = Path.GetFileNameWithoutExtension(this.RosFileInfo.Name);
             SetType();
+            ProcessFields();
         }
+
+        protected abstract void ProcessFields();
 
         private void SetPackageDirectoryInfo(){
             if(_rosPackageFolderNameList.Contains(this.RosFileInfo.Directory.Name)){
@@ -44,6 +47,18 @@
         private void SetType(){
             Type = string.Format("{0}__{1}", Namespace, ClassName);
         }
+
+        public override bool Equals(object obj)
+        {
+            RosFile item = obj as RosFile;
+
+            if (item == null)
+            {
+                return false;
+            }
+
+            return this.Type == item.Type;
+        }
     }
 
     public class MsgFile : RosFile
@@ -54,17 +69,16 @@
         public IDictionary<string, string> MessageFields { get; private set; }
 
         public MsgFile(FileInfo file) : base(file){
-            this.MessageFields = ProcessMessageFields();
         }
 
-        private IDictionary<string, string> ProcessMessageFields(){
+        protected override void ProcessFields(){
             IDictionary<string, string> result = new Dictionary<string, string>();
             foreach(string line in this.FileContentLineList)
             {
                 string[] splittedLine = line.Split(new char[0], StringSplitOptions.RemoveEmptyEntries);
                 result.Add(splittedLine[1], splittedLine[0]);
             }  
-            return result;
+            this.MessageFields = result;
         }
 
     }
@@ -75,7 +89,9 @@
         public MsgFile Request { get; private set; }
 
         public SrvFile(FileInfo file) : base(file){
+        }
 
+        protected override void ProcessFields(){
         }
     }
 #>
