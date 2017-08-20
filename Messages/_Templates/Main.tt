@@ -5,7 +5,7 @@
 <#@ import namespace="System.Collections.Generic" #>
 <#@ include file="Helpers\FileLoader.ttinclude" #>
 <# 
-    string rosAbsolutePath = @"C:\Users\tothc\git\ROS.NET\common_msgs";
+    string rosAbsolutePath = @"D:\Source\Repos\ROS.NET\common_msgs";
 
     HashSet<MsgFile> msgFileSet = new HashSet<MsgFile>();
     HashSet<SrvFile> srvFileSet = new HashSet<SrvFile>();

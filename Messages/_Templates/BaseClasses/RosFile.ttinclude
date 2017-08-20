@@ -6,7 +6,10 @@
 <#+
     public abstract class RosFile
     {
+        public const string MsgFileExtension = ".msg";
+        public const string SrvFileExtension = ".srv";
         private string[] _rosPackageFolderNameList = { "msg", "srv", "msgs", "srvs" };
+        private const char CommentLineStartingChar = '#';
 
         public FileInfo RosFileInfo {get; private set; }
         public DirectoryInfo PackageDirectoryInfo { get; private set; }
@@ -41,7 +44,7 @@
 
         private void SetFileContentLineListWithoutComments()
         {
-            this.FileContentLineList = File.ReadAllLines(this.RosFileInfo.FullName).Where(line => !string.IsNullOrWhiteSpace(line) && line[0] != '#').ToList();
+            this.FileContentLineList = File.ReadAllLines(this.RosFileInfo.FullName).Where(line => !string.IsNullOrWhiteSpace(line) && line[0] != CommentLineStartingChar).ToList();
         }
 
         private void SetType(){
@@ -50,14 +53,18 @@
 
         public override bool Equals(object obj)
         {
-            RosFile item = obj as RosFile;
+            if (obj != null && obj is RosFile){
 
-            if (item == null)
-            {
-                return false;
+                RosFile item = obj as RosFile;
+
+                if (item == null)
+                {
+                    return false;
+                }
+
+                return this.Type == item.Type;
             }
-
-            return this.Type == item.Type;
+            return false;
         }
     }
 
