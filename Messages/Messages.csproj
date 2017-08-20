@@ -41,6 +41,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="_Templates\BaseClasses\Member.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Member.ttinclude</DependentUpon>
+    </Compile>
     <Compile Include="_Templates\Helpers\FileLoader.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -61,6 +66,10 @@
     <None Include="_Templates\Helpers\FileLoader.ttinclude">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>FileLoader.cs</LastGenOutput>
+    </None>
+    <None Include="_Templates\BaseClasses\Member.ttinclude">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Member.cs</LastGenOutput>
     </None>
     <Content Include="_Templates\Main.tt">
       <Generator>TextTemplatingFileGenerator</Generator>

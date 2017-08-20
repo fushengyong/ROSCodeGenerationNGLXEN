@@ -10,10 +10,10 @@
             return;
         }
 
-        HashSet<FileInfo> msgFileInfoSet = new HashSet<FileInfo>(Directory.GetFiles(path, string.Format("*{0}", RosFile.MsgFileExtension), SearchOption.AllDirectories).Select(filePath => new FileInfo(filePath)));
-        HashSet<FileInfo> srvFileInfoSet = new HashSet<FileInfo>(Directory.GetFiles(path, string.Format("*{0}", RosFile.SrvFileExtension), SearchOption.AllDirectories).Select(filePath => new FileInfo(filePath)));
+        HashSet<FileInfo> msgFileInfoSet = new HashSet<FileInfo>(Directory.GetFiles(path, string.Format("*{0}", MsgFile.FileExtension), SearchOption.AllDirectories).Select(filePath => new FileInfo(filePath)));
+        HashSet<FileInfo> srvFileInfoSet = new HashSet<FileInfo>(Directory.GetFiles(path, string.Format("*{0}", SrvFile.FileExtension), SearchOption.AllDirectories).Select(filePath => new FileInfo(filePath)));
 
         msgFileSet.UnionWith(msgFileInfoSet.Select(FileInfo => new MsgFile(FileInfo)));
-        srvFileSet.UnionWith(msgFileInfoSet.Select(FileInfo => new SrvFile(FileInfo)));
+        srvFileSet.UnionWith(srvFileInfoSet.Select(FileInfo => new SrvFile(FileInfo)));
     }
 #>

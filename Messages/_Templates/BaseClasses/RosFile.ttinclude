@@ -3,21 +3,18 @@
 <#@ import namespace="System.IO" #>
 <#@ import namespace="System.Linq" #>
 <#@ import namespace="System.Collections.Generic" #>
+<#@ include file="Member.ttinclude" #>
 <#+
     public abstract class RosFile
     {
-        public const string MsgFileExtension = ".msg";
-        public const string SrvFileExtension = ".srv";
         private string[] _rosPackageFolderNameList = { "msg", "srv", "msgs", "srvs" };
-        private const char CommentLineStartingChar = '#';
+        protected const char CommentLineStartingChar = '#';
 
         public FileInfo RosFileInfo {get; private set; }
         public DirectoryInfo PackageDirectoryInfo { get; private set; }
         public IEnumerable<string> FileContentLineList { get; private set; }
         public string Namespace { get; private set; }
         public string ClassName { get; private set; }
-        public bool HasHeader { get; private set; }
-        public bool IsMeta { get; private set; }
         public string Type { get; private set; }
 
         public RosFile(FileInfo file){
@@ -44,7 +41,7 @@
 
         private void SetFileContentLineListWithoutComments()
         {
-            this.FileContentLineList = File.ReadAllLines(this.RosFileInfo.FullName).Where(line => !string.IsNullOrWhiteSpace(line) && line[0] != CommentLineStartingChar).ToList();
+            this.FileContentLineList = File.ReadAllLines(this.RosFileInfo.FullName).Where(line => !string.IsNullOrWhiteSpace(line) && line.Trim()[0] != CommentLineStartingChar).ToList();
         }
 
         private void SetType(){
@@ -72,26 +69,69 @@
     {
         public enum ServiceMessageTypeEnum { Not = 0, Request = 1, Response = 2 }
 
+        public const string FileExtension = ".msg";
+        public static readonly Dictionary<string,string> PrimitiveMsgTypeList = new Dictionary<string,string>
+        {
+            {"float64", "double"},
+            {"float32", "Single"},
+            {"uint64", "ulong"},
+            {"uint32", "uint"},
+            {"uint16", "ushort"},
+            {"uint8", "byte"},
+            {"int64", "long"},
+            {"int32", "int"},
+            {"int16", "short"},
+            {"int8", "sbyte"},
+            {"byte", "byte"},
+            {"bool", "bool"},
+            {"char", "char"},
+            {"time", "Time"},
+            {"string", "string"},
+            {"duration", "Duration"}     
+        };
+        private const char ConstantMemberChar = '=';        
+
+        public bool HasHeader { get; private set; }
+        public bool IsMeta { get; private set; }
         public ServiceMessageTypeEnum ServiceMessageType { get; private set; }
-        public IDictionary<string, string> MessageFields { get; private set; }
+        public HashSet<Member> MessageFields { get; private set; }
 
         public MsgFile(FileInfo file) : base(file){
         }
 
         protected override void ProcessFields(){
-            IDictionary<string, string> result = new Dictionary<string, string>();
+            HashSet<Member> result = new HashSet<Member>();
             foreach(string line in this.FileContentLineList)
             {
-                string[] splittedLine = line.Split(new char[0], StringSplitOptions.RemoveEmptyEntries);
-                result.Add(splittedLine[1], splittedLine[0]);
+                string typeNameString = line;
+                bool isConstant = false;
+                bool isArray = false;
+                string constantValue = string.Empty;
+                if(line.Contains(ConstantMemberChar)){
+                    isConstant = true;
+                    string[] splittedByConstantChar = line.Split(new char[1] { ConstantMemberChar }, StringSplitOptions.RemoveEmptyEntries);
+                    constantValue = splittedByConstantChar.Last();
+                    if(constantValue.Contains(CommentLineStartingChar)){
+                        constantValue = constantValue.Split(new char[1] { CommentLineStartingChar }, StringSplitOptions.RemoveEmptyEntries).First().Trim();
+                    }
+                    typeNameString = splittedByConstantChar.First();
+                }
+                string[] splittedTypeName = typeNameString.Split(new char[0], StringSplitOptions.RemoveEmptyEntries);
+
+                result.Add(new Member(splittedTypeName.Last(), splittedTypeName.First(), isConstant, isArray, constantValue));
             }  
             this.MessageFields = result;
+            if(result.Any(member => !PrimitiveMsgTypeList.ContainsKey(member.Type))){
+                IsMeta = true;
+            }
         }
 
     }
 
     public class SrvFile : RosFile
     {
+        public const string FileExtension = ".srv";
+
         public MsgFile Response { get; private set; }
         public MsgFile Request { get; private set; }
 
