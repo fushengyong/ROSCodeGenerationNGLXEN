@@ -1,9 +1,11 @@
 ﻿<#@ template debug="true" hostspecific="true" language="C#" #>
 <#@ output extension=".cs" #>
+
 <#@ assembly name="System.Core" #>
 <#@ import namespace="System.Linq" #>
 <#@ import namespace="System.Collections.Generic" #>
-<#@ include file="Helpers\FileLoader.ttinclude" #>
+
+<#@ include file="Helpers\FileLoader.ttinclude" once="true"#>
 <# 
     string rosAbsolutePath = @"D:\Source\Repos\ROS.NET\common_msgs";
 

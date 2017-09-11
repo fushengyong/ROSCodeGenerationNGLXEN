@@ -1,9 +1,13 @@
-﻿<#@ template language="C#" #>
-<#@ assembly name="System.Core" #>
+﻿<#@ assembly name="System.Core" #>
+
 <#@ import namespace="System.IO" #>
 <#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text.RegularExpressions" #>
 <#@ import namespace="System.Collections.Generic" #>
-<#@ include file="Member.ttinclude" #>
+
+<#@ include file="$(ProjectDir)\_Templates\Helpers\YAMLParser.ttinclude" once="true"#>
+<#@ include file="Member.ttinclude" once="true" #>
+
 <#+
     public abstract class RosFile
     {
@@ -69,7 +73,7 @@
     {
         public enum ServiceMessageTypeEnum { Not = 0, Request = 1, Response = 2 }
 
-        public const string FileExtension = ".msg";
+        public const string FileExtension = "msg";
         public static readonly Dictionary<string,string> PrimitiveMsgTypeList = new Dictionary<string,string>
         {
             {"float64", "double"},
@@ -103,22 +107,7 @@
             HashSet<Member> result = new HashSet<Member>();
             foreach(string line in this.FileContentLineList)
             {
-                string typeNameString = line;
-                bool isConstant = false;
-                bool isArray = false;
-                string constantValue = string.Empty;
-                if(line.Contains(ConstantMemberChar)){
-                    isConstant = true;
-                    string[] splittedByConstantChar = line.Split(new char[1] { ConstantMemberChar }, StringSplitOptions.RemoveEmptyEntries);
-                    constantValue = splittedByConstantChar.Last();
-                    if(constantValue.Contains(CommentLineStartingChar)){
-                        constantValue = constantValue.Split(new char[1] { CommentLineStartingChar }, StringSplitOptions.RemoveEmptyEntries).First().Trim();
-                    }
-                    typeNameString = splittedByConstantChar.First();
-                }
-                string[] splittedTypeName = typeNameString.Split(new char[0], StringSplitOptions.RemoveEmptyEntries);
-
-                result.Add(new Member(splittedTypeName.Last(), splittedTypeName.First(), isConstant, isArray, constantValue));
+                Member lineMember = YAMLParser.YAMLLineToMember(line);
             }  
             this.MessageFields = result;
             if(result.Any(member => !PrimitiveMsgTypeList.ContainsKey(member.Type))){
@@ -130,7 +119,7 @@
 
     public class SrvFile : RosFile
     {
-        public const string FileExtension = ".srv";
+        public const string FileExtension = "srv";
 
         public MsgFile Response { get; private set; }
         public MsgFile Request { get; private set; }

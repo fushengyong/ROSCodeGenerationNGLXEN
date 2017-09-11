@@ -1,0 +1,43 @@
+﻿<#@ template language="C#" #>
+
+<#@ import namespace="System.IO" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ import namespace="System.Text.RegularExpressions" #>
+
+<#@ include file="$(ProjectDir)\_Templates\BaseClasses\Member.ttinclude" once="true" #>
+
+<#+
+    public static class YAMLParser{
+        private const string YAMLParserRegexString = @"^(?:(?<namespace>\w+)\/)?(?<type>\w+)\b(?<isArray>\[(?<elementCount>\d*)\])?\s+(?<name>\w+)(?:=(?<value>\w+))?";
+        private const string NamespaceRegexGroupName = "namespace";
+        private const string TypeRegexGroupName = "type";
+        private const string IsArrayRegexGroupName = "isArray";
+        private const string ElementCountRegexGroupName = "elementCount";
+        private const string VariableNameRegexGroupName = "name";
+        private const string ConstantValueRegexGroupName = "value";
+
+        private static Regex YAMLParserRegex = new Regex(YAMLParserRegexString, RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
+
+        public static Member YAMLLineToMember(string yamlString){
+            Match matchResult = YAMLParserRegex.Match(yamlString);
+            
+            if(matchResult.Success)
+            {
+                string namespaceName = matchResult.Groups[NamespaceRegexGroupName].Value;
+                string type = matchResult.Groups[TypeRegexGroupName].Value;
+                bool isArray = matchResult.Groups[IsArrayRegexGroupName].Success;
+                int elementCount = 0;
+                bool hasCount = int.TryParse(matchResult.Groups[ElementCountRegexGroupName].Value, out elementCount);
+                string name = matchResult.Groups[VariableNameRegexGroupName].Value;
+                string memberValue = matchResult.Groups[ConstantValueRegexGroupName].Value;
+
+                Member resultMember = new Member(name, type, namespaceName, isArray, elementCount, memberValue);
+                return resultMember;
+            }
+
+            return null;
+        }
+    }
+#>

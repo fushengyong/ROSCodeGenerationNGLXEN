@@ -1,20 +1,21 @@
-﻿<#@ template language="C#" #>
-
-<#+
+﻿<#+
 public class Member{
     public string Name { get; private set; }
+    public string NamespaceName{ get; private set; }
     public string Type { get; private set; }
-    public bool IsConst { get; private set; }
-    public string Value { get; private set; }
     public bool IsArray { get; private set; }
+    public int ArrayElementCount { get; private set;}
+    public string Value { get; private set; }
+    public bool IsConst { get { return !string.IsNullOrEmpty(Value); } }
 
-    public Member(string name, string type, bool isConst, bool isArray, string memberValue)
+    public Member(string name, string type, string namespaceName, bool isArray, int arrayElementCount, string memberValue)
     {
         this.Name = name;
         this.Type = type;
-        this.IsConst = isConst;
-        this.Value = memberValue;
+        this.NamespaceName = namespaceName;
         this.IsArray = isArray;
+        this.ArrayElementCount = arrayElementCount;
+        this.Value = memberValue;
     }
 
     public override bool Equals(object obj){
