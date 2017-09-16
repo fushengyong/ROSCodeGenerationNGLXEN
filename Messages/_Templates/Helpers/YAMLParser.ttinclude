@@ -9,7 +9,6 @@
 
 <#+
     public static class YAMLParser{
-        private const string YAMLParserRegexString = @"^(?:(?<namespace>\w+)\/)?(?<type>\w+)\b(?<isArray>\[(?<elementCount>\d*)\])?\s+(?<name>\w+)(?:=(?<value>\w+))?";
         private const string NamespaceRegexGroupName = "namespace";
         private const string TypeRegexGroupName = "type";
         private const string IsArrayRegexGroupName = "isArray";
@@ -17,27 +16,27 @@
         private const string VariableNameRegexGroupName = "name";
         private const string ConstantValueRegexGroupName = "value";
 
-        private static Regex YAMLParserRegex = new Regex(YAMLParserRegexString, RegexOptions.IgnoreCase | RegexOptions.Compiled);
+        private const string YAMLParserRegexString = @"^\s*(?:(?<namespace>\w+)\/)?(?<type>\w+)\b(?<isArray>\[(?<elementCount>\d*)\])?\s+(?<name>\w+)(?:\s*=\s*(?<value>\w+))?";
+        private static Regex YAMLParserRegex = new Regex(YAMLParserRegexString, RegexOptions.IgnoreCase | RegexOptions.Multiline | RegexOptions.Compiled);
 
+        public static HashSet<Member> YAMLStringToMemberSet(string yamlString){
+            HashSet<Member> result = new HashSet<Member>();
+            foreach(Match currentMatch in YAMLParserRegex.Matches(yamlString)){
+                if(currentMatch.Success)
+                {
+                    string namespaceName = currentMatch.Groups[NamespaceRegexGroupName].Value;
+                    string type = currentMatch.Groups[TypeRegexGroupName].Value;
+                    bool isArray = currentMatch.Groups[IsArrayRegexGroupName].Success;
+                    int elementCount = 0;
+                    bool hasCount = int.TryParse(currentMatch.Groups[ElementCountRegexGroupName].Value, out elementCount);
+                    string name = currentMatch.Groups[VariableNameRegexGroupName].Value;
+                    string memberValue = currentMatch.Groups[ConstantValueRegexGroupName].Value;
 
-        public static Member YAMLLineToMember(string yamlString){
-            Match matchResult = YAMLParserRegex.Match(yamlString);
-            
-            if(matchResult.Success)
-            {
-                string namespaceName = matchResult.Groups[NamespaceRegexGroupName].Value;
-                string type = matchResult.Groups[TypeRegexGroupName].Value;
-                bool isArray = matchResult.Groups[IsArrayRegexGroupName].Success;
-                int elementCount = 0;
-                bool hasCount = int.TryParse(matchResult.Groups[ElementCountRegexGroupName].Value, out elementCount);
-                string name = matchResult.Groups[VariableNameRegexGroupName].Value;
-                string memberValue = matchResult.Groups[ConstantValueRegexGroupName].Value;
-
-                Member resultMember = new Member(name, type, namespaceName, isArray, elementCount, memberValue);
-                return resultMember;
+                    Member newMember = new Member(name, type, namespaceName, isArray, elementCount, memberValue);
+                    result.Add(newMember);
+                }
             }
-
-            return null;
+            return result;
         }
     }
 #>
