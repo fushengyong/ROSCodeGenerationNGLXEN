@@ -51,6 +51,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>FileLoader.ttinclude</DependentUpon>
     </Compile>
+    <Compile Include="_Templates\Helpers\SolutionManager.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SolutionManager.ttinclude</DependentUpon>
+    </Compile>
     <Compile Include="_Templates\Main.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -71,6 +76,10 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>Member.cs</LastGenOutput>
     </None>
+    <None Include="_Templates\Helpers\SolutionManager.ttinclude">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>SolutionManager.cs</LastGenOutput>
+    </None>
     <Content Include="_Templates\Main.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>Main.cs</LastGenOutput>
@@ -83,6 +92,9 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="RosClasses\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
