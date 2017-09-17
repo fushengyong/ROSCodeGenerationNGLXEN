@@ -115,11 +115,18 @@
         protected override void ProcessFields(){
             this.MemberSet = YAMLParser.YAMLStringToMemberSet(this.FileContent);
                 
-            if(this.MemberSet.Any(member => !PrimitiveTypeDictionary.ContainsKey(member.Type))){
-                IsMeta = true;
-
-                if(this.MemberSet.Any(member => member.Type == HEADER_TYPE_NAME)){
-                    HasHeader = true;
+            foreach(Member currentMember in this.MemberSet)
+            {
+                string cSharpType = string.Empty;
+                if(PrimitiveTypeDictionary.TryGetValue(currentMember.Type, out cSharpType)){
+                    currentMember.CSharpType = cSharpType;     
+                }
+                else
+                {
+                    IsMeta = true;
+                    if(currentMember.Type == HEADER_TYPE_NAME){
+                        HasHeader = true;
+                    }
                 }
             }
 

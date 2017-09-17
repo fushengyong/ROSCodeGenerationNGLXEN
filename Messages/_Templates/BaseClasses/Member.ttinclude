@@ -7,6 +7,7 @@ public class Member{
     public int ArrayElementCount { get; private set;}
     public string Value { get; private set; }
     public bool IsConst { get { return !string.IsNullOrEmpty(Value); } }
+    public string CSharpType { get; set; }
 
     public Member(string name, string type, string namespaceName, bool isArray, int arrayElementCount, string memberValue)
     {
