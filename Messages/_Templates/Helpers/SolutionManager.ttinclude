@@ -28,16 +28,44 @@
         }
 
         public ProjectItem Initialize(string folderName){
+            if(folderName == null){
+                throw new ArgumentNullException();
+            }
+
             ProjectItem result = null;
 
-            if(!IsFolderExistsInCurrentProject(folderName, ref result)){
+            if(!IsFolderExistsInProject(folderName, ref result)){
                 _project.ProjectItems.AddFolder(folderName);
             }
 
             return result;
         }
 
-        public bool IsFolderExistsInCurrentProject(string folderName, ref ProjectItem projectItem){
+        public ProjectItem AddFileToProject(FileInfo file){
+            if(file == null){
+                throw new ArgumentNullException();
+            }
+
+            if(!file.Exists){
+                throw new FileNotFoundException();
+            }
+
+            return _project.ProjectItems.AddFromFile(file.FullName);
+        }
+
+        public ProjectItem AddFilesAndSubDirectoriesToProject(DirectoryInfo directory){
+            if(directory == null){
+                throw new ArgumentNullException();
+            }
+
+            if(!directory.Exists){
+                throw new DirectoryNotFoundException();
+            }           
+
+            return _project.ProjectItems.AddFromDirectory(directory.FullName);
+        }
+
+        private bool IsFolderExistsInProject(string folderName, ref ProjectItem projectItem){
             foreach(ProjectItem currentProjectItem in _project.ProjectItems){
                 if(currentProjectItem.Kind == PROJECT_DIRECTORY_GUID && currentProjectItem.Name == folderName){
                     projectItem = currentProjectItem;
