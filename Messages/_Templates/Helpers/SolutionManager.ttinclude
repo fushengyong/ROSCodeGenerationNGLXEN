@@ -53,7 +53,7 @@
             return _project.ProjectItems.AddFromFile(file.FullName);
         }
 
-        public ProjectItem AddFilesAndSubDirectoriesToProject(DirectoryInfo directory){
+        public ProjectItem AddFilesAndSubdirectoriesToProject(DirectoryInfo directory){
             if(directory == null){
                 throw new ArgumentNullException();
             }
