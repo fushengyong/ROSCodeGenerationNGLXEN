@@ -7,8 +7,8 @@
     <ProjectGuid>{0F5C53FD-41B9-4C6C-A518-C5AF23C0D14F}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Messages</RootNamespace>
-    <AssemblyName>Messages</AssemblyName>
+    <RootNamespace>RosbridgeMessages</RootNamespace>
+    <AssemblyName>RosbridgeMessages</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -41,61 +41,59 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="_Templates\BaseClasses\Member.cs">
+    <Compile Include="Templates\BaseClasses\Member.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Member.ttinclude</DependentUpon>
     </Compile>
-    <Compile Include="_Templates\Helpers\FileLoader.cs">
+    <Compile Include="Templates\Helpers\FileLoader.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>FileLoader.ttinclude</DependentUpon>
     </Compile>
-    <Compile Include="_Templates\Helpers\SolutionManager.cs">
+    <Compile Include="Templates\Helpers\SolutionManager.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>SolutionManager.ttinclude</DependentUpon>
     </Compile>
-    <Compile Include="_Templates\Main.cs">
+    <Compile Include="Templates\Main.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Main.tt</DependentUpon>
     </Compile>
-    <Compile Include="_Templates\BaseClasses\RosFile.cs">
+    <Compile Include="Templates\BaseClasses\RosFile.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>RosFile.ttinclude</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="_Templates\Helpers\FileLoader.ttinclude">
+    <None Include="Templates\Helpers\FileLoader.ttinclude">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>FileLoader.cs</LastGenOutput>
     </None>
-    <None Include="_Templates\BaseClasses\Member.ttinclude">
+    <None Include="Templates\BaseClasses\Member.ttinclude">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>Member.cs</LastGenOutput>
     </None>
-    <None Include="_Templates\Helpers\SolutionManager.ttinclude">
+    <None Include="Templates\Helpers\SolutionManager.ttinclude">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>SolutionManager.cs</LastGenOutput>
     </None>
-    <Content Include="_Templates\Main.tt">
+    <Content Include="Templates\Main.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>Main.cs</LastGenOutput>
     </Content>
-    <None Include="_Templates\BaseClasses\RosFile.ttinclude">
+    <None Include="Templates\BaseClasses\RosFile.ttinclude">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>RosFile.cs</LastGenOutput>
     </None>
-    <None Include="_Templates\Helpers\YAMLParser.ttinclude" />
+    <None Include="Templates\Helpers\YAMLParser.ttinclude" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="RosClasses\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -2,7 +2,7 @@
 <#@ import namespace="System.IO" #>
 <#@ import namespace="System.Linq" #>
 
-<#@ include file="$(ProjectDir)\_Templates\BaseClasses\RosFile.ttinclude" once="true"#>
+<#@ include file="$(ProjectDir)\Templates\BaseClasses\RosFile.ttinclude" once="true"#>
 
 <#+
     void LoadRosFiles(HashSet<MsgFile> msgFileSet, HashSet<SrvFile> srvFileSet, string path){

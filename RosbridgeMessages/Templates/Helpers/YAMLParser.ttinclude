@@ -3,7 +3,7 @@
 <#@ import namespace="System.Collections.Generic" #>
 <#@ import namespace="System.Text.RegularExpressions" #>
 
-<#@ include file="$(ProjectDir)\_Templates\BaseClasses\Member.ttinclude" once="true" #>
+<#@ include file="$(ProjectDir)\Templates\BaseClasses\Member.ttinclude" once="true" #>
 
 <#+
     public static class YAMLParser{

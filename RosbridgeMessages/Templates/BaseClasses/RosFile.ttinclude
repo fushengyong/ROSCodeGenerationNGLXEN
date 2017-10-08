@@ -5,7 +5,7 @@
 <#@ import namespace="System.Text.RegularExpressions" #>
 <#@ import namespace="System.Collections.Generic" #>
 
-<#@ include file="$(ProjectDir)\_Templates\Helpers\YAMLParser.ttinclude" once="true"#>
+<#@ include file="$(ProjectDir)\Templates\Helpers\YAMLParser.ttinclude" once="true"#>
 <#@ include file="Member.ttinclude" once="true" #>
 
 <#+
