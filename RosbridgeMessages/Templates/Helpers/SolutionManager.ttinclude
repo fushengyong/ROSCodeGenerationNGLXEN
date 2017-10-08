@@ -1,0 +1,78 @@
+﻿<#@ assembly name="System.Core" #>
+<#@ assembly name="EnvDTE" #>
+
+<#@ import namespace="System.IO" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ import namespace="EnvDTE" #>
+
+<#+
+    public class SolutionManager{
+        private const string PROJECT_DIRECTORY_GUID = "{6BB5F8EF-4483-11D3-8BCF-00C04F8EC28C}";
+
+        private DTE _dte;
+        private Project _project;
+
+        public SolutionManager(IServiceProvider serviceProvider, string templateFile){
+            if(serviceProvider == null || templateFile == null){
+                throw new ArgumentNullException();
+            }
+
+            if(!File.Exists(templateFile)){
+                throw new FileNotFoundException(nameof(templateFile));
+            }
+
+            _dte = serviceProvider.GetService(typeof(DTE)) as DTE;
+            _project = _dte.Solution.FindProjectItem(templateFile).ContainingProject;
+        }
+
+        public ProjectItem Initialize(string folderName){
+            if(folderName == null){
+                throw new ArgumentNullException();
+            }
+
+            ProjectItem result = null;
+
+            if(!IsFolderExistsInProject(folderName, ref result)){
+                _project.ProjectItems.AddFolder(folderName);
+            }
+
+            return result;
+        }
+
+        public ProjectItem AddFileToProject(FileInfo file){
+            if(file == null){
+                throw new ArgumentNullException();
+            }
+
+            if(!file.Exists){
+                throw new FileNotFoundException();
+            }
+
+            return _project.ProjectItems.AddFromFile(file.FullName);
+        }
+
+        public ProjectItem AddFilesAndSubdirectoriesToProject(DirectoryInfo directory){
+            if(directory == null){
+                throw new ArgumentNullException();
+            }
+
+            if(!directory.Exists){
+                throw new DirectoryNotFoundException();
+            }           
+
+            return _project.ProjectItems.AddFromDirectory(directory.FullName);
+        }
+
+        private bool IsFolderExistsInProject(string folderName, ref ProjectItem projectItem){
+            foreach(ProjectItem currentProjectItem in _project.ProjectItems){
+                if(currentProjectItem.Kind == PROJECT_DIRECTORY_GUID && currentProjectItem.Name == folderName){
+                    projectItem = currentProjectItem;
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
+#>

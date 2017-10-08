@@ -2,16 +2,26 @@
 <#@ output extension=".cs" #>
 
 <#@ assembly name="System.Core" #>
+
+<#@ import namespace="System.IO" #>
 <#@ import namespace="System.Linq" #>
 <#@ import namespace="System.Collections.Generic" #>
 
 <#@ include file="Helpers\FileLoader.ttinclude" once="true"#>
+<#@ include file="Helpers\SolutionManager.ttinclude" once="true" #>
+
 <# 
     string rosAbsolutePath = @"D:\Source\Repos\ROS.NET\common_msgs";
 
     HashSet<MsgFile> msgFileSet = new HashSet<MsgFile>();
     HashSet<SrvFile> srvFileSet = new HashSet<SrvFile>();
+
     LoadRosFiles(msgFileSet, srvFileSet, rosAbsolutePath);
+    
+    IServiceProvider serviceProvider = this.Host as IServiceProvider;
+    SolutionManager manager = new SolutionManager(serviceProvider, this.Host.TemplateFile);
+    ProjectItem p = manager.Initialize("RosClasses");
+
     string k = "";
  #>
 0

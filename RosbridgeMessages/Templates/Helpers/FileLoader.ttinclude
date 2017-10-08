@@ -2,12 +2,16 @@
 <#@ import namespace="System.IO" #>
 <#@ import namespace="System.Linq" #>
 
-<#@ include file="$(ProjectDir)\_Templates\BaseClasses\RosFile.ttinclude" once="true"#>
+<#@ include file="$(ProjectDir)\Templates\BaseClasses\RosFile.ttinclude" once="true"#>
 
 <#+
     void LoadRosFiles(HashSet<MsgFile> msgFileSet, HashSet<SrvFile> srvFileSet, string path){
-        if(msgFileSet == null || srvFileSet == null || string.IsNullOrWhiteSpace(path)){
+        if(msgFileSet == null || srvFileSet == null || path == null){
             throw new ArgumentNullException();
+        }
+
+        if(!Directory.Exists(path)){
+            throw new DirectoryNotFoundException();
         }
 
         HashSet<FileInfo> msgFileInfoSet = new HashSet<FileInfo>(Directory.GetFiles(path, string.Format("*.{0}", MsgFile.FILE_EXTENSION), SearchOption.AllDirectories).Select(filePath => new FileInfo(filePath)));

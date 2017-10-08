@@ -3,7 +3,7 @@
 <#@ import namespace="System.Collections.Generic" #>
 <#@ import namespace="System.Text.RegularExpressions" #>
 
-<#@ include file="$(ProjectDir)\_Templates\BaseClasses\Member.ttinclude" once="true" #>
+<#@ include file="$(ProjectDir)\Templates\BaseClasses\Member.ttinclude" once="true" #>
 
 <#+
     public static class YAMLParser{
@@ -18,6 +18,10 @@
         private static Regex YAMLParserRegex = new Regex(YAMLParserRegexString, RegexOptions.IgnoreCase | RegexOptions.Multiline | RegexOptions.Compiled);
 
         public static HashSet<Member> YAMLStringToMemberSet(string yamlString){
+            if(yamlString == null){
+                throw new ArgumentNullException();
+            }
+
             HashSet<Member> result = new HashSet<Member>();
             foreach(Match currentMatch in YAMLParserRegex.Matches(yamlString)){
                 if(currentMatch.Success)
