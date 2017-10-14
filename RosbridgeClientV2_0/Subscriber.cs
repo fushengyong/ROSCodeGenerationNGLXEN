@@ -1,7 +1,10 @@
 ﻿namespace RosbridgeClientV2_0
 {
     using Messages;
+    using RosbridgeClientCommon;
+    using RosbridgeClientCommon.Attributes;
     using RosbridgeClientCommon.EventArguments;
+    using RosbridgeClientCommon.Exceptions;
     using RosbridgeClientCommon.Interfaces;
     using System;
     using System.Threading.Tasks;
@@ -19,12 +22,24 @@
 
         public Subscriber(string topic, IMessageDispatcher messageDispatcher)
         {
+            RosMessageTypeAttribute rosMessageTypeAttribute = AttributeReader.GetAttribute<RosMessageTypeAttribute>(typeof(TRosMessage));
+
+            if (null == rosMessageTypeAttribute)
+            {
+                throw new RosMessageTypeAttributeNullException(nameof(TRosMessage));
+            }
+
+            if (string.Empty == rosMessageTypeAttribute.RosMessageType)
+            {
+                throw new RosMessageTypeAttributeEmptyException(nameof(TRosMessage));
+            }
+
             if (null == topic)
             {
                 throw new ArgumentNullException(nameof(topic));
             }
 
-            if (string.IsNullOrEmpty(topic))
+            if (string.Empty == topic)
             {
                 throw new ArgumentException("Argument cannot be empty!", nameof(topic));
             }
@@ -33,6 +48,8 @@
             {
                 throw new ArgumentNullException(nameof(messageDispatcher));
             }
+
+            Type = rosMessageTypeAttribute.RosMessageType;
 
             _messageDispatcher = messageDispatcher;
             _messageDispatcher.MessageReceived += RosbridgeMessageReceived;

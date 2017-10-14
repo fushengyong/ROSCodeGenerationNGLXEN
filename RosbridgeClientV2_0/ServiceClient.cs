@@ -14,8 +14,18 @@
 
         public string Service { get; private set; }
 
-        public ServiceClient(IMessageDispatcher messageDispatcher)
+        public ServiceClient(string service, IMessageDispatcher messageDispatcher)
         {
+            if (null == service)
+            {
+                throw new ArgumentNullException(nameof(service));
+            }
+
+            if (string.Empty == service)
+            {
+                throw new ArgumentException("Argument cannot be empty!", nameof(service));
+            }
+
             if (null == messageDispatcher)
             {
                 throw new ArgumentNullException(nameof(messageDispatcher));

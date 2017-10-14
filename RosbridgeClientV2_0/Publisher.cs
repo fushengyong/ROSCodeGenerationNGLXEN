@@ -2,6 +2,9 @@
 {
     using Messages;
     using Newtonsoft.Json.Linq;
+    using RosbridgeClientCommon;
+    using RosbridgeClientCommon.Attributes;
+    using RosbridgeClientCommon.Exceptions;
     using RosbridgeClientCommon.Interfaces;
     using System;
     using System.Threading.Tasks;
@@ -17,12 +20,24 @@
 
         public Publisher(string topic, IMessageDispatcher messageDispatcher)
         {
+            RosMessageTypeAttribute rosMessageTypeAttribute = AttributeReader.GetAttribute<RosMessageTypeAttribute>(typeof(TRosMessage));
+
+            if (null == rosMessageTypeAttribute)
+            {
+                throw new RosMessageTypeAttributeNullException(nameof(TRosMessage));
+            }
+
+            if (string.Empty == rosMessageTypeAttribute.RosMessageType)
+            {
+                throw new RosMessageTypeAttributeEmptyException(nameof(TRosMessage));
+            }
+
             if (null == topic)
             {
                 throw new ArgumentNullException(nameof(topic));
             }
 
-            if (string.IsNullOrEmpty(topic))
+            if (string.Empty == topic)
             {
                 throw new ArgumentException("Argument cannot be empty!", nameof(topic));
             }
@@ -31,6 +46,8 @@
             {
                 throw new ArgumentNullException(nameof(messageDispatcher));
             }
+
+            Type = rosMessageTypeAttribute.RosMessageType;
 
             _messageDispatcher = messageDispatcher;
             _uniqueId = _messageDispatcher.GetUID();
