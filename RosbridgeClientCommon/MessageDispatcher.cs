@@ -1,4 +1,4 @@
-﻿namespace RosbridgeMessages.RosbridgeClientCommon
+﻿namespace RosbridgeClientCommon
 {
     using Enums;
     using EventArguments;
@@ -10,7 +10,7 @@
     public class MessageDispatcher<TMessage> : IMessageDispatcher<TMessage>
     {
         private ISocket _socket;
-        private IMessageSerializer _serializer;
+        private IMessageSerializer<TMessage> _serializer;
         private bool _disposed;
         private Task _receivingTask;
 
@@ -21,7 +21,7 @@
             get; private set;
         }
 
-        public MessageDispatcher(ISocket socket, IMessageSerializer serializer)
+        public MessageDispatcher(ISocket socket, IMessageSerializer<TMessage> serializer)
         {
             if (null == socket)
             {
@@ -88,7 +88,7 @@
                     {
                         buffer = await _socket.ReceiveAsync();
 
-                        TMessage message = _serializer.Deserialize<TMessage>(buffer);
+                        TMessage message = _serializer.Deserialize(buffer);
 
                         MessageReceived?.Invoke(this, new MessageReceivedEventArgs<TMessage>(message));
                     }

@@ -1,4 +1,4 @@
-﻿namespace RosbridgeMessages.RosbridgeClientCommon.Exceptions
+﻿namespace RosbridgeClientCommon.Exceptions
 {
     using System;
 

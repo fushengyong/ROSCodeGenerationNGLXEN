@@ -1,4 +1,4 @@
-﻿namespace RosbridgeMessages.RosbridgeClientCommon.EventArguments
+﻿namespace RosbridgeClientCommon.EventArguments
 {
     using System;
 

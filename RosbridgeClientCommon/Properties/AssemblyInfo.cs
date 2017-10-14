@@ -4,11 +4,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("RosbridgeMessages")]
+[assembly: AssemblyTitle("RosbridgeClientCommon")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("RosbridgeMessages")]
+[assembly: AssemblyProduct("RosbridgeClientCommon")]
 [assembly: AssemblyCopyright("Copyright ©  2017")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -19,7 +19,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("0f5c53fd-41b9-4c6c-a518-c5af23c0d14f")]
+[assembly: Guid("dd80b703-b9d2-491d-bc74-74be90d36146")]
 
 // Version information for an assembly consists of the following four values:
 //

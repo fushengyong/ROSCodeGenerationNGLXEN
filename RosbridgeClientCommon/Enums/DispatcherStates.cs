@@ -1,4 +1,4 @@
-﻿namespace RosbridgeMessages.RosbridgeClientCommon.Enums
+﻿namespace RosbridgeClientCommon.Enums
 {
     public enum States
     {

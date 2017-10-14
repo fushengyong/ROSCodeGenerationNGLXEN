@@ -1,4 +1,4 @@
-﻿namespace RosbridgeMessages.RosbridgeClientCommon.Interfaces
+﻿namespace RosbridgeClientCommon.Interfaces
 {
     using System;
     using System.Threading.Tasks;
