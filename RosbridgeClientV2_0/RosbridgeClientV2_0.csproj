@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{DD80B703-B9D2-491D-BC74-74BE90D36146}</ProjectGuid>
+    <ProjectGuid>{1DB1F654-2AEF-4390-A45B-2B249A2F33CB}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>RosbridgeClientCommon</RootNamespace>
-    <AssemblyName>RosbridgeClientCommon</AssemblyName>
+    <RootNamespace>RosbridgeClientV2_0</RootNamespace>
+    <AssemblyName>RosbridgeClientV2_0</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -44,18 +44,35 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Enums\DispatcherStates.cs" />
-    <Compile Include="EventArguments\RosbridgeMessageReceivedEventArgs.cs" />
-    <Compile Include="EventArguments\RosMessageReceivedEventArgs.cs" />
-    <Compile Include="Exceptions\MessageDispatcherException.cs" />
-    <Compile Include="Interfaces\IMessageDispatcher.cs" />
-    <Compile Include="Interfaces\IMessageSerializer.cs" />
-    <Compile Include="Interfaces\IRosPublisher.cs" />
-    <Compile Include="Interfaces\IRosServiceClient.cs" />
-    <Compile Include="Interfaces\ISocket.cs" />
-    <Compile Include="Interfaces\IRosSubscriber.cs" />
-    <Compile Include="MessageDispatcher.cs" />
+    <Compile Include="Enums\MessageCompressionLevel.cs" />
+    <Compile Include="Enums\StatusMessageLevel.cs" />
+    <Compile Include="Messages\AuthenticateMessage.cs" />
+    <Compile Include="Messages\FragmentedMessage.cs" />
+    <Compile Include="Messages\PNGMessage.cs" />
+    <Compile Include="Messages\RosAdvertiseMessage.cs" />
+    <Compile Include="Messages\RosCallServiceMessage.cs" />
+    <Compile Include="Messages\RosMessageBase.cs" />
+    <Compile Include="Messages\RosPublishMessage.cs" />
+    <Compile Include="Messages\RosServiceResponseMessage.cs" />
+    <Compile Include="Messages\RosSubscribeMessage.cs" />
+    <Compile Include="Messages\RosTopicMessageBase.cs" />
+    <Compile Include="Messages\RosbridgeMessageBase.cs" />
+    <Compile Include="MessageSerializer.cs" />
+    <Compile Include="Messages\RosUnadvertiseMessage.cs" />
+    <Compile Include="Messages\RosUnsubscribeMessage.cs" />
+    <Compile Include="Messages\SetStatusLevelMessage.cs" />
+    <Compile Include="Messages\StatusLevelMessage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Publisher.cs" />
+    <Compile Include="RosbridgeProtocolConstants.cs" />
+    <Compile Include="ServiceClient.cs" />
+    <Compile Include="Subscriber.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\RosbridgeClientCommon\RosbridgeClientCommon.csproj">
+      <Project>{dd80b703-b9d2-491d-bc74-74be90d36146}</Project>
+      <Name>RosbridgeClientCommon</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -4,24 +4,25 @@
     using EventArguments;
     using Exceptions;
     using Interfaces;
+    using Newtonsoft.Json.Linq;
     using System;
     using System.Threading.Tasks;
 
-    public class MessageDispatcher<TMessage> : IMessageDispatcher<TMessage>
+    public class MessageDispatcher : IMessageDispatcher
     {
         private ISocket _socket;
-        private IMessageSerializer<TMessage> _serializer;
+        private IMessageSerializer _serializer;
         private bool _disposed;
         private Task _receivingTask;
 
-        public event MessageReceivedHandler<TMessage> MessageReceived;
+        public event MessageReceivedHandler MessageReceived;
 
         public States CurrentState
         {
             get; private set;
         }
 
-        public MessageDispatcher(ISocket socket, IMessageSerializer<TMessage> serializer)
+        public MessageDispatcher(ISocket socket, IMessageSerializer serializer)
         {
             if (null == socket)
             {
@@ -59,7 +60,7 @@
             {
                 try
                 {
-                    await _socket.ConnectedAsync();
+                    await _socket.ConnectAsync();
                 }
                 catch
                 {
@@ -88,9 +89,9 @@
                     {
                         buffer = await _socket.ReceiveAsync();
 
-                        TMessage message = _serializer.Deserialize(buffer);
+                        JObject message = _serializer.Deserialize(buffer);
 
-                        MessageReceived?.Invoke(this, new MessageReceivedEventArgs<TMessage>(message));
+                        MessageReceived?.Invoke(this, new RosbridgeMessageReceivedEventArgs(message));
                     }
                     catch
                     {
@@ -111,7 +112,7 @@
 
             if (CurrentState != States.Started)
             {
-                throw new MessageDispatcherException("Dispatcher not in started state!");
+                throw new MessageDispatcherException("Dispatcher not in 'started' state!");
             }
 
             CurrentState = States.Stopping;
@@ -120,7 +121,7 @@
             {
                 if (null != _socket)
                 {
-                    await _socket.DisconnectedAsync();
+                    await _socket.DisconnectAsync();
                 }
 
                 if (null != _receivingTask)
@@ -133,7 +134,7 @@
             });
         }
 
-        public Task SendAsync(TMessage message)
+        public Task SendAsync<TMessage>(TMessage message) where TMessage : class, new()
         {
             if (_disposed)
             {
@@ -142,7 +143,7 @@
 
             if (CurrentState != States.Started)
             {
-                throw new MessageDispatcherException("Dispatcher not in started state!");
+                throw new MessageDispatcherException("Dispatcher not in 'started' state!");
             }
 
             return _socket.SendAsync(_serializer.Serialize(message));
@@ -164,7 +165,7 @@
                 {
                     if (null != _socket)
                     {
-                        await _socket.DisconnectedAsync();
+                        await _socket.DisconnectAsync();
                     }
 
                     if (null != _receivingTask)
@@ -189,6 +190,11 @@
 
                 }
             });
+        }
+
+        public string GetUID()
+        {
+            return Guid.NewGuid().ToString();
         }
     }
 }

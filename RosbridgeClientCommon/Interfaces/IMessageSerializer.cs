@@ -1,20 +1,21 @@
 ﻿namespace RosbridgeClientCommon.Interfaces
 {
-    public interface IMessageSerializer<TMessage>
+    using Newtonsoft.Json.Linq;
+
+    public interface IMessageSerializer
     {
         /// <summary>
         /// Serialize an object to byte array
         /// </summary>
         /// <param name="message"></param>
         /// <returns></returns>
-        byte[] Serialize(TMessage message);
+        byte[] Serialize<TMessage>(TMessage message) where TMessage : class, new();
 
         /// <summary>
         /// Deserialize a byte array to the given type
         /// </summary>
-        /// <typeparam name="TType"></typeparam>
         /// <param name="buffer"></param>
         /// <returns></returns>
-        TMessage Deserialize(byte[] buffer);
+        JObject Deserialize(byte[] buffer);
     }
 }

@@ -19,13 +19,13 @@
         /// Open a Rosbridge server connection
         /// </summary>
         /// <returns></returns>
-        Task ConnectedAsync();
+        Task ConnectAsync();
 
         /// <summary>
         /// Coloses Rosbridge server connection
         /// </summary>
         /// <returns></returns>
-        Task DisconnectedAsync();
+        Task DisconnectAsync();
 
         /// <summary>
         /// Sends message to Rosbridge server

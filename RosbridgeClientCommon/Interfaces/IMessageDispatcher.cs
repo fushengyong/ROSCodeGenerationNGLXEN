@@ -5,14 +5,14 @@
     using System;
     using System.Threading.Tasks;
 
-    public delegate void MessageReceivedHandler<TMessage>(object sender, MessageReceivedEventArgs<TMessage> message);
+    public delegate void MessageReceivedHandler(object sender, RosbridgeMessageReceivedEventArgs args);
 
-    public interface IMessageDispatcher<TMessage> : IDisposable
+    public interface IMessageDispatcher : IDisposable
     {
         /// <summary>
         /// Event for handling received messages
         /// </summary>
-        event MessageReceivedHandler<TMessage> MessageReceived;
+        event MessageReceivedHandler MessageReceived;
 
         /// <summary>
         /// Dispatcher status
@@ -35,6 +35,12 @@
         /// Send a message asynchronously
         /// </summary>
         /// <returns></returns>
-        Task SendAsync(TMessage message);
+        Task SendAsync<TMessage>(TMessage message) where TMessage : class, new();
+
+        /// <summary>
+        /// Returns Unique ID
+        /// </summary>
+        /// <returns></returns>
+        string GetUID();
     }
 }
