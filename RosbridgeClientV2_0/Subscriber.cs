@@ -22,7 +22,7 @@
 
         public Subscriber(string topic, IMessageDispatcher messageDispatcher)
         {
-            RosMessageTypeAttribute rosMessageTypeAttribute = AttributeReader.GetAttribute<RosMessageTypeAttribute>(typeof(TRosMessage));
+            RosMessageTypeAttribute rosMessageTypeAttribute = typeof(TRosMessage).GetCustomAttribute<RosMessageTypeAttribute>();
 
             if (null == rosMessageTypeAttribute)
             {

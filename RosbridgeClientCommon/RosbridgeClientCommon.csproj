@@ -44,7 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AttributeReader.cs" />
+    <Compile Include="AttributeHelper.cs" />
     <Compile Include="Attributes\RosMessageTypeAttribute.cs" />
     <Compile Include="Enums\DispatcherStates.cs" />
     <Compile Include="EventArguments\RosbridgeMessageReceivedEventArgs.cs" />
