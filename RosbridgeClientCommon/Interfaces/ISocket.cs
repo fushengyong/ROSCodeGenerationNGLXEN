@@ -8,7 +8,7 @@
         /// <summary>
         /// Rosbridge server URI.
         /// </summary>
-        Uri Uri { get; }
+        Uri URI { get; }
 
         /// <summary>
         /// True if connected to Rosbridge

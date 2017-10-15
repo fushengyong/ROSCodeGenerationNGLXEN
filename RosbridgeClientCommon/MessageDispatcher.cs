@@ -44,7 +44,7 @@
         {
             if (_disposed)
             {
-                throw new ObjectDisposedException(nameof(_socket));
+                throw new ObjectDisposedException(nameof(MessageDispatcher));
             }
 
             if (CurrentState != States.Stopped)
@@ -107,7 +107,7 @@
         {
             if (_disposed)
             {
-                throw new ObjectDisposedException(nameof(_socket));
+                throw new ObjectDisposedException(nameof(MessageDispatcher));
             }
 
             if (CurrentState != States.Started)
@@ -138,7 +138,7 @@
         {
             if (_disposed)
             {
-                throw new ObjectDisposedException(nameof(_socket));
+                throw new ObjectDisposedException(nameof(MessageDispatcher));
             }
 
             if (CurrentState != States.Started)
@@ -190,6 +190,8 @@
 
                 }
             });
+
+            GC.SuppressFinalize(this);
         }
 
         public string GetUID()

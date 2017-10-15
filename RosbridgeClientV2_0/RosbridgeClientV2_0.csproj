@@ -46,6 +46,7 @@
   <ItemGroup>
     <Compile Include="Enums\MessageCompressionLevel.cs" />
     <Compile Include="Enums\StatusMessageLevel.cs" />
+    <Compile Include="Exceptions\SocketException.cs" />
     <Compile Include="Messages\AuthenticateMessage.cs" />
     <Compile Include="Messages\FragmentedMessage.cs" />
     <Compile Include="Messages\PNGMessage.cs" />
@@ -66,6 +67,7 @@
     <Compile Include="Publisher.cs" />
     <Compile Include="RosbridgeProtocolConstants.cs" />
     <Compile Include="ServiceClient.cs" />
+    <Compile Include="Socket.cs" />
     <Compile Include="Subscriber.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -77,6 +79,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

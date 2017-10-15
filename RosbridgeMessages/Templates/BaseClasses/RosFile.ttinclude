@@ -65,7 +65,7 @@
         }
 
         private void SetType(){
-            Type = string.Format("/{0}/{1}", Namespace, ClassName);
+            Type = string.Format("{0}/{1}", Namespace, ClassName);
         }
 
         public override bool Equals(object obj)

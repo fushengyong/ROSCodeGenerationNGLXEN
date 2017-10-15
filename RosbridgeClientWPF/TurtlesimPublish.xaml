@@ -1,0 +1,30 @@
+﻿<Window x:Class="RosbridgeClientWPF.TurtlesimPublish"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:RosbridgeClientWPF"
+        mc:Ignorable="d"
+        Title="{Binding TopicToPublish, StringFormat='Publish to: {0}'}" Height="300" Width="300" ResizeMode="NoResize" KeyDown="Window_KeyDown">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="1*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="1*"/>
+        </Grid.RowDefinitions>
+        <Label Content="Topic:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
+        <TextBlock HorizontalAlignment="Left" Margin="53,15,0,0" TextWrapping="Wrap" Text="{Binding TopicToPublish}" VerticalAlignment="Top" RenderTransformOrigin="0.495,0.547" Width="229" Grid.ColumnSpan="3"/>
+        <Label Content="Step:" HorizontalAlignment="Left" Margin="10,41,0,0" VerticalAlignment="Top"/>
+        <Slider x:Name="slider" Margin="61,49,55,0" RenderTransformOrigin="-1.787,0.127" Value="{Binding Step}" Grid.ColumnSpan="3" Minimum="{Binding MinStep}" Maximum="{Binding MaxStep}" TickFrequency="0.1" Height="18" VerticalAlignment="Top" Focusable="False"/>
+        <TextBlock Grid.Column="2" Margin="48,49,10,23" TextWrapping="Wrap" Text="{Binding Value, ElementName=slider}"/>
+        <Button Content="5" FontFamily="Marlett" FontSize="50" Grid.Row="1" Grid.Column="1" Click="Button_Click" Tag="1"/>
+        <Button Content="3" FontFamily="Marlett" FontSize="50" Grid.Row="2" Click="Button_Click" Tag="2"/>
+        <Button Content="6" FontFamily="Marlett" FontSize="50" Grid.Row="2" Grid.Column="1" Click="Button_Click" Tag="3"/>
+        <Button Content="4" FontFamily="Marlett" FontSize="50" Grid.Row="2" Grid.Column="2" Click="Button_Click" Tag="4"/>
+    </Grid>
+</Window>

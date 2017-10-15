@@ -1,7 +1,7 @@
 ﻿namespace RosbridgeClientV2_0
 {
     /// <summary>
-    /// The rosbridge protocol defines a number of different operations
+    /// Rosbridge protocol constants for Rosbridge 2.0
     /// </summary>
     public static class RosbridgeProtocolConstants
     {
