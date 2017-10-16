@@ -147,7 +147,7 @@
             {
                 if(!string.IsNullOrEmpty(field.NamespaceName)){
                     DependencySet.Add(new MessageType(field.NamespaceName, field.TypeName));
-                }else if( !PrimitiveTypeDictionary.ContainsKey(field.TypeName)){
+                }else if(!PrimitiveTypeDictionary.ContainsKey(field.TypeName)){
                     DependencySet.Add(new MessageType(this.Type.NamespaceName, field.TypeName));
                 }
 
