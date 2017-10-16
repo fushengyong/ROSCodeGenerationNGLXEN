@@ -3,7 +3,7 @@
 <#@ import namespace="System.Collections.Generic" #>
 <#@ import namespace="System.Text.RegularExpressions" #>
 
-<#@ include file="$(ProjectDir)\Templates\BaseClasses\Member.ttinclude" once="true" #>
+<#@ include file="$(ProjectDir)\Templates\BaseClasses\MessageField.ttinclude" once="true" #>
 
 <#+
     public static class YAMLParser{
@@ -17,12 +17,12 @@
         private const string YAMLParserRegexString = @"^\s*(?:(?<namespace>\w+)\/)?(?<type>\w+)\b(?<isArray>\[(?<elementCount>\d*)\])?\s+(?<name>\w+)(?:\s*=\s*(?<value>\w+))?";
         private static Regex YAMLParserRegex = new Regex(YAMLParserRegexString, RegexOptions.IgnoreCase | RegexOptions.Multiline | RegexOptions.Compiled);
 
-        public static HashSet<Member> YAMLStringToMemberSet(string yamlString){
+        public static HashSet<MessageField> YAMLStringToMessageFieldSet(string yamlString){
             if(yamlString == null){
                 throw new ArgumentNullException();
             }
 
-            HashSet<Member> result = new HashSet<Member>();
+            HashSet<MessageField> result = new HashSet<MessageField>();
             foreach(Match currentMatch in YAMLParserRegex.Matches(yamlString)){
                 if(currentMatch.Success)
                 {
@@ -34,7 +34,7 @@
                     string name = currentMatch.Groups[VariableNameRegexGroupName].Value;
                     string memberValue = currentMatch.Groups[ConstantValueRegexGroupName].Value;
 
-                    Member newMember = new Member(name, type, namespaceName, isArray, elementCount, memberValue);
+                    MessageField newMember = new MessageField(name, type, namespaceName, isArray, elementCount, memberValue);
                     result.Add(newMember);
                 }
             }

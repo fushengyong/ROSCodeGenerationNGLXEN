@@ -6,7 +6,8 @@
 <#@ import namespace="System.Collections.Generic" #>
 
 <#@ include file="$(ProjectDir)\Templates\Helpers\YAMLParser.ttinclude" once="true"#>
-<#@ include file="Member.ttinclude" once="true" #>
+<#@ include file="MessageField.ttinclude" once="true" #>
+<#@ include file="MessageType.ttinclude" once="true" #>
 
 <#+
     public enum ServiceMessageTypeEnum { Not = 0, Request = 1, Response = 2 }
@@ -18,54 +19,50 @@
         public FileInfo RosFileInfo {get; private set; }
         public DirectoryInfo PackageDirectoryInfo { get; private set; }
         public string FileContent {get; private set; }
-        public string Namespace { get; private set; }
-        public string ClassName { get; private set; }
-        public string Type { get; private set; }
+        public MessageType Type { get; private set; }
 
         public RosFile(FileInfo file){
-            if(file == null){
-                throw new ArgumentNullException();
+            if(null == file){
+                throw new ArgumentNullException(nameof(file));
             }
 
             if(!file.Exists){
-                throw new FileNotFoundException();
+                throw new FileNotFoundException(file.FullName);
             }
 
             this.RosFileInfo = file;
             this.FileContent = File.ReadAllText(this.RosFileInfo.FullName);
             SetPackageDirectoryInfo();
-            this.Namespace = this.PackageDirectoryInfo.Name;
-            this.ClassName = Path.GetFileNameWithoutExtension(this.RosFileInfo.Name);
-            SetType();
-            ProcessFields();
+            string namespaceName = this.PackageDirectoryInfo.Name;
+            string className = Path.GetFileNameWithoutExtension(this.RosFileInfo.Name);
+            Type = new MessageType(namespaceName, className);
         }
 
-        public RosFile(string fileContent, string className, string namespaceValue){
-            if(fileContent == null || className == null || namespaceValue == null){
-                throw new ArgumentNullException();
+        public RosFile(string fileContent, string className, string namespaceName){
+            if(null == fileContent){
+                throw new ArgumentNullException(nameof(fileContent));
+            }
+
+            if(null == className){
+                throw new ArgumentNullException(nameof(className));
+            }
+
+            if(null == namespaceName){
+                throw new ArgumentNullException(nameof(namespaceName));
+            }
+
+            //FileContent can be empty (service with no response)
+
+            if(string.Empty == className){
+                throw new ArgumentException("Parameter cannot be empty!", nameof(className));
+            }
+
+            if(string.Empty == namespaceName){
+                throw new ArgumentException("Parameter cannot be empty!", nameof(namespaceName));
             }
 
             this.FileContent = fileContent;
-            this.ClassName  = className;
-            this.Namespace = namespaceValue;
-            SetType();
-            ProcessFields();
-        }
-
-        protected abstract void ProcessFields();
-
-        private void SetPackageDirectoryInfo(){
-            if(RosPackageFolderNameArray.Contains(this.RosFileInfo.Directory.Name)){
-                this.PackageDirectoryInfo = this.RosFileInfo.Directory.Parent;
-            }
-            else
-            {                       
-                this.PackageDirectoryInfo = this.RosFileInfo.Directory;
-            }
-        }
-
-        private void SetType(){
-            Type = string.Format("{0}/{1}", Namespace, ClassName);
+            Type = new MessageType(namespaceName, className);
         }
 
         public override bool Equals(object obj)
@@ -83,16 +80,28 @@
             }
             return false;
         }
+
+        protected abstract void ProcessFields();
+
+        private void SetPackageDirectoryInfo(){
+            if(RosPackageFolderNameArray.Contains(this.RosFileInfo.Directory.Name)){
+                this.PackageDirectoryInfo = this.RosFileInfo.Directory.Parent;
+            }
+            else
+            {                       
+                this.PackageDirectoryInfo = this.RosFileInfo.Directory;
+            }
+        }
     }
 
     public class MsgFile : RosFile
     {
         private const string HEADER_TYPE_NAME = "Header";
         public const string FILE_EXTENSION = "msg";
+
         public static readonly Dictionary<string,string> PrimitiveTypeDictionary = new Dictionary<string,string>
         {
             {"float64", "double"},
-            {"float32", "Single"},
             {"uint64", "ulong"},
             {"uint32", "uint"},
             {"uint16", "ushort"},
@@ -104,31 +113,45 @@
             {"byte", "byte"},
             {"bool", "bool"},
             {"char", "char"},
-            {"time", "Time"},
             {"string", "string"},
+            {"float32", "Single"},
+            {"time", "Time"},
             {"duration", "Duration"}     
         };
-        public static readonly HashSet<string> MessageTypeSet = new HashSet<string>();
+
+        public static readonly HashSet<MessageType> MessageTypeSet = new HashSet<MessageType>();
 
         public bool HasHeader { get; private set; }
-        public bool IsMeta { get; private set; }
+        public bool IsMeta { get { return DependencySet.Count > 0; } }
         public ServiceMessageTypeEnum ServiceMessageType { get; private set; }
-        public HashSet<Member> MemberSet { get; private set; }
+        public HashSet<MessageField> FieldSet { get; private set; }
+        public HashSet<MessageType> DependencySet { get; private set; }
 
         public MsgFile(FileInfo file) : base(file){
+            this.FieldSet = new HashSet<MessageField>();
+            this.DependencySet = new HashSet<MessageType>();
+            ProcessFields();
         }
 
         public MsgFile(string fileContent, string className, string namespaceValue, ServiceMessageTypeEnum type) : base(fileContent, className, namespaceValue){
             this.ServiceMessageType = type;
+            this.FieldSet = new HashSet<MessageField>();
+            this.DependencySet = new HashSet<MessageType>();
+            ProcessFields();
         }
 
         protected override void ProcessFields(){
-            this.MemberSet = YAMLParser.YAMLStringToMemberSet(this.FileContent);
-                
-            if(this.MemberSet.Any(member => !PrimitiveTypeDictionary.ContainsKey(member.Type))){
-                IsMeta = true;
+            this.FieldSet = YAMLParser.YAMLStringToMessageFieldSet(this.FileContent);
+            
+            foreach(MessageField field in this.FieldSet)
+            {
+                if(!string.IsNullOrEmpty(field.NamespaceName)){
+                    DependencySet.Add(new MessageType(field.NamespaceName, field.TypeName));
+                }else if( !PrimitiveTypeDictionary.ContainsKey(field.TypeName)){
+                    DependencySet.Add(new MessageType(this.Type.NamespaceName, field.TypeName));
+                }
 
-                if(this.MemberSet.Any(member => member.Type == HEADER_TYPE_NAME)){
+                if(field.TypeName == HEADER_TYPE_NAME){
                     HasHeader = true;
                 }
             }
@@ -150,6 +173,7 @@
         public MsgFile Request { get; private set; }
 
         public SrvFile(FileInfo file) : base(file){
+            ProcessFields();
         }
 
         protected override void ProcessFields(){
@@ -159,13 +183,13 @@
             string responseString = splittedFileContent.LastOrDefault();
 
             if(requestString != null){
-                string tempClassName = string.Format("{0}{1}{2}",this.ClassName, TYPE_SEPARATOR, RESPONSE_NAME);
-                Request = new MsgFile(requestString, tempClassName, this.Namespace, ServiceMessageTypeEnum.Request);
+                string tempClassName = string.Format("{0}{1}{2}",this.Type.TypeName, TYPE_SEPARATOR, RESPONSE_NAME);
+                Request = new MsgFile(requestString, tempClassName, this.Type.NamespaceName, ServiceMessageTypeEnum.Request);
             }
 
             if(responseString != null){
-                string tempClassName = string.Format("{0}{1}{2}",this.ClassName, TYPE_SEPARATOR, REQUEST_NAME);
-                Response = new MsgFile(responseString, tempClassName, this.Namespace, ServiceMessageTypeEnum.Response);
+                string tempClassName = string.Format("{0}{1}{2}",this.Type.TypeName, TYPE_SEPARATOR, REQUEST_NAME);
+                Response = new MsgFile(responseString, tempClassName, this.Type.NamespaceName, ServiceMessageTypeEnum.Response);
             }
         }
     }
