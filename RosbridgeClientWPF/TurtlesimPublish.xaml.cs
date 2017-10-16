@@ -1,11 +1,11 @@
-﻿using RosbridgeClientCommon.Interfaces;
-using RosbridgeClientV2_0;
-using RosbridgeClientWPF.ViewModels;
-using System.Windows;
-using System.Windows.Controls;
-
-namespace RosbridgeClientWPF
+﻿namespace RosbridgeClientWPF
 {
+    using RosbridgeClientCommon.Interfaces;
+    using RosbridgeClientV2_0;
+    using System.Windows;
+    using System.Windows.Controls;
+    using ViewModels;
+
     /// <summary>
     /// Interaction logic for TurtlesimPublish.xaml
     /// </summary>

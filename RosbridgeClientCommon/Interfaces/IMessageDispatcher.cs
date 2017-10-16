@@ -41,6 +41,6 @@
         /// Returns Unique ID
         /// </summary>
         /// <returns></returns>
-        string GetUID();
+        string GetUniqueID();
     }
 }

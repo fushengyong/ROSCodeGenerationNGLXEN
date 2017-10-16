@@ -1,0 +1,19 @@
+﻿<Window x:Class="RosbridgeClientWPF.TurtlesimSubscribe"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:RosbridgeClientWPF"
+        mc:Ignorable="d"
+        Title="{Binding Topic, StringFormat='Subscribed to: {0}'}" Height="350" Width="450" ResizeMode="NoResize">
+    <Grid>
+        <Label Content="Topic:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
+        <TextBlock Margin="55,10,0,0" TextWrapping="Wrap" Text="{Binding Topic}" VerticalAlignment="Top" Height="26" HorizontalAlignment="Left" Width="379"/>
+        <Label Content="Type:" HorizontalAlignment="Left" Margin="10,36,0,0" VerticalAlignment="Top" Width="40"/>
+        <TextBlock Margin="55,41,0,0" TextWrapping="Wrap" Text="{Binding Type}" VerticalAlignment="Top" Height="26" HorizontalAlignment="Left" Width="379"/>
+        <GroupBox Header="Last Message" Margin="10,0,10,10" Height="239" VerticalAlignment="Bottom">
+            <TextBlock Text="{Binding CurrentMessage}" TextWrapping="Wrap"/>
+        </GroupBox>
+
+    </Grid>
+</Window>

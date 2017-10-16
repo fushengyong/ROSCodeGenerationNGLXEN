@@ -1,7 +1,7 @@
-﻿using System.Threading.Tasks;
-
-namespace RosbridgeClientCommon.Interfaces
+﻿namespace RosbridgeClientCommon.Interfaces
 {
+    using System.Threading.Tasks;
+
     public interface IRosPublisher<TRosMessage> where TRosMessage : class, new()
     {
         string Topic { get; }

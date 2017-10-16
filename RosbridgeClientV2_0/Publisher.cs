@@ -50,7 +50,7 @@
             Type = rosMessageTypeAttribute.RosMessageType;
 
             _messageDispatcher = messageDispatcher;
-            _uniqueId = _messageDispatcher.GetUID();
+            _uniqueId = _messageDispatcher.GetUniqueID();
             Topic = topic;
         }
 

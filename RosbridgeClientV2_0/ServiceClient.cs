@@ -32,7 +32,7 @@
             }
 
             _messageDispatcher = messageDispatcher;
-            _uniqueId = _messageDispatcher.GetUID();
+            _uniqueId = _messageDispatcher.GetUniqueID();
         }
 
         public Task<TServiceResponse> Call<TServiceResponse>(TServiceRequest request) where TServiceResponse : class, new()

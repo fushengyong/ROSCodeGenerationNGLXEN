@@ -15,7 +15,7 @@
         <GroupBox Header="Rosbridge Connection" Margin="10,37,10,0" VerticalAlignment="Top" Height="97">
             <Grid>
                 <Label Content="Rosbridge URL:" HorizontalAlignment="Left" Margin="10,8,0,0" VerticalAlignment="Top" Width="98"/>
-                <TextBox Margin="0,10,10,0" TextWrapping="Wrap" Text="{Binding RosbridgeUri}" HorizontalAlignment="Right" Width="289" Height="23" VerticalAlignment="Top" TabIndex="0"/>
+                <TextBox Margin="0,10,10,0" TextWrapping="Wrap" Text="{Binding RosbridgeUri}" HorizontalAlignment="Right" Width="289" Height="23" VerticalAlignment="Top" TabIndex="0" IsReadOnly="{Binding ConnectedToRosBridge}"/>
                 <Label Content="Status:" HorizontalAlignment="Left" Margin="10,39,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.994,0.493"/>
                 <TextBox Margin="0,42,90,0" TextWrapping="Wrap" Text="{Binding StatusTextBoxText}" Foreground="{Binding ConnectedToRosBridge, Converter={StaticResource BoolToRedOrGreenConverter}}" IsReadOnly="True" HorizontalAlignment="Right" Width="209" Height="23" VerticalAlignment="Top" Focusable="False"/>
                 <Button Content="{Binding ConnectButtonText}" Margin="0,42,10,10" HorizontalAlignment="Right" Width="75" Click="Connect_Click" TabIndex="1"/>

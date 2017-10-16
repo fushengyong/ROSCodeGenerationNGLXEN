@@ -53,7 +53,7 @@
 
             _messageDispatcher = messageDispatcher;
             _messageDispatcher.MessageReceived += RosbridgeMessageReceived;
-            _uniqueId = _messageDispatcher.GetUID();
+            _uniqueId = _messageDispatcher.GetUniqueID();
             Topic = topic;
         }
 

@@ -22,6 +22,11 @@
             get; private set;
         }
 
+        public string GetUniqueID()
+        {
+            return Guid.NewGuid().ToString();
+        }
+
         public MessageDispatcher(ISocket socket, IMessageSerializer serializer)
         {
             if (null == socket)
@@ -49,13 +54,11 @@
 
             if (CurrentState != States.Stopped)
             {
-                throw new MessageDispatcherException("Message dispatcher is not stopped!");
+                throw new MessageDispatcherException("Dispatcher is not stopped!");
             }
 
             CurrentState = States.Starting;
 
-
-            //TODO SIMPLIFY
             Task socketConnectTask = Task.Run(async () =>
             {
                 try
@@ -71,32 +74,19 @@
                 CurrentState = States.Started;
             });
 
-            _receivingTask = Task.Run(async () =>
+            _receivingTask = socketConnectTask.ContinueWith(async (socketTask) =>
             {
-                try
-                {
-                    await socketConnectTask;
-                }
-                catch
-                {
-                    return;
-                }
-
-                byte[] buffer;
                 while (CurrentState == States.Started)
                 {
                     try
                     {
-                        buffer = await _socket.ReceiveAsync();
+                        byte[] buffer = await _socket.ReceiveAsync();
 
                         JObject message = _serializer.Deserialize(buffer);
 
                         MessageReceived?.Invoke(this, new RosbridgeMessageReceivedEventArgs(message));
                     }
-                    catch
-                    {
-
-                    }
+                    catch { }
                 }
             });
 
@@ -112,7 +102,7 @@
 
             if (CurrentState != States.Started)
             {
-                throw new MessageDispatcherException("Dispatcher not in 'started' state!");
+                throw new MessageDispatcherException("Dispatcher not started!");
             }
 
             CurrentState = States.Stopping;
@@ -143,7 +133,7 @@
 
             if (CurrentState != States.Started)
             {
-                throw new MessageDispatcherException("Dispatcher not in 'started' state!");
+                throw new MessageDispatcherException("Dispatcher not started!");
             }
 
             return _socket.SendAsync(_serializer.Serialize(message));
@@ -185,18 +175,10 @@
                         _serializer = null;
                     }
                 }
-                catch
-                {
-
-                }
+                catch { }
             });
 
             GC.SuppressFinalize(this);
-        }
-
-        public string GetUID()
-        {
-            return Guid.NewGuid().ToString();
         }
     }
 }

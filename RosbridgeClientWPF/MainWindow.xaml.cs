@@ -1,13 +1,13 @@
-﻿using RosbridgeClientCommon;
-using RosbridgeClientCommon.Interfaces;
-using RosbridgeClientV2_0;
-using RosbridgeClientWPF.ViewModels;
-using System;
-using System.Collections.Generic;
-using System.Windows;
-
-namespace RosbridgeClientWPF
+﻿namespace RosbridgeClientWPF
 {
+    using RosbridgeClientCommon;
+    using RosbridgeClientCommon.Interfaces;
+    using RosbridgeClientV2_0;
+    using System;
+    using System.Collections.Generic;
+    using System.Windows;
+    using ViewModels;
+
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
@@ -129,7 +129,10 @@ namespace RosbridgeClientWPF
         {
             if (_viewModel.ConnectedToRosBridge)
             {
+                TurtlesimSubscribe subscribeWindow = new TurtlesimSubscribe(_viewModel.TurtlesimSubscribeTopicName, _messageDispatcher);
+                subscribeWindow.Show();
 
+                _windowList.Add(subscribeWindow);
             }
         }
     }
