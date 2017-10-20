@@ -42,10 +42,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Templates\BaseClasses\Member.cs">
+    <Compile Include="Templates\BaseClasses\MessageField.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>Member.ttinclude</DependentUpon>
+      <DependentUpon>MessageField.ttinclude</DependentUpon>
+    </Compile>
+    <Compile Include="Templates\BaseClasses\MessageType.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MessageType.ttinclude</DependentUpon>
     </Compile>
     <Compile Include="Templates\Helpers\FileLoader.cs">
       <AutoGen>True</AutoGen>
@@ -73,13 +78,17 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>FileLoader.cs</LastGenOutput>
     </None>
-    <None Include="Templates\BaseClasses\Member.ttinclude">
+    <None Include="Templates\BaseClasses\MessageField.ttinclude">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>Member.cs</LastGenOutput>
+      <LastGenOutput>MessageField.cs</LastGenOutput>
     </None>
     <None Include="Templates\Helpers\SolutionManager.ttinclude">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>SolutionManager.cs</LastGenOutput>
+    </None>
+    <None Include="Templates\BaseClasses\MessageType.ttinclude">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>MessageType.cs</LastGenOutput>
     </None>
     <Content Include="Templates\Main.tt">
       <Generator>TextTemplatingFileGenerator</Generator>

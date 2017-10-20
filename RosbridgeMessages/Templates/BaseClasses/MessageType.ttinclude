@@ -1,0 +1,35 @@
+﻿<#+
+public class MessageType{
+    public string NamespaceName{ get; private set; }
+    public string TypeName { get; private set; }
+    
+    public MessageType(string namespaceName, string typeName){
+        if(null == namespaceName){
+            throw new ArgumentNullException(nameof(namespaceName));
+        }
+
+        if(string.Empty == namespaceName){
+            throw new ArgumentException("Property can't be empty!", nameof(namespaceName));
+        }
+
+        if(null == typeName){
+            throw new ArgumentNullException(nameof(typeName));
+        }
+
+        if(string.Empty == typeName){
+            throw new ArgumentException("Property can't be empty!", nameof(typeName));
+        }
+
+        this.NamespaceName = namespaceName;
+        this.TypeName = typeName;
+    }
+
+    public override bool Equals(object obj){
+        if(obj is MessageType){
+            MessageType other = obj as MessageType;
+            return this.NamespaceName == other.NamespaceName && this.TypeName == other.TypeName;
+        }
+        return false;
+    }
+}
+#>
