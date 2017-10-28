@@ -5,11 +5,6 @@
 
     public class RosServiceResponseMessage : RosMessageBase
     {
-        public RosServiceResponseMessage()
-        {
-            Operation = RosbridgeProtocolConstants.RosMessages.SERVICE_RESPONSE;
-        }
-
         /// <summary>
         /// The name of the service that was called
         /// </summary>
@@ -21,5 +16,9 @@
         /// </summary>
         [JsonProperty("values", NullValueHandling = NullValueHandling.Ignore)]
         public JArray ValueList { get; set; }
+
+        public RosServiceResponseMessage() : base(RosbridgeProtocolConstants.RosMessages.SERVICE_RESPONSE)
+        {
+        }
     }
 }

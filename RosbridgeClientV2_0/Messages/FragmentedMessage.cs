@@ -7,11 +7,6 @@
     /// </summary>
     public class FragmentedMessage : RosbridgeMessageBase
     {
-        public FragmentedMessage()
-        {
-            Operation = RosbridgeProtocolConstants.MessageTransformation.FRAGMENT;
-        }
-
         /// <summary>
         /// Required for fragmented messages, in order to identify corresponding fragments for the fragmented message
         /// </summary>
@@ -35,5 +30,9 @@
         /// </summary>
         [JsonProperty("total")]
         public int Total { get; set; }
+
+        public FragmentedMessage() : base(RosbridgeProtocolConstants.MessageTransformation.FRAGMENT)
+        {
+        }
     }
 }

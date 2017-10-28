@@ -1,0 +1,67 @@
+﻿<#@ template debug="true" hostspecific="false" language="C#" #>
+<#@ output extension=".cs" #>
+
+<#@ include file="$(ProjectDir)\Templates\BaseClasses\RosFile.ttinclude" once="true" #>
+<#@ include file="$(ProjectDir)\Templates\BaseClasses\MessageType.ttinclude" once="true" #>
+<#@ include file="$(ProjectDir)\Templates\BaseClasses\MessageField.ttinclude" once="true" #>
+
+<#@ assembly name="System.Core" #>
+
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+
+<#@ parameter type="System.Object" name="Message" #>
+<#@ parameter type="System.String" name="MessageTypeAttributeName" #>
+
+<#@ parameter type="System.String" name="NamespacePrefix" #>
+
+<#
+    if(null == Message){
+        throw new ArgumentNullException(nameof(Message));
+    }
+
+    if(!(Message is MsgFile)){
+        throw new ArgumentException("Invalid argument type!", nameof(Message));
+    }
+
+    if(null == MessageTypeAttributeName){
+        throw new ArgumentNullException(nameof(MessageTypeAttributeName));
+    }
+    
+    MsgFile message = Message as MsgFile;
+#>
+
+namespace <#= AddPrefixToNamespace(message.Type.NamespaceName) #>{
+    
+<# foreach(MessageType dependencyType in message.DependencySet){ #>
+    using <#= AddPrefixToNamespace(dependencyType.NamespaceName) #>;     
+<# }#>
+
+    [<#= MessageTypeAttributeName #>("<#= message.Type.NamespaceName #>/<#= message.Type.TypeName #>")]
+    public class <#= message.Type.TypeName #>{ 
+        <# 
+            IEnumerable<MessageField> fieldSet = message.FieldSet.OrderBy(field => field.IsConst);
+            
+            foreach(MessageField field in fieldSet){ #>
+                <# if(field.IsConst){ #>
+        public static const <#= field.TypeName #> <#= field.FieldName #> = <#= field.FieldValue #>;
+                <# }else{
+                        if(field.IsArray) { #>
+        public <#= field.TypeName #>[<#= field.ArrayElementCount > 0 ? field.ArrayElementCount.ToString() : string.Empty #>] { get; set; }            
+                    <# }else{ #>
+        public <#= field.TypeName #> <#= field.FieldName #> { get; set; }
+                <# }} #>
+        <#  } #>     
+    }
+}
+
+<#+
+    private string AddPrefixToNamespace(string namespaceName){
+        if(!string.IsNullOrEmpty(NamespacePrefix)){
+            return string.Format("{0}.{1}", NamespacePrefix,namespaceName);
+        }
+
+        return namespaceName;
+    }
+ #>

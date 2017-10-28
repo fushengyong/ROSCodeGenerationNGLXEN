@@ -2,9 +2,8 @@
 {
     public class RosUnsubscribeMessage : RosTopicMessageBase
     {
-        public RosUnsubscribeMessage()
+        public RosUnsubscribeMessage() : base(RosbridgeProtocolConstants.RosMessages.UNSUBSCRIBE)
         {
-            Operation = RosbridgeProtocolConstants.RosMessages.UNSUBSCRIBE;
         }
     }
 }

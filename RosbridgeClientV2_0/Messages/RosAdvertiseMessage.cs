@@ -7,15 +7,14 @@
     /// </summary>
     public class RosAdvertiseMessage : RosTopicMessageBase
     {
-        public RosAdvertiseMessage()
-        {
-            Operation = RosbridgeProtocolConstants.RosMessages.ADVERTISE;
-        }
-
         /// <summary>
         /// The string type to advertise for the topic
         /// </summary>
         [JsonProperty("type")]
         public string Type { get; set; }
+
+        public RosAdvertiseMessage() : base(RosbridgeProtocolConstants.RosMessages.ADVERTISE)
+        {
+        }
     }
 }

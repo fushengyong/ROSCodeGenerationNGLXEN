@@ -7,11 +7,6 @@
     /// </summary>
     public class AuthenticateMessage : RosbridgeMessageBase
     {
-        public AuthenticateMessage()
-        {
-            Operation = RosbridgeProtocolConstants.Authentication.AUTHENTICATE;
-        }
-
         /// <summary>
         /// MAC (hashed) string given by the client
         /// </summary>
@@ -53,5 +48,9 @@
         /// </summary>
         [JsonProperty("end")]
         public int ClientEndTime { get; set; }
+
+        public AuthenticateMessage() : base(RosbridgeProtocolConstants.Authentication.AUTHENTICATE)
+        {
+        }
     }
 }

@@ -4,15 +4,14 @@
 
     public class StatusLevelMessage : SetStatusLevelMessage
     {
-        public StatusLevelMessage()
-        {
-            Operation = RosbridgeProtocolConstants.StatusMessage.STATUS;
-        }
-
         /// <summary>
         /// The string message being logged
         /// </summary>
         [JsonProperty("msg")]
         public string Message { get; set; }
+
+        public StatusLevelMessage() : base(RosbridgeProtocolConstants.StatusMessage.STATUS)
+        {
+        }
     }
 }

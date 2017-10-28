@@ -1,8 +1,10 @@
-﻿<#@ import namespace="System.Collections.Generic" #>
+﻿<#@ include file="$(ProjectDir)\Templates\BaseClasses\RosFile.ttinclude" once="true"#>
+
+<#@ assembly name="System.Core" #>
+
+<#@ import namespace="System.Collections.Generic" #>
 <#@ import namespace="System.IO" #>
 <#@ import namespace="System.Linq" #>
-
-<#@ include file="$(ProjectDir)\Templates\BaseClasses\RosFile.ttinclude" once="true"#>
 
 <#+
     void LoadRosFiles(HashSet<MsgFile> msgFileSet, HashSet<SrvFile> srvFileSet, string path){

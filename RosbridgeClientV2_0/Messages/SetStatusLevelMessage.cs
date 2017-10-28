@@ -9,11 +9,6 @@
     /// </summary>
     public class SetStatusLevelMessage : RosbridgeMessageBase
     {
-        public SetStatusLevelMessage()
-        {
-            Operation = RosbridgeProtocolConstants.StatusMessage.SET_STATUS_LEVEL;
-        }
-
         [JsonProperty("id", NullValueHandling = NullValueHandling.Ignore)]
         public string Id { get; set; }
 
@@ -23,5 +18,13 @@
         [JsonProperty("level")]
         [JsonConverter(typeof(StringEnumConverter))]
         public StatusMessageLevel StatusLevel { get; set; }
+
+        public SetStatusLevelMessage() : base(RosbridgeProtocolConstants.StatusMessage.SET_STATUS_LEVEL)
+        {
+        }
+
+        protected SetStatusLevelMessage(string operation) : base(operation)
+        {
+        }
     }
 }
