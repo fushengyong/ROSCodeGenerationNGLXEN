@@ -52,6 +52,16 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>MessageType.ttinclude</DependentUpon>
     </Compile>
+    <Compile Include="Templates\CodeGeneration\RosMessage.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>RosMessage.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Templates\Helpers\CodeGenerator.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CodeGenerator.ttinclude</DependentUpon>
+    </Compile>
     <Compile Include="Templates\Helpers\FileLoader.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -89,6 +99,14 @@
     <None Include="Templates\BaseClasses\MessageType.ttinclude">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>MessageType.cs</LastGenOutput>
+    </None>
+    <Content Include="Templates\CodeGeneration\RosMessage.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>RosMessage.cs</LastGenOutput>
+    </Content>
+    <None Include="Templates\Helpers\CodeGenerator.ttinclude">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>CodeGenerator.cs</LastGenOutput>
     </None>
     <Content Include="Templates\Main.tt">
       <Generator>TextTemplatingFileGenerator</Generator>

@@ -14,6 +14,18 @@
         private DTE _dte;
         private Project _project;
 
+        public Project ActualProject { get { return _project; } }
+        public string DefaultNamespace
+        { 
+            get { 
+                    if(null != _project){
+                        return _project.Properties.Item("RootNamespace").Value.ToString();
+                    } else {
+                        return string.Empty;
+                    }
+                }
+        }
+
         public SolutionManager(IServiceProvider serviceProvider, string templateFile){
             if(serviceProvider == null || templateFile == null){
                 throw new ArgumentNullException();
