@@ -4,8 +4,10 @@
 
     public class RosMessageTypeAttributeEmptyException : Exception
     {
+        private const string MESSAGE_TEMPLATE = "The attribute value cannot be empty on class: {0}!";
+
         public RosMessageTypeAttributeEmptyException() : base() { }
-        public RosMessageTypeAttributeEmptyException(string message) : base(message) { }
-        public RosMessageTypeAttributeEmptyException(string message, Exception innerException) : base(message, innerException) { }
+        public RosMessageTypeAttributeEmptyException(string classType) : base(string.Format(MESSAGE_TEMPLATE, classType)) { }
+        public RosMessageTypeAttributeEmptyException(string classType, Exception innerException) : base(string.Format(MESSAGE_TEMPLATE, classType), innerException) { }
     }
 }
