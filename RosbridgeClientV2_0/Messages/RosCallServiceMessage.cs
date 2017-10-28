@@ -7,11 +7,6 @@ namespace RosbridgeClientV2_0.Messages
 {
     public class RosCallServiceMessage : RosMessageBase
     {
-        public RosCallServiceMessage()
-        {
-            Operation = RosbridgeProtocolConstants.RosMessages.CALL_SERVICE;
-        }
-
         /// <summary>
         /// The name of the service to call
         /// </summary>
@@ -36,5 +31,9 @@ namespace RosbridgeClientV2_0.Messages
         [JsonProperty("compression", NullValueHandling = NullValueHandling.Ignore)]
         [JsonConverter(typeof(StringEnumConverter))]
         public MessageCompressionLevel? Compression { get; set; }
+
+        public RosCallServiceMessage() : base(RosbridgeProtocolConstants.RosMessages.CALL_SERVICE)
+        {
+        }
     }
 }

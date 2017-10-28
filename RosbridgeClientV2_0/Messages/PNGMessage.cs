@@ -7,11 +7,6 @@ namespace RosbridgeClientV2_0.Messages
     /// </summary>
     public class PNGMessage : RosbridgeMessageBase
     {
-        public PNGMessage()
-        {
-            Operation = RosbridgeProtocolConstants.MessageTransformation.PNG;
-        }
-
         /// <summary>
         /// Only required if the message is fragmented. Identifies the fragments for the fragmented message.
         /// </summary>
@@ -36,5 +31,8 @@ namespace RosbridgeClientV2_0.Messages
         [JsonProperty("total", NullValueHandling = NullValueHandling.Ignore)]
         public int? Total { get; set; }
 
+        public PNGMessage() : base(RosbridgeProtocolConstants.MessageTransformation.PNG)
+        {
+        }
     }
 }

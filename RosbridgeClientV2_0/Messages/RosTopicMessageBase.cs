@@ -12,5 +12,9 @@
         /// </summary>
         [JsonProperty("topic")]
         public string Topic { get; set; }
+
+        public RosTopicMessageBase(string operation) : base(operation)
+        {
+        }
     }
 }

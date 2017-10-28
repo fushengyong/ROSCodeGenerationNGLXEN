@@ -5,9 +5,8 @@
     /// </summary>
     public class RosUnadvertiseMessage : RosTopicMessageBase
     {
-        public RosUnadvertiseMessage()
+        public RosUnadvertiseMessage() : base(RosbridgeProtocolConstants.RosMessages.UNADVERTISE)
         {
-            Operation = RosbridgeProtocolConstants.RosMessages.UNADVERTISE;
         }
     }
 }

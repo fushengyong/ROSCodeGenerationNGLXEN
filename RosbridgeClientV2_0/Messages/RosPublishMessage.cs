@@ -8,15 +8,14 @@
     /// </summary>
     public class RosPublishMessage : RosTopicMessageBase
     {
-        public RosPublishMessage()
-        {
-            Operation = RosbridgeProtocolConstants.RosMessages.PUBLISH;
-        }
-
         /// <summary>
         /// The message to publish on the topic
         /// </summary>
         [JsonProperty("msg")]
         public JObject Message { get; set; }
+
+        public RosPublishMessage() : base(RosbridgeProtocolConstants.RosMessages.PUBLISH)
+        {
+        }
     }
 }

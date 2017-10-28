@@ -9,11 +9,6 @@
     /// </summary>
     public class RosSubscribeMessage : RosTopicMessageBase
     {
-        public RosSubscribeMessage()
-        {
-            Operation = RosbridgeProtocolConstants.RosMessages.SUBSCRIBE;
-        }
-
         /// <summary>
         /// The (expected) type of the topic to subscribe to. If left off, type will be inferred, and if the topic doesn't exist then the command to subscribe will fail
         /// </summary>
@@ -44,5 +39,9 @@
         [JsonProperty("compression", NullValueHandling = NullValueHandling.Ignore)]
         [JsonConverter(typeof(StringEnumConverter))]
         public MessageCompressionLevel? Compression { get; set; }
+
+        public RosSubscribeMessage() : base(RosbridgeProtocolConstants.RosMessages.SUBSCRIBE)
+        {
+        }
     }
 }

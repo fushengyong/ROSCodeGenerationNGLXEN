@@ -6,5 +6,9 @@
     {
         [JsonProperty("id", NullValueHandling = NullValueHandling.Ignore)]
         public string Id { get; set; }
+
+        public RosMessageBase(string operation) : base(operation)
+        {
+        }
     }
 }
