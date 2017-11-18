@@ -8,12 +8,24 @@
 
 <#+
     void LoadRosFiles(HashSet<MsgFile> msgFileSet, HashSet<SrvFile> srvFileSet, string path){
-        if(msgFileSet == null || srvFileSet == null || path == null){
-            throw new ArgumentNullException();
+        if(null == msgFileSet){
+            throw new ArgumentNullException(nameof(msgFileSet));
+        }
+
+        if(null == srvFileSet){
+            throw new ArgumentNullException(nameof(srvFileSet));
+        }
+
+        if(null == path){
+            throw new ArgumentNullException(nameof(path));
+        }
+
+        if(string.Empty == path){
+            throw new ArgumentException("Parameter cannot be empty!", nameof(path));
         }
 
         if(!Directory.Exists(path)){
-            throw new DirectoryNotFoundException();
+            throw new DirectoryNotFoundException(path);
         }
 
         HashSet<FileInfo> msgFileInfoSet = new HashSet<FileInfo>(Directory.GetFiles(path, string.Format("*.{0}", MsgFile.FILE_EXTENSION), SearchOption.AllDirectories).Select(filePath => new FileInfo(filePath)));

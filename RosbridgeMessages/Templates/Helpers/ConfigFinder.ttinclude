@@ -1,0 +1,45 @@
+﻿<#@ assembly name="EnvDTE" #>
+<#@ assembly name="System.Core" #>
+<#@ assembly name="System.Configuration.dll" #>
+
+<#@ import namespace="EnvDTE" #>
+<#@ import namespace="Microsoft.VisualStudio.TextTemplating" #>
+<#@ import namespace="Microsoft.VisualStudio.TextTemplating.VSHost" #>
+<#@ import namespace="System.Configuration" #> 
+<#@ import namespace="System.IO" #> 
+<#@ import namespace="System.Text.RegularExpressions" #>
+
+<#+
+    public System.Configuration.Configuration GetConfigFile(ITextTemplatingEngineHost host, string templateFile)
+    {
+        if(null == host){
+            throw new ArgumentNullException(nameof(host));
+        }
+
+        if(null == templateFile){
+            throw new ArgumentNullException(nameof(templateFile));
+        }
+
+        if(string.Empty == templateFile){
+            throw new ArgumentException("Parameter cannot be empty!", nameof(templateFile));
+        }
+
+        DTE dte = (EnvDTE.DTE)((IServiceProvider)host).GetService(typeof(EnvDTE.DTE));
+        Project project = dte.Solution.FindProjectItem(templateFile).ContainingProject;
+        string configFilePath = null;
+        foreach (EnvDTE.ProjectItem item in project.ProjectItems)
+        {
+            if (Regex.IsMatch(item.Name, "(app|web).config", RegexOptions.IgnoreCase)){
+                configFilePath = item.get_FileNames(0);
+            }
+        }
+
+        if (null == configFilePath){
+            throw new FileNotFoundException("Configuration file cannot be found!");
+        }
+
+        ExeConfigurationFileMap configFile = new ExeConfigurationFileMap();
+        configFile.ExeConfigFilename = configFilePath;
+        return System.Configuration.ConfigurationManager.OpenMappedExeConfiguration(configFile, ConfigurationUserLevel.None);
+    }
+#>

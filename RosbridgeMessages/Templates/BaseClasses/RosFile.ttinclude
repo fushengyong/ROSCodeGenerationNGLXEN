@@ -6,13 +6,9 @@
 
 <#@ import namespace="System.IO" #>
 <#@ import namespace="System.Linq" #>
-<#@ import namespace="System.Text.RegularExpressions" #>
-<#@ import namespace="System.Collections.Generic" #>
-<#@ import namespace="System.Runtime.Serialization" #>
-
 
 <#+
-    public enum ServiceMessageTypeEnum { Not = 0, Request = 1, Response = 2 }
+    public enum ServiceMessageTypeEnum { NotUsed = 0, Request = 1, Response = 2 }
     
     public abstract class RosFile
     {
@@ -98,7 +94,8 @@
 
     public class MsgFile : RosFile
     {
-        private const string HEADER_TYPE_NAME = "Header";
+        public const string HEADER_TYPE_NAME = "Header";
+        public const string CUSTOM_PRIMITIVE_TYPE_FOR_TIME = "TimeData";
         public const string FILE_EXTENSION = "msg";
 
         public static readonly Dictionary<string,string> PrimitiveTypeDictionary = new Dictionary<string,string>
@@ -121,10 +118,10 @@
             {"duration", "Duration"}     
         };
 
+        public static readonly HashSet<string> CustomPrimitiveTypeSet = new HashSet<string>{ "Time", "Duration" };
+
         public static readonly HashSet<MessageType> MessageTypeSet = new HashSet<MessageType>();
 
-        public bool HasHeader { get; private set; }
-        public bool IsMeta { get { return DependencySet.Count > 0; } }
         public ServiceMessageTypeEnum ServiceMessageType { get; private set; }
         public HashSet<MessageField> FieldSet { get; private set; }
         public HashSet<MessageType> DependencySet { get; private set; }
@@ -143,18 +140,16 @@
         }
 
         protected override void ProcessFields(){
-            this.FieldSet = YAMLParser.YAMLStringToMessageFieldSet(this.FileContent);
+            this.FieldSet = YAMLParser.YAMLStringToMessageFieldSet(this.FileContent, PrimitiveTypeDictionary);
             
             foreach(MessageField field in this.FieldSet)
             {
-                if(!string.IsNullOrEmpty(field.NamespaceName) && this.Type.NamespaceName != field.NamespaceName){
-                    DependencySet.Add(new MessageType(field.NamespaceName, field.TypeName));
-                }else if(!PrimitiveTypeDictionary.ContainsKey(field.TypeName)){
-                    DependencySet.Add(new MessageType(this.Type.NamespaceName, field.TypeName));
+                if(this.Type.TypeName == field.Type.TypeName && CustomPrimitiveTypeSet.Contains(this.Type.TypeName)){
+                    field.Type.TypeName = CUSTOM_PRIMITIVE_TYPE_FOR_TIME;
                 }
 
-                if(field.TypeName == HEADER_TYPE_NAME){
-                    HasHeader = true;
+                if(!string.IsNullOrEmpty(field.Type.NamespaceName) && this.Type.NamespaceName != field.Type.NamespaceName){
+                    DependencySet.Add(new MessageType(field.Type.NamespaceName, field.Type.TypeName));
                 }
             }
 
