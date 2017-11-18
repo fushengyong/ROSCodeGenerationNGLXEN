@@ -87,7 +87,7 @@ namespace <#= AddPrefixToNamespace(MessageNamespace) #> {
 <# } foreach(KeyValuePair<string, string> field in FieldList){ #>
         public <#= field.Value #> <#= field.Key #> { get; set; }
 <# } #>
-<# if(ArrayFieldList.Count > 0){ #>
+<# if(ArrayFieldList.Any(arrayField => arrayField.Item3 > 0)){ #>
 
         public <#= MessageType #>(){
 <# foreach(Tuple<string, string, int> arrayField in ArrayFieldList){ #>
