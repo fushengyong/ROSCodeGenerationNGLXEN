@@ -57,10 +57,10 @@
                 throw new MessageDispatcherException("Dispatcher is not stopped!");
             }
 
-            CurrentState = States.Starting;
-
             Task socketConnectTask = Task.Run(async () =>
             {
+                CurrentState = States.Starting;
+
                 try
                 {
                     await _socket.ConnectAsync();

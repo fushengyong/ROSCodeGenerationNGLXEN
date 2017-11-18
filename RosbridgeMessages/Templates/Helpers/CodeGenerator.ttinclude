@@ -11,42 +11,85 @@
 <#@ import namespace="Microsoft.VisualStudio.TextTemplating.VSHost" #>
 
 <#+
-    public class CodeGenerator{
-        private const string ROS_MESSAGE_TYPE_ATTRIBUTE_NAME = "RosMessageTypeAttribute";
-        private const string ROS_MESSAGE_CODE_GENERATION_TEMPLATE_RELATIVE_PATH = @"CodeGeneration\RosMessage.tt";
+	public class CodeGenerator{
+		private const string ROS_MESSAGE_CODE_GENERATION_TEMPLATE_RELATIVE_PATH = @"CodeGeneration\RosMessage.tt";
 
-        private ITextTemplatingEngineHost _host;
-        private ITextTemplating _textTemplating;
-        private ITextTemplatingSessionHost _textTemplatingHost;
-        private SolutionManager _solutionManager;
-        private string _defaultNamespace;
-        private bool _useProjectDefaultNamespace;
-        private string _rosMessageCodeGenerationTemplatePath;
+		private ITextTemplatingEngineHost _host;
+		private ITextTemplating _textTemplating;
+		private ITextTemplatingSessionHost _textTemplatingHost;
+		private SolutionManager _solutionManager;
+		private ProjectItem _workingDirectory;
+		private string _defaultNamespace;
+		private string _rosMessageTypeAttributeName;
+		private string _rosMessageTypeAttributeNamespace;
+		private bool _useProjectDefaultNamespaceAsPrefix;
+		private string _rosMessageCodeGenerationTemplatePath;
 
-        public CodeGenerator(ITextTemplatingEngineHost host, string defaultNamespace, bool useProjectDefaultNamespace){
-            _host = host;
-            _textTemplating = (_host as IServiceProvider).GetService(typeof(STextTemplating)) as ITextTemplating;
-            _textTemplatingHost = _textTemplating as ITextTemplatingSessionHost;
-            _solutionManager = new SolutionManager(_host as IServiceProvider, _host.TemplateFile);
-            _defaultNamespace = defaultNamespace;
-            _useProjectDefaultNamespace = useProjectDefaultNamespace;
+		public CodeGenerator(ITextTemplatingEngineHost host, string defaultNamespace, string rosMessageTypeAttributeName, string rosMessageTypeAttributeNamespace, bool useProjectDefaultNamespaceAsPrefix){
+			_host = host;
+			_textTemplating = (_host as IServiceProvider).GetService(typeof(STextTemplating)) as ITextTemplating;
+			_textTemplatingHost = _textTemplating as ITextTemplatingSessionHost;
+			_solutionManager = new SolutionManager(_host as IServiceProvider, _host.TemplateFile);
+			_defaultNamespace = defaultNamespace;
+			_useProjectDefaultNamespaceAsPrefix = useProjectDefaultNamespaceAsPrefix;
+			_rosMessageTypeAttributeName = rosMessageTypeAttributeName;
+			_rosMessageTypeAttributeNamespace = rosMessageTypeAttributeNamespace;
 
-            _rosMessageCodeGenerationTemplatePath = _host.ResolvePath(ROS_MESSAGE_CODE_GENERATION_TEMPLATE_RELATIVE_PATH);
-            _solutionManager.Initialize(defaultNamespace);
-        }
+			_rosMessageCodeGenerationTemplatePath = _host.ResolvePath(ROS_MESSAGE_CODE_GENERATION_TEMPLATE_RELATIVE_PATH);
+			_workingDirectory = _solutionManager.Initialize(defaultNamespace);
+		}
 
-        public void GenerateRosMessages(HashSet<MsgFile> messageSet){
-            HashSet<MessageType> messageDone = new HashSet<MessageType>();
+		public void GenerateRosMessages(HashSet<MsgFile> messageSet){
+			HashSet<MessageType> messageDone = new HashSet<MessageType>();
+			foreach(IGrouping<string, MsgFile> msgGroup in messageSet.GroupBy(msg => msg.Type.NamespaceName)){
+				GenerateMsgByNamespace(msgGroup);
+			}
+		}
 
-            foreach(MsgFile message in messageSet){
-                _textTemplatingHost.Session = _textTemplatingHost.CreateSession();
+		private void GenerateMsgByNamespace(IGrouping<string, MsgFile> msgGroup){
+			string directoryName = msgGroup.Key;
 
-                _textTemplatingHost.Session["Message"] = message;
-                _textTemplatingHost.Session["MessageTypeAttributeName"] = ROS_MESSAGE_TYPE_ATTRIBUTE_NAME;
-                _textTemplatingHost.Session["NamespacePrefix"] = _useProjectDefaultNamespace ? string.Format("{0}.{1}", _solutionManager.DefaultNamespace, _defaultNamespace) : _defaultNamespace;
+			ProjectItem groupDirectoryProjectItem = SolutionManager.AddDirectoryToProjectItem(_workingDirectory, directoryName);
 
-                string result = _textTemplating.ProcessTemplate(_rosMessageCodeGenerationTemplatePath, File.ReadAllText(_rosMessageCodeGenerationTemplatePath)); 
-            }
-        }
-    }
+			DirectoryInfo groupDirectory = new DirectoryInfo(SolutionManager.GetProjectItemFullPath(groupDirectoryProjectItem));
+
+			foreach(MsgFile message in msgGroup){
+				TextTemplatingSession session = new TextTemplatingSession();
+
+				session["MessageTypeAttributeName"] = _rosMessageTypeAttributeName;
+				session["MessageTypeAttributeNamespace"] = _rosMessageTypeAttributeNamespace;
+				session["NamespacePrefix"] = _useProjectDefaultNamespaceAsPrefix ? string.Format("{0}.{1}", _solutionManager.DefaultNamespace, _defaultNamespace) : _defaultNamespace;
+				session["DependencyList"] = message.DependencySet.Select(dep => dep.NamespaceName).ToList();
+				session["MessageNamespace"] = message.Type.NamespaceName;
+				session["MessageType"] = message.Type.TypeName;
+				session["ConstantFieldList"] = message.FieldSet.Where(field => field.IsConst && !field.IsArray).Select(field => Tuple.Create(field.TypeName, field.FieldName, field.FieldValue)).ToList();
+				session["ArrayFieldList"] = message.FieldSet.Where(field => field.IsArray && !field.IsConst).Select(field => Tuple.Create(field.TypeName, field.FieldName, field.ArrayElementCount)).ToList();
+				session["FieldList"] = message.FieldSet.Where(field => !field.IsConst && !field.IsArray).ToDictionary(k => k.FieldName, v => v.TypeName);
+
+				_textTemplatingHost.Session = session;
+
+				string transformedTemplate = _textTemplating.ProcessTemplate(_rosMessageCodeGenerationTemplatePath, File.ReadAllText(_rosMessageCodeGenerationTemplatePath)); 
+				
+				FileInfo newFile = WriteToFile(groupDirectory, message.Type.TypeName, transformedTemplate);
+
+				SolutionManager.AddFileToProjectItem(groupDirectoryProjectItem, newFile);
+			}
+
+			_solutionManager.ActualProject.Save();
+		}
+
+		private FileInfo WriteToFile(DirectoryInfo directory, string fileName, string fileContent){
+			FileInfo newFile = new FileInfo(Path.Combine(directory.FullName, string.Format("{0}.cs", fileName)));
+
+			if(newFile.Exists){
+				newFile.Delete();
+			}
+
+			File.WriteAllText(newFile.FullName, fileContent);
+
+			newFile.Refresh();
+
+			return newFile;
+		}
+	}
  #>

@@ -1,11 +1,13 @@
 ﻿<#@ template debug="true" hostspecific="true" language="C#" #>
-<#@ output extension=".cs" #>
+<#@ output extension=".txt" #>
 
 <#@ include file="Helpers\FileLoader.ttinclude" once="true"#>
 <#@ include file="Helpers\CodeGenerator.ttinclude" once="true" #>
 
 <#@ assembly name="System.Core" #>
+﻿<#@ assembly name="Microsoft.CSharp" #>
 
+<#@ import namespace="System" #>
 <#@ import namespace="System.IO" #>
 <#@ import namespace="System.Linq" #>
 <#@ import namespace="System.Collections.Generic" #>
@@ -14,14 +16,15 @@
     string rosMessagesAbsolutePath = @"D:\Source\Repos\ROS.NET\common_msgs";
     bool projectDefaultNamespaceAsPrefix = true;
     string defaultNamespace = "RosClasses";
+    string rosMessageTypeAttributeName = "RosMessageType";
+    string rosMessageTypeAttributeNamespace = "RosbridgeClientCommon.Attributes";
 
     HashSet<MsgFile> msgFileSet = new HashSet<MsgFile>();
     HashSet<SrvFile> srvFileSet = new HashSet<SrvFile>();
 
     LoadRosFiles(msgFileSet, srvFileSet, rosMessagesAbsolutePath);
     
-    CodeGenerator codeGenerator = new CodeGenerator(this.Host, defaultNamespace, projectDefaultNamespaceAsPrefix);
+    CodeGenerator generator = new CodeGenerator(this.Host, defaultNamespace, rosMessageTypeAttributeName, rosMessageTypeAttributeNamespace, projectDefaultNamespaceAsPrefix);
 
-    codeGenerator.GenerateRosMessages(msgFileSet);
+    generator.GenerateRosMessages(msgFileSet);
  #>
-0
