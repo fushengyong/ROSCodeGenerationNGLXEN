@@ -16,9 +16,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RosbridgeClientV2_0.UnitTests", "RosbridgeClientV2_0.UnitTests\RosbridgeClientV2_0.UnitTests.csproj", "{87F362FF-1DB5-4808-8642-2C3F180BEF6A}"
 EndProject
 Global
-	GlobalSection(Performance) = preSolution
-		HasPerformanceSessions = true
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU

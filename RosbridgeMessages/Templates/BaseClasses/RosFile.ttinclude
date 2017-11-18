@@ -1,6 +1,6 @@
 ﻿<#@ include file="$(ProjectDir)\Templates\Helpers\YAMLParser.ttinclude" once="true"#>
-<#@ include file="MessageField.ttinclude" once="true" #>
-<#@ include file="MessageType.ttinclude" once="true" #>
+<#@ include file="$(ProjectDir)\Templates\BaseClasses\MessageField.ttinclude" once="true" #>
+<#@ include file="$(ProjectDir)\Templates\BaseClasses\MessageType.ttinclude" once="true" #>
 
 <#@ assembly name="System.Core" #>
 
@@ -8,10 +8,12 @@
 <#@ import namespace="System.Linq" #>
 <#@ import namespace="System.Text.RegularExpressions" #>
 <#@ import namespace="System.Collections.Generic" #>
+<#@ import namespace="System.Runtime.Serialization" #>
+
 
 <#+
     public enum ServiceMessageTypeEnum { Not = 0, Request = 1, Response = 2 }
-
+    
     public abstract class RosFile
     {
         private readonly string[] RosPackageFolderNameArray = { "msg", "srv", "msgs", "srvs" };
@@ -145,7 +147,7 @@
             
             foreach(MessageField field in this.FieldSet)
             {
-                if(!string.IsNullOrEmpty(field.NamespaceName)){
+                if(!string.IsNullOrEmpty(field.NamespaceName) && this.Type.NamespaceName != field.NamespaceName){
                     DependencySet.Add(new MessageType(field.NamespaceName, field.TypeName));
                 }else if(!PrimitiveTypeDictionary.ContainsKey(field.TypeName)){
                     DependencySet.Add(new MessageType(this.Type.NamespaceName, field.TypeName));

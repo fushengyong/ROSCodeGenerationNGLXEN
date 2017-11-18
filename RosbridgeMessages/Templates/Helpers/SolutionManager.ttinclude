@@ -10,6 +10,7 @@
 <#+
     public class SolutionManager{
         private const string PROJECT_DIRECTORY_GUID = "{6BB5F8EF-4483-11D3-8BCF-00C04F8EC28C}";
+        private const string FULL_PATH_ITEM_PROPERTY = "FullPath";
 
         private DTE _dte;
         private Project _project;
@@ -18,12 +19,62 @@
         public string DefaultNamespace
         { 
             get { 
-                    if(null != _project){
-                        return _project.Properties.Item("RootNamespace").Value.ToString();
-                    } else {
-                        return string.Empty;
-                    }
+                if(null != _project){
+                    return _project.Properties.Item("RootNamespace").Value.ToString();
+                } else {
+                    return string.Empty;
                 }
+            }
+        }
+
+        public static string GetProjectItemFullPath(ProjectItem item){
+            return item.Properties.Item(FULL_PATH_ITEM_PROPERTY).Value.ToString();
+        }
+
+        public static ProjectItem AddDirectoryToProjectItem(ProjectItem projectItem, string directoryName){
+            if(null == directoryName){
+                throw new ArgumentNullException(nameof(directoryName));
+            }
+
+            ProjectItem result = null;
+
+            if(!IsDirectoryExistsInProjectItems(projectItem.ProjectItems, directoryName, ref result)){
+                result = projectItem.ProjectItems.AddFolder(directoryName);
+            }
+            
+            return result;
+        }
+
+        public static bool IsDirectoryExistsInProjectItems(ProjectItems projectItems, string directoryName, ref ProjectItem projectItem){
+            foreach(ProjectItem currentProjectItem in projectItems){
+                if(currentProjectItem.Kind == PROJECT_DIRECTORY_GUID && currentProjectItem.Name == directoryName){
+                    projectItem = currentProjectItem;
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public static ProjectItem AddFileToProjectItem(ProjectItem projectItem, FileInfo file){
+            if(null == projectItem){
+                throw new ArgumentNullException(nameof(projectItem));
+            }
+
+            if(file == null){
+                throw new ArgumentNullException(nameof(file));
+            }
+
+            if(projectItem.Kind != PROJECT_DIRECTORY_GUID){
+                throw new InvalidOperationException("The given project item is not a directory!");
+            }
+            
+            if(!file.Exists){
+                throw new FileNotFoundException(file.FullName);
+            }
+
+            ProjectItem newFileItem = projectItem.ProjectItems.AddFromFile(file.FullName);
+
+            return newFileItem;
         }
 
         public SolutionManager(IServiceProvider serviceProvider, string templateFile){
@@ -39,52 +90,33 @@
             _project = _dte.Solution.FindProjectItem(templateFile).ContainingProject;
         }
 
-        public ProjectItem Initialize(string folderName){
-            if(folderName == null){
+        public ProjectItem Initialize(string directoryName){
+            if(directoryName == null){
                 throw new ArgumentNullException();
             }
 
             ProjectItem result = null;
 
-            if(!IsFolderExistsInProject(folderName, ref result)){
-                _project.ProjectItems.AddFolder(folderName);
+            if(!IsDirectoryExistsInProjectItems(_project.ProjectItems, directoryName, ref result)){
+                result = _project.ProjectItems.AddFolder(directoryName);
+            }else{
+                result.Remove();
+                Directory.Delete(GetProjectItemFullPath(result), true);
+                //foreach(ProjectItem item in result.ProjectItems){
+                    //item.Remove();
+                    //string itemFullPath = item.Properties.Item(FULL_PATH_ITEM_PROPERTY).Value.ToString();
+                    //if(item.Kind == PROJECT_DIRECTORY_GUID){
+                        //Directory.Delete(itemFullPath, true);
+                    //}else{
+                        //File.Delete(itemFullPath);
+                    //}
+                //}
+                result = _project.ProjectItems.AddFolder(directoryName);
             }
+
+            _project.Save();
 
             return result;
-        }
-
-        public ProjectItem AddFileToProject(FileInfo file){
-            if(file == null){
-                throw new ArgumentNullException();
-            }
-
-            if(!file.Exists){
-                throw new FileNotFoundException();
-            }
-
-            return _project.ProjectItems.AddFromFile(file.FullName);
-        }
-
-        public ProjectItem AddFilesAndSubdirectoriesToProject(DirectoryInfo directory){
-            if(directory == null){
-                throw new ArgumentNullException();
-            }
-
-            if(!directory.Exists){
-                throw new DirectoryNotFoundException();
-            }           
-
-            return _project.ProjectItems.AddFromDirectory(directory.FullName);
-        }
-
-        private bool IsFolderExistsInProject(string folderName, ref ProjectItem projectItem){
-            foreach(ProjectItem currentProjectItem in _project.ProjectItems){
-                if(currentProjectItem.Kind == PROJECT_DIRECTORY_GUID && currentProjectItem.Name == folderName){
-                    projectItem = currentProjectItem;
-                    return true;
-                }
-            }
-            return false;
         }
     }
 #>

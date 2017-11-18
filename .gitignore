@@ -240,3 +240,5 @@ ModelManifest.xml
 
 # FAKE - F# Make
 .fake/
+/RosbridgeMessages/Templates/BaseClasses/RosMessageDTO.ttinclude
+/RosbridgeMessages/Templates/BaseClasses/RosMessageDTO.cs
