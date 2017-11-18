@@ -52,10 +52,15 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>MessageType.ttinclude</DependentUpon>
     </Compile>
-    <Compile Include="Templates\BaseClasses\RosMessageDTO.cs">
+    <Compile Include="Templates\CodeGeneration\TimeData.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>RosMessageDTO.ttinclude</DependentUpon>
+      <DependentUpon>TimeData.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Templates\Helpers\ConfigFinder1.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ConfigFinder.ttinclude</DependentUpon>
     </Compile>
     <Compile Include="Templates\Helpers\CodeGenerator.cs">
       <AutoGen>True</AutoGen>
@@ -79,15 +84,20 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Templates\BaseClasses\RosMessageDTO.ttinclude">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>RosMessageDTO.cs</LastGenOutput>
-    </None>
     <Content Include="Templates\CodeGeneration\RosMessage.txt">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>RosMessage.tt</DependentUpon>
     </Content>
+    <Content Include="Templates\CodeGeneration\TimeData.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>TimeData.cs</LastGenOutput>
+    </Content>
+    <None Include="App.config" />
+    <None Include="Templates\Helpers\ConfigFinder.ttinclude">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>ConfigFinder1.cs</LastGenOutput>
+    </None>
     <Content Include="Templates\Main.txt">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

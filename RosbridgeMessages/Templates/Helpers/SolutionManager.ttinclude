@@ -1,11 +1,11 @@
-﻿<#@ assembly name="System.Core" #>
-<#@ assembly name="EnvDTE" #>
+﻿<#@ assembly name="EnvDTE" #>
+<#@ assembly name="System.Core" #>
 
+<#@ import namespace="EnvDTE" #>
+<#@ import namespace="System.Collections.Generic" #>
 <#@ import namespace="System.IO" #>
 <#@ import namespace="System.Linq" #>
 <#@ import namespace="System.Text" #>
-<#@ import namespace="System.Collections.Generic" #>
-<#@ import namespace="EnvDTE" #>
 
 <#+
     public class SolutionManager{
@@ -32,8 +32,16 @@
         }
 
         public static ProjectItem AddDirectoryToProjectItem(ProjectItem projectItem, string directoryName){
+            if(null == projectItem){
+                throw new ArgumentNullException(nameof(projectItem));
+            }
+
             if(null == directoryName){
                 throw new ArgumentNullException(nameof(directoryName));
+            }
+
+            if(string.Empty == directoryName){
+                throw new ArgumentException("Parameter cannot be empty!", nameof(directoryName));
             }
 
             ProjectItem result = null;
@@ -46,6 +54,18 @@
         }
 
         public static bool IsDirectoryExistsInProjectItems(ProjectItems projectItems, string directoryName, ref ProjectItem projectItem){
+            if(null == projectItems){
+                throw new ArgumentNullException(nameof(projectItems));
+            }
+
+            if(null == directoryName){
+                throw new ArgumentNullException(nameof(directoryName));    
+            }
+
+            if(string.Empty == directoryName){
+                throw new ArgumentException("Parameter cannot be empty!", nameof(directoryName));
+            }
+
             foreach(ProjectItem currentProjectItem in projectItems){
                 if(currentProjectItem.Kind == PROJECT_DIRECTORY_GUID && currentProjectItem.Name == directoryName){
                     projectItem = currentProjectItem;
@@ -60,7 +80,7 @@
                 throw new ArgumentNullException(nameof(projectItem));
             }
 
-            if(file == null){
+            if(null == file){
                 throw new ArgumentNullException(nameof(file));
             }
 
@@ -78,12 +98,20 @@
         }
 
         public SolutionManager(IServiceProvider serviceProvider, string templateFile){
-            if(serviceProvider == null || templateFile == null){
-                throw new ArgumentNullException();
+            if(null == serviceProvider){
+                throw new ArgumentNullException(nameof(serviceProvider));
+            }
+
+            if(null == templateFile){
+                throw new ArgumentNullException(nameof(templateFile));
+            }
+
+            if(string.Empty == templateFile){
+                throw new ArgumentException("Parameter cannot be empty!", nameof(templateFile));
             }
 
             if(!File.Exists(templateFile)){
-                throw new FileNotFoundException(nameof(templateFile));
+                throw new FileNotFoundException(templateFile);
             }
 
             _dte = serviceProvider.GetService(typeof(DTE)) as DTE;
@@ -91,8 +119,12 @@
         }
 
         public ProjectItem Initialize(string directoryName){
-            if(directoryName == null){
-                throw new ArgumentNullException();
+            if(null == directoryName){
+                throw new ArgumentNullException(nameof(directoryName));
+            }
+
+            if(string.Empty == directoryName){
+                throw new ArgumentException("Parameter cannot be empty!", nameof(directoryName));
             }
 
             ProjectItem result = null;
@@ -102,15 +134,6 @@
             }else{
                 result.Remove();
                 Directory.Delete(GetProjectItemFullPath(result), true);
-                //foreach(ProjectItem item in result.ProjectItems){
-                    //item.Remove();
-                    //string itemFullPath = item.Properties.Item(FULL_PATH_ITEM_PROPERTY).Value.ToString();
-                    //if(item.Kind == PROJECT_DIRECTORY_GUID){
-                        //Directory.Delete(itemFullPath, true);
-                    //}else{
-                        //File.Delete(itemFullPath);
-                    //}
-                //}
                 result = _project.ProjectItems.AddFolder(directoryName);
             }
 

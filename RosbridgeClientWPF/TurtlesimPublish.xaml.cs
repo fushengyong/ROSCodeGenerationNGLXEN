@@ -2,6 +2,7 @@
 {
     using RosbridgeClientCommon.Interfaces;
     using RosbridgeClientV2_0;
+    using RosbridgeMessages.RosDTOs.geometry_msgs;
     using System.Windows;
     using System.Windows.Controls;
     using ViewModels;

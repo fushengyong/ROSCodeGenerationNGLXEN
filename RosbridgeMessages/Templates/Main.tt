@@ -3,7 +3,8 @@
 
 <#@ include file="Helpers\FileLoader.ttinclude" once="true"#>
 <#@ include file="Helpers\CodeGenerator.ttinclude" once="true" #>
-
+<#@ include file="Helpers\ConfigFinder.ttinclude" once="true"#>
+ 
 <#@ assembly name="System.Core" #>
 ﻿<#@ assembly name="Microsoft.CSharp" #>
 
@@ -11,18 +12,21 @@
 <#@ import namespace="System.IO" #>
 <#@ import namespace="System.Linq" #>
 <#@ import namespace="System.Collections.Generic" #>
+<#@ import namespace="System.Configuration" #> 
 
 <# 
-    string rosMessagesAbsolutePath = @"D:\Source\Repos\ROS.NET\common_msgs";
-    bool projectDefaultNamespaceAsPrefix = true;
-    string defaultNamespace = "RosClasses";
-    string rosMessageTypeAttributeName = "RosMessageType";
-    string rosMessageTypeAttributeNamespace = "RosbridgeClientCommon.Attributes";
+    KeyValueConfigurationCollection appSettings = GetConfigFile(this.Host, this.Host.TemplateFile).AppSettings.Settings;
+    string rosMessagesDirectoryPath = appSettings["RosMessagesDirectoryPath"].Value;
+    string rosMessageTypeAttributeName = appSettings["RosMessageTypeAttributeName"].Value;
+    string rosMessageTypeAttributeNamespace = appSettings["RosMessageTypeAttributeNamespace"].Value;
+    string defaultNamespace = appSettings["RosDTONamespace"].Value;
+    bool projectDefaultNamespaceAsPrefix = false;
+    Boolean.TryParse(appSettings["UseProjectDefaultNamespaceAsPrefix"].Value, out projectDefaultNamespaceAsPrefix);
 
     HashSet<MsgFile> msgFileSet = new HashSet<MsgFile>();
     HashSet<SrvFile> srvFileSet = new HashSet<SrvFile>();
 
-    LoadRosFiles(msgFileSet, srvFileSet, rosMessagesAbsolutePath);
+    LoadRosFiles(msgFileSet, srvFileSet, rosMessagesDirectoryPath);
     
     CodeGenerator generator = new CodeGenerator(this.Host, defaultNamespace, rosMessageTypeAttributeName, rosMessageTypeAttributeNamespace, projectDefaultNamespaceAsPrefix);
 

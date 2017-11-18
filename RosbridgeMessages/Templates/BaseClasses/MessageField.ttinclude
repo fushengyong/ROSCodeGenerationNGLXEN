@@ -1,7 +1,8 @@
-﻿<#+
+﻿<#@ include file="$(ProjectDir)\Templates\BaseClasses\MessageType.ttinclude" once="true" #>
+
+<#+
     public class MessageField{
-        public string NamespaceName{ get; private set; }
-        public string TypeName { get; private set; }
+        public MessageType Type { get; private set; }
         public string FieldName { get; private set; }
         public string FieldValue { get; private set; }
         public int ArrayElementCount { get; private set;}
@@ -14,8 +15,16 @@
                 throw new ArgumentNullException(nameof(fieldName));
             }
 
+            if(string.Empty == fieldName){
+                throw new ArgumentException("Parameter cannot be empty!", nameof(fieldName));
+            }
+
             if(null == typeName){
                 throw new ArgumentNullException(nameof(fieldName));
+            }
+
+            if(string.Empty == typeName){
+                throw new ArgumentException("Parameter cannot be empty!", nameof(typeName));
             }
 
             if(null == namespaceName){
@@ -26,9 +35,8 @@
                 throw new ArgumentNullException(nameof(fieldName));
             }
 
+            this.Type = new MessageType(namespaceName, typeName);
             this.FieldName = fieldName;
-            this.TypeName = typeName;
-            this.NamespaceName = namespaceName;
             this.IsArray = isArray;
             this.ArrayElementCount = arrayElementCount;
             this.FieldValue = fieldValue;

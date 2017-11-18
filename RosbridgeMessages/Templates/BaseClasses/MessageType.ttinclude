@@ -1,15 +1,11 @@
 ﻿<#+
-    public class MessageType : MarshalByRefObject{
-        public string NamespaceName{ get; private set; }
-        public string TypeName { get; private set; }
+    public class MessageType{
+        public string NamespaceName{ get; set; }
+        public string TypeName { get; set; }
     
         public MessageType(string namespaceName, string typeName){
             if(null == namespaceName){
                 throw new ArgumentNullException(nameof(namespaceName));
-            }
-
-            if(string.Empty == namespaceName){
-                throw new ArgumentException("Property can't be empty!", nameof(namespaceName));
             }
 
             if(null == typeName){
@@ -17,7 +13,7 @@
             }
 
             if(string.Empty == typeName){
-                throw new ArgumentException("Property can't be empty!", nameof(typeName));
+                throw new ArgumentException("Parameter cannot be empty!", nameof(typeName));
             }
 
             this.NamespaceName = namespaceName;

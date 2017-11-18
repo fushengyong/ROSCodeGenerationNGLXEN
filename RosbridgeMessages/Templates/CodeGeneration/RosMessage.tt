@@ -19,13 +19,25 @@
     if(null == MessageTypeAttributeName){
         throw new ArgumentNullException(nameof(MessageTypeAttributeName));
     }
+
+    if(string.Empty == MessageTypeAttributeName){
+        throw new ArgumentException("Parameter cannot be empty!", nameof(MessageTypeAttributeName));
+    }
     
     if(null == MessageTypeAttributeNamespace){
         throw new ArgumentNullException(nameof(MessageTypeAttributeNamespace));
     }
 
+    if(string.Empty == MessageTypeAttributeNamespace){
+        throw new ArgumentException("Parameter cannot be empty!", nameof(MessageTypeAttributeNamespace));
+    }
+
     if(null == NamespacePrefix){
         throw new ArgumentNullException(nameof(NamespacePrefix));
+    }
+
+    if(string.Empty == NamespacePrefix){
+        throw new ArgumentException("Parameter cannot be empty!", nameof(NamespacePrefix));
     }
 
     if(null == DependencyList){
@@ -36,8 +48,16 @@
         throw new ArgumentNullException(nameof(MessageNamespace));
     }
 
+    if(string.Empty == MessageNamespace){
+        throw new ArgumentException("Parameter cannot be empty!", nameof(MessageNamespace));
+    }
+
     if(null == MessageType){
         throw new ArgumentNullException(nameof(MessageType));
+    }
+
+    if(string.Empty == MessageType){
+        throw new ArgumentException("Parameter cannot be empty!", nameof(MessageType));
     }
 
     if(null == ConstantFieldList){
@@ -53,22 +73,30 @@
     }
 #>
 namespace <#= AddPrefixToNamespace(MessageNamespace) #> {
-    using <#= MessageTypeAttributeNamespace #>
+    using System;
+    using <#= MessageTypeAttributeNamespace #>;
 <# foreach(string dependencyNamespace in DependencyList){ #>
     using <#= AddPrefixToNamespace(dependencyNamespace) #>;     
 <# }#>
     [<#= MessageTypeAttributeName #>("<#= MessageNamespace #>/<#= MessageType #>")]
     public class <#= MessageType #> { 
-        <# 
-        foreach(Tuple<string, string, string> constantField in ConstantFieldList){ #>
-    public const <#= constantField.Item1 #> <#= constantField.Item2 #> = <#= constantField.Item3 #>;
-        <#}
-        foreach(Tuple<string, string, int> arrayField in ArrayFieldList){ #>
-    public <#= arrayField.Item1 #> [<#= arrayField.Item3 > 0 ? arrayField.Item3.ToString() : string.Empty #>] <#= arrayField.Item2 #> { get; set; }
-        <#}
-        foreach(KeyValuePair<string, string> field in FieldList){ #>
-    public <#= field.Value #> <#= field.Key #> { get; set; }
-        <# } #>  
+<# foreach(Tuple<string, string, string> constantField in ConstantFieldList){ #>
+        public const <#= constantField.Item1 #> <#= constantField.Item2 #> = <# if(constantField.Item1 == "char"){ #>'<#= constantField.Item3 #>'<# }else if(constantField.Item1 == "string"){ #>"<#= constantField.Item3 #>"<# } else { #><#= constantField.Item3 #><# } #>;
+<# } foreach(Tuple<string, string, int> arrayField in ArrayFieldList){ #>
+        public <#= arrayField.Item1 #>[] <#= arrayField.Item2 #> { get; set; }
+<# } foreach(KeyValuePair<string, string> field in FieldList){ #>
+        public <#= field.Value #> <#= field.Key #> { get; set; }
+<# } #>
+<# if(ArrayFieldList.Count > 0){ #>
+
+        public <#= MessageType #>(){
+<# foreach(Tuple<string, string, int> arrayField in ArrayFieldList){ #>
+<# if(arrayField.Item3 > 0){ #>
+            this.<#= arrayField.Item2 #> = new <#= arrayField.Item1 #>[<#= arrayField.Item3 #>];
+<# } #>
+<# } #>
+        }
+<# } #>
     }
 }
 <#+
