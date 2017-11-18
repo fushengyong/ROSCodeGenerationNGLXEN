@@ -93,7 +93,9 @@
 				session["MessageTypeAttributeNamespace"] = _rosMessageTypeAttributeNamespace;
 				session["NamespacePrefix"] = _defaultNamespace;
 				HashSet<string> standardNamespaceSet = new HashSet<string>();
-				standardNamespaceSet.Add(standardNamespace);
+				if(message.Type.NamespaceName != standardNamespace){
+					standardNamespaceSet.Add(standardNamespace);
+				}
 				standardNamespaceSet.UnionWith(message.DependencySet.Select(dep => dep.NamespaceName).ToList());
 				session["DependencyList"] =  standardNamespaceSet.ToList();
 				session["MessageNamespace"] = message.Type.NamespaceName;
