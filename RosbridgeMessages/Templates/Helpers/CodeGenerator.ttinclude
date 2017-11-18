@@ -1,5 +1,5 @@
 ﻿<#@ include file="$(ProjectDir)\Templates\BaseClasses\RosFile.ttinclude" once="true" #>
-<#@ include file="SolutionManager.ttinclude" once="true" #>
+<#@ include file="$(ProjectDir)\Templates\Helpers\SolutionManager.ttinclude" once="true" #>
 
 <#@ assembly name="System.Core" #>
 
