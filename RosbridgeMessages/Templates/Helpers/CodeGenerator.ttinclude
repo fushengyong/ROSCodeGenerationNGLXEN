@@ -73,9 +73,9 @@
 				if(msgGroup.Key == standardNamespace){
 					TextTemplatingSession session = new TextTemplatingSession();
 					session["Namespace"] =  string.Format("{0}.{1}", _defaultNamespace, standardNamespace);
-					session["Type"] = MsgFile.CUSTOM_PRIMITIVE_TYPE_FOR_TIME;
+					session["Type"] = MsgFile.CUSTOM_TIME_PRIMITIVE_TYPE;
 					
-					TransformTemplateToFile(_customTimeDataTemplatePath, session, groupDirectoryProjectItem, MsgFile.CUSTOM_PRIMITIVE_TYPE_FOR_TIME);
+					TransformTemplateToFile(_customTimeDataTemplatePath, session, groupDirectoryProjectItem, MsgFile.CUSTOM_TIME_PRIMITIVE_TYPE);
 				}
 			}
 			_solutionManager.ActualProject.Save();

@@ -95,7 +95,7 @@
     public class MsgFile : RosFile
     {
         public const string HEADER_TYPE_NAME = "Header";
-        public const string CUSTOM_PRIMITIVE_TYPE_FOR_TIME = "TimeData";
+        public const string CUSTOM_TIME_PRIMITIVE_TYPE = "TimeData";
         public const string FILE_EXTENSION = "msg";
 
         public static readonly Dictionary<string,string> PrimitiveTypeDictionary = new Dictionary<string,string>
@@ -118,7 +118,7 @@
             {"duration", "Duration"}     
         };
 
-        public static readonly HashSet<string> CustomPrimitiveTypeSet = new HashSet<string>{ "Time", "Duration" };
+        public static readonly HashSet<string> CustomTimePrimitiveTypeSet = new HashSet<string>{ "Time", "Duration" };
 
         public static readonly HashSet<MessageType> MessageTypeSet = new HashSet<MessageType>();
 
@@ -144,8 +144,8 @@
             
             foreach(MessageField field in this.FieldSet)
             {
-                if(this.Type.TypeName == field.Type.TypeName && CustomPrimitiveTypeSet.Contains(this.Type.TypeName)){
-                    field.Type.TypeName = CUSTOM_PRIMITIVE_TYPE_FOR_TIME;
+                if(this.Type.TypeName == field.Type.TypeName && CustomTimePrimitiveTypeSet.Contains(this.Type.TypeName)){
+                    field.Type.TypeName = CUSTOM_TIME_PRIMITIVE_TYPE;
                 }
 
                 if(!string.IsNullOrEmpty(field.Type.NamespaceName) && this.Type.NamespaceName != field.Type.NamespaceName){
