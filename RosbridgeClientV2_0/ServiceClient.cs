@@ -7,7 +7,7 @@
     using System;
     using System.Threading.Tasks;
 
-    public class ServiceClient<TServiceRequest> : IRosServiceClient<TServiceRequest> where TServiceRequest : class, new()
+    public class ServiceClient<TServiceRequest, TServiceResponse> : IRosServiceClient<TServiceRequest, TServiceResponse> where TServiceRequest : class, new() where TServiceResponse : class, new()
     {
         private IMessageDispatcher _messageDispatcher;
         private readonly string _uniqueId;
@@ -35,7 +35,7 @@
             _uniqueId = _messageDispatcher.GetUniqueID();
         }
 
-        public Task<TServiceResponse> Call<TServiceResponse>(TServiceRequest request) where TServiceResponse : class, new()
+        public Task<TServiceResponse> Call(TServiceRequest request)
         {
             if (null == request)
             {

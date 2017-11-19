@@ -9,6 +9,11 @@
 
         public RosbridgeMessageReceivedEventArgs(JObject message)
         {
+            if (null == message)
+            {
+                throw new ArgumentNullException(nameof(message));
+            }
+
             RosBridgeMessage = message;
         }
     }
