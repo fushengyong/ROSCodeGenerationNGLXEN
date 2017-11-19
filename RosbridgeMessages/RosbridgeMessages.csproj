@@ -84,12 +84,12 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Templates\CodeGeneration\RosMessage.txt">
+    <Content Include="Templates\CodeGenerators\RosMessage.txt">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>RosMessage.tt</DependentUpon>
     </Content>
-    <Content Include="Templates\CodeGeneration\TimeData.tt">
+    <Content Include="Templates\CodeGenerators\TimeData.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>TimeData.txt</LastGenOutput>
     </Content>
@@ -114,7 +114,7 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>MessageType.cs</LastGenOutput>
     </None>
-    <Content Include="Templates\CodeGeneration\RosMessage.tt">
+    <Content Include="Templates\CodeGenerators\RosMessage.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>RosMessage.txt</LastGenOutput>
     </Content>
@@ -122,7 +122,7 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>CodeGenerator.cs</LastGenOutput>
     </None>
-    <Content Include="Templates\CodeGeneration\TimeData.txt">
+    <Content Include="Templates\CodeGenerators\TimeData.txt">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>TimeData.tt</DependentUpon>

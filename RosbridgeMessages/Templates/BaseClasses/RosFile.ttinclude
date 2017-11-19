@@ -94,7 +94,7 @@
 
     public class MsgFile : RosFile
     {
-        public const string HEADER_TYPE_NAME = "Header";
+        public const string HEADER_TYPE = "Header";
         public const string CUSTOM_TIME_PRIMITIVE_TYPE = "TimeData";
         public const string FILE_EXTENSION = "msg";
 

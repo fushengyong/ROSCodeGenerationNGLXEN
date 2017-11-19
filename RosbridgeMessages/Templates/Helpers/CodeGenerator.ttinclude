@@ -10,8 +10,8 @@
 
 <#+
 	public class CodeGenerator{
-		private const string ROS_MESSAGE_CODE_GENERATION_TEMPLATE_RELATIVE_PATH = @"CodeGeneration\RosMessage.tt";
-		private const string CUSTOM_TIME_DATA_TEMPLATE_RELATIVE_PATH = @"CodeGeneration\TimeData.tt";
+		private const string ROS_MESSAGE_CODE_GENERATION_TEMPLATE_RELATIVE_PATH = @"CodeGenerators\RosMessage.tt";
+		private const string CUSTOM_TIME_DATA_TEMPLATE_RELATIVE_PATH = @"CodeGenerators\TimeData.tt";
 
 		private ITextTemplatingEngineHost _host;
 		private ITextTemplating _textTemplating;
@@ -67,7 +67,7 @@
 		}
 
 		public void GenerateRosMessages(HashSet<MsgFile> messageSet){
-			string standardNamespace = messageSet.SingleOrDefault(msg => msg.Type.TypeName == MsgFile.HEADER_TYPE_NAME).Type.NamespaceName;
+			string standardNamespace = messageSet.SingleOrDefault(msg => msg.Type.TypeName == MsgFile.HEADER_TYPE).Type.NamespaceName;
 			foreach(IGrouping<string, MsgFile> msgGroup in messageSet.GroupBy(msg => msg.Type.NamespaceName)){
 				ProjectItem groupDirectoryProjectItem = GenerateMsgByNamespace(msgGroup, standardNamespace);
 				if(msgGroup.Key == standardNamespace){
