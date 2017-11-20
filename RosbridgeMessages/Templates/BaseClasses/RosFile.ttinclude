@@ -94,12 +94,14 @@
 
     public class MsgFile : RosFile
     {
+        public const string FILE_EXTENSION = "msg";
         public const string HEADER_TYPE = "Header";
         public const string CUSTOM_TIME_PRIMITIVE_TYPE = "TimeData";
-        public const string FILE_EXTENSION = "msg";
 
-        public static readonly Dictionary<string,string> PrimitiveTypeDictionary = new Dictionary<string,string>
-        {
+        public static readonly HashSet<MessageType> MessageTypeSet = new HashSet<MessageType>();
+        
+        private static readonly HashSet<string> CustomTimePrimitiveTypeSet = new HashSet<string>{ "Time", "Duration" };
+        private static readonly Dictionary<string,string> PrimitiveTypeDictionary = new Dictionary<string,string> {
             {"float64", "double"},
             {"uint64", "ulong"},
             {"uint32", "uint"},
@@ -117,10 +119,6 @@
             {"time", "Time"},
             {"duration", "Duration"}     
         };
-
-        public static readonly HashSet<string> CustomTimePrimitiveTypeSet = new HashSet<string>{ "Time", "Duration" };
-
-        public static readonly HashSet<MessageType> MessageTypeSet = new HashSet<MessageType>();
 
         public ServiceMessageTypeEnum ServiceMessageType { get; private set; }
         public HashSet<MessageField> FieldSet { get; private set; }
@@ -159,12 +157,12 @@
 
     public class SrvFile : RosFile
     {
+        public const string FILE_EXTENSION = "srv";
+
         private const string INPUT_OUTPUT_SEPARATOR = "---";
         private const string REQUEST_NAME = "Request";
         private const string RESPONSE_NAME = "Response";
         private const string TYPE_SEPARATOR = "__";
-
-        public const string FILE_EXTENSION = "srv";
 
         public MsgFile Response { get; private set; }
         public MsgFile Request { get; private set; }
@@ -180,12 +178,12 @@
             string responseString = splittedFileContent.LastOrDefault();
 
             if(requestString != null){
-                string tempClassName = string.Format("{0}{1}{2}",this.Type.TypeName, TYPE_SEPARATOR, RESPONSE_NAME);
+                string tempClassName = string.Format("{0}{1}{2}", this.Type.TypeName, TYPE_SEPARATOR, RESPONSE_NAME);
                 Request = new MsgFile(requestString, tempClassName, this.Type.NamespaceName, ServiceMessageTypeEnum.Request);
             }
 
             if(responseString != null){
-                string tempClassName = string.Format("{0}{1}{2}",this.Type.TypeName, TYPE_SEPARATOR, REQUEST_NAME);
+                string tempClassName = string.Format("{0}{1}{2}", this.Type.TypeName, TYPE_SEPARATOR, REQUEST_NAME);
                 Response = new MsgFile(responseString, tempClassName, this.Type.NamespaceName, ServiceMessageTypeEnum.Response);
             }
         }
