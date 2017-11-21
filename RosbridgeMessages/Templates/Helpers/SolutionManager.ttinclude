@@ -132,9 +132,10 @@
             if(!IsDirectoryExistsInProjectItems(_project.ProjectItems, directoryName, ref result)){
                 result = _project.ProjectItems.AddFolder(directoryName);
             }else{
-                result.Remove();
-                Directory.Delete(GetProjectItemFullPath(result), true);
-                result = _project.ProjectItems.AddFolder(directoryName);
+                //result.Remove();
+                //Directory.Delete(GetProjectItemFullPath(result), true);
+                //result = _project.ProjectItems.AddFolder(directoryName);
+                throw new InvalidOperationException(string.Format("The folder {0} is already exists!", directoryName));
             }
 
             _project.Save();
