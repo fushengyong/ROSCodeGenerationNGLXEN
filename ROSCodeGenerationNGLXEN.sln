@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.27004.2009
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RosbridgeMessages", "RosbridgeMessages\RosbridgeMessages.csproj", "{0F5C53FD-41B9-4C6C-A518-C5AF23C0D14F}"
 EndProject
@@ -14,6 +14,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RosbridgeClientCommon.UnitTests", "RosbridgeClientCommon.UnitTests\RosbridgeClientCommon.UnitTests.csproj", "{8EDF4429-251A-416D-BB68-93F227191BCF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RosbridgeClientV2_0.UnitTests", "RosbridgeClientV2_0.UnitTests\RosbridgeClientV2_0.UnitTests.csproj", "{87F362FF-1DB5-4808-8642-2C3F180BEF6A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RosbridgeMessagesCodeGenerationLogic", "RosbridgeMessagesCodeGenerationLogic\RosbridgeMessagesCodeGenerationLogic.csproj", "{5A422471-A1CB-4EE7-BDC8-F6E6A50C0DF2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,8 +47,15 @@ Global
 		{87F362FF-1DB5-4808-8642-2C3F180BEF6A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{87F362FF-1DB5-4808-8642-2C3F180BEF6A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{87F362FF-1DB5-4808-8642-2C3F180BEF6A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5A422471-A1CB-4EE7-BDC8-F6E6A50C0DF2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5A422471-A1CB-4EE7-BDC8-F6E6A50C0DF2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5A422471-A1CB-4EE7-BDC8-F6E6A50C0DF2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5A422471-A1CB-4EE7-BDC8-F6E6A50C0DF2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {2DCDA1A9-0229-43A4-B1BB-16503DCFC8FC}
 	EndGlobalSection
 EndGlobal

@@ -1,12 +1,13 @@
-﻿<#@ include file="$(ProjectDir)\Templates\BaseClasses\MessageField.ttinclude" once="true" #>
+﻿namespace RosbridgeMessagesCodeGenerationLogic.Helpers
+{
+    using RosbridgeMessagesCodeGenerationLogic.BaseClasses;
+    using RosbridgeMessagesCodeGenerationLogic.Interfaces;
+    using System;
+    using System.Collections.Generic;
+    using System.Text.RegularExpressions;
 
-<#@ assembly name="System.Core" #>
-
-<#@ import namespace="System.Collections.Generic" #>
-<#@ import namespace="System.Text.RegularExpressions" #>
-
-<#+
-    public static class YAMLParser{
+    public class YAMLParser : IYAMLParser
+    {
         private const string NamespaceRegexGroupName = "namespace";
         private const string TypeRegexGroupName = "type";
         private const string IsArrayRegexGroupName = "isArray";
@@ -16,19 +17,29 @@
 
         private const string YAMLParserRegexString = @"^\s*(?:(?<namespace>\w+)\/)?(?<type>\w+)\b(?<isArray>\[(?<elementCount>\d*)\])?\s+(?<name>\w+)(?:\s*=\s*(?<value>\w+))?";
         private static Regex YAMLParserRegex = new Regex(YAMLParserRegexString, RegexOptions.IgnoreCase | RegexOptions.Multiline | RegexOptions.Compiled);
+        private readonly IDictionary<string, string> _primitiveTypeDictionary;
 
-        public static HashSet<MessageField> YAMLStringToMessageFieldSet(string yamlString, Dictionary<string, string> primitiveTypeDictionary){
-            if(null == yamlString){
-                throw new ArgumentNullException(nameof(yamlString));
-            }
-
-            if(null == primitiveTypeDictionary){
+        public YAMLParser(IDictionary<string, string> primitiveTypeDictionary)
+        {
+            if (null == primitiveTypeDictionary)
+            {
                 throw new ArgumentNullException(nameof(primitiveTypeDictionary));
             }
 
+            _primitiveTypeDictionary = primitiveTypeDictionary;
+        }
+
+        ISet<MessageField> IYAMLParser.YAMLStringToMessageFieldSet(string yamlString)
+        {
+            if (null == yamlString)
+            {
+                throw new ArgumentNullException(nameof(yamlString));
+            }
+
             HashSet<MessageField> result = new HashSet<MessageField>();
-            foreach(Match currentMatch in YAMLParserRegex.Matches(yamlString)){
-                if(currentMatch.Success)
+            foreach (Match currentMatch in YAMLParserRegex.Matches(yamlString))
+            {
+                if (currentMatch.Success)
                 {
                     string namespaceName = currentMatch.Groups[NamespaceRegexGroupName].Value;
                     string type = currentMatch.Groups[TypeRegexGroupName].Value;
@@ -38,11 +49,11 @@
                     string name = currentMatch.Groups[VariableNameRegexGroupName].Value;
                     string memberValue = currentMatch.Groups[ConstantValueRegexGroupName].Value;
 
-                    MessageField newField = new MessageField(name, primitiveTypeDictionary.ContainsKey(type) ? primitiveTypeDictionary[type] : type, namespaceName, isArray, elementCount, memberValue);
+                    MessageField newField = new MessageField(name, _primitiveTypeDictionary.ContainsKey(type) ? _primitiveTypeDictionary[type] : type, namespaceName, isArray, elementCount, memberValue);
                     result.Add(newField);
                 }
             }
             return result;
         }
     }
-#>
+}

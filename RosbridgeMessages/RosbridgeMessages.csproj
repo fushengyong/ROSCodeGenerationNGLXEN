@@ -32,6 +32,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -42,46 +43,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Templates\BaseClasses\MessageField.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>MessageField.ttinclude</DependentUpon>
-    </Compile>
-    <Compile Include="Templates\BaseClasses\MessageType.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>MessageType.ttinclude</DependentUpon>
-    </Compile>
-    <Compile Include="Templates\Helpers\ConfigFinder1.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ConfigFinder.ttinclude</DependentUpon>
-    </Compile>
-    <Compile Include="Templates\Helpers\CodeGenerator.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>CodeGenerator.ttinclude</DependentUpon>
-    </Compile>
-    <Compile Include="Templates\Helpers\FileLoader.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>FileLoader.ttinclude</DependentUpon>
-    </Compile>
-    <Compile Include="Templates\Helpers\SolutionManager.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>SolutionManager.ttinclude</DependentUpon>
-    </Compile>
-    <Compile Include="Templates\BaseClasses\RosFile.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>RosFile.ttinclude</DependentUpon>
-    </Compile>
-    <Compile Include="Templates\Main.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Main.tt</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Templates\CodeGenerators\RosMessage.txt">
@@ -93,35 +54,16 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>TimeData.txt</LastGenOutput>
     </Content>
+    <Content Include="Templates\Main.txt">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Main.tt</DependentUpon>
+    </Content>
     <None Include="App.config" />
-    <None Include="Templates\Helpers\ConfigFinder.ttinclude">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>ConfigFinder1.cs</LastGenOutput>
-    </None>
-    <None Include="Templates\Helpers\FileLoader.ttinclude">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>FileLoader.cs</LastGenOutput>
-    </None>
-    <None Include="Templates\BaseClasses\MessageField.ttinclude">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>MessageField.cs</LastGenOutput>
-    </None>
-    <None Include="Templates\Helpers\SolutionManager.ttinclude">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>SolutionManager.cs</LastGenOutput>
-    </None>
-    <None Include="Templates\BaseClasses\MessageType.ttinclude">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>MessageType.cs</LastGenOutput>
-    </None>
     <Content Include="Templates\CodeGenerators\RosMessage.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>RosMessage.txt</LastGenOutput>
     </Content>
-    <None Include="Templates\Helpers\CodeGenerator.ttinclude">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>CodeGenerator.cs</LastGenOutput>
-    </None>
     <Content Include="Templates\CodeGenerators\TimeData.txt">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -129,13 +71,8 @@
     </Content>
     <Content Include="Templates\Main.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>Main.cs</LastGenOutput>
+      <LastGenOutput>Main.txt</LastGenOutput>
     </Content>
-    <None Include="Templates\BaseClasses\RosFile.ttinclude">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>RosFile.cs</LastGenOutput>
-    </None>
-    <None Include="Templates\Helpers\YAMLParser.ttinclude" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

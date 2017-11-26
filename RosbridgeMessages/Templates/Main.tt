@@ -1,20 +1,36 @@
 ﻿<#@ template debug="true" hostspecific="true"#>
-
-<#@ include file="$(ProjectDir)\Templates\Helpers\FileLoader.ttinclude" once="true"#>
-<#@ include file="$(ProjectDir)\Templates\Helpers\CodeGenerator.ttinclude" once="true" #>
-<#@ include file="$(ProjectDir)\Templates\Helpers\ConfigFinder.ttinclude" once="true"#>
+<#@ output extension="txt" #>
  
 ﻿<#@ assembly name="Microsoft.CSharp" #>
+<#@ assembly name="EnvDTE" #>
 <#@ assembly name="System.Core" #>
+<#@ assembly name="System.Configuration" #>
+<#@ assembly name="$(SolutionDir)\RosbridgeMessagesCodeGenerationLogic\bin\Debug\RosbridgeMessagesCodeGenerationLogic.dll" #>
 
+<#@ import namespace="RosbridgeMessagesCodeGenerationLogic.Enums" #>
+<#@ import namespace="RosbridgeMessagesCodeGenerationLogic.Helpers" #>
+<#@ import namespace="RosbridgeMessagesCodeGenerationLogic.BaseClasses" #>
+<#@ import namespace="RosbridgeMessagesCodeGenerationLogic.Interfaces" #>
 <#@ import namespace="System" #>
+<#@ import namespace="EnvDTE" #>
 <#@ import namespace="System.Collections.Generic" #>
 <#@ import namespace="System.Configuration" #> 
 <#@ import namespace="System.IO" #>
 <#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Configuration" #>
+<#@ import namespace="Microsoft.VisualStudio.TextTemplating" #>
+<#@ import namespace="Microsoft.VisualStudio.TextTemplating.VSHost" #>
 
 <# 
-    KeyValueConfigurationCollection appSettings = GetConfigFile(this.Host, this.Host.TemplateFile).AppSettings.Settings;
+    IServiceProvider serviceProvider = (IServiceProvider)this.Host;
+    ITextTemplating textTemplating = serviceProvider.GetService(typeof(STextTemplating)) as ITextTemplating;
+    ITextTemplatingSessionHost textTemplatingSessionHost = textTemplating as ITextTemplatingSessionHost;
+
+    IYAMLParser yamlParser = new YAMLParser(MsgFile.PrimitiveTypeDictionary);
+    FileLoader fileLoader = new FileLoader(yamlParser);
+    SolutionManager solutionManager = new SolutionManager(serviceProvider, this.Host.TemplateFile);
+
+    KeyValueConfigurationCollection appSettings = ConfigFinder.GetConfigFile(serviceProvider, this.Host.TemplateFile).AppSettings.Settings;
     string rosMessagesDirectoryPath = appSettings["RosMessagesDirectoryPath"].Value;
     string rosMessageTypeAttributeName = appSettings["RosMessageTypeAttributeName"].Value;
     string rosMessageTypeAttributeNamespace = appSettings["RosMessageTypeAttributeNamespace"].Value;
@@ -22,12 +38,12 @@
     bool projectDefaultNamespaceAsPrefix = false;
     Boolean.TryParse(appSettings["UseProjectDefaultNamespaceAsPrefix"].Value, out projectDefaultNamespaceAsPrefix);
 
-    HashSet<MsgFile> msgFileSet = new HashSet<MsgFile>();
-    HashSet<SrvFile> srvFileSet = new HashSet<SrvFile>();
+    ISet<MsgFile> msgFileSet = new HashSet<MsgFile>();
+    ISet<SrvFile> srvFileSet = new HashSet<SrvFile>();
 
-    LoadRosFiles(msgFileSet, srvFileSet, rosMessagesDirectoryPath);
+    fileLoader.LoadRosFiles(msgFileSet, srvFileSet, rosMessagesDirectoryPath);
     
-    CodeGenerator generator = new CodeGenerator(this.Host, defaultNamespace, rosMessageTypeAttributeName, rosMessageTypeAttributeNamespace, projectDefaultNamespaceAsPrefix);
+    CodeGenerator generator = new CodeGenerator(this.Host, textTemplatingSessionHost, textTemplating, solutionManager, defaultNamespace, rosMessageTypeAttributeName, rosMessageTypeAttributeNamespace, projectDefaultNamespaceAsPrefix);
 
     generator.GenerateRosMessages(msgFileSet);
  #>

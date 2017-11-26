@@ -1,14 +1,11 @@
-﻿<#@ assembly name="EnvDTE" #>
-<#@ assembly name="System.Core" #>
+﻿namespace RosbridgeMessagesCodeGenerationLogic.Helpers
+{
+    using EnvDTE;
+    using System;
+    using System.IO;
 
-<#@ import namespace="EnvDTE" #>
-<#@ import namespace="System.Collections.Generic" #>
-<#@ import namespace="System.IO" #>
-<#@ import namespace="System.Linq" #>
-<#@ import namespace="System.Text" #>
-
-<#+
-    public class SolutionManager{
+    public class SolutionManager
+    {
         private const string PROJECT_DIRECTORY_GUID = "{6BB5F8EF-4483-11D3-8BCF-00C04F8EC28C}";
         private const string FULL_PATH_ITEM_PROPERTY = "FullPath";
 
@@ -17,57 +14,73 @@
 
         public Project ActualProject { get { return _project; } }
         public string DefaultNamespace
-        { 
-            get { 
-                if(null != _project){
+        {
+            get
+            {
+                if (null != _project)
+                {
                     return _project.Properties.Item("RootNamespace").Value.ToString();
-                } else {
+                }
+                else
+                {
                     return string.Empty;
                 }
             }
         }
 
-        public static string GetProjectItemFullPath(ProjectItem item){
+        public static string GetProjectItemFullPath(ProjectItem item)
+        {
             return item.Properties.Item(FULL_PATH_ITEM_PROPERTY).Value.ToString();
         }
 
-        public static ProjectItem AddDirectoryToProjectItem(ProjectItem projectItem, string directoryName){
-            if(null == projectItem){
+        public static ProjectItem AddDirectoryToProjectItem(ProjectItem projectItem, string directoryName)
+        {
+            if (null == projectItem)
+            {
                 throw new ArgumentNullException(nameof(projectItem));
             }
 
-            if(null == directoryName){
+            if (null == directoryName)
+            {
                 throw new ArgumentNullException(nameof(directoryName));
             }
 
-            if(string.Empty == directoryName){
+            if (string.Empty == directoryName)
+            {
                 throw new ArgumentException("Parameter cannot be empty!", nameof(directoryName));
             }
 
             ProjectItem result = null;
 
-            if(!IsDirectoryExistsInProjectItems(projectItem.ProjectItems, directoryName, ref result)){
+            if (!IsDirectoryExistsInProjectItems(projectItem.ProjectItems, directoryName, ref result))
+            {
                 result = projectItem.ProjectItems.AddFolder(directoryName);
             }
-            
+
             return result;
         }
 
-        public static bool IsDirectoryExistsInProjectItems(ProjectItems projectItems, string directoryName, ref ProjectItem projectItem){
-            if(null == projectItems){
+        public static bool IsDirectoryExistsInProjectItems(ProjectItems projectItems, string directoryName, ref ProjectItem projectItem)
+        {
+            if (null == projectItems)
+            {
                 throw new ArgumentNullException(nameof(projectItems));
             }
 
-            if(null == directoryName){
-                throw new ArgumentNullException(nameof(directoryName));    
+            if (null == directoryName)
+            {
+                throw new ArgumentNullException(nameof(directoryName));
             }
 
-            if(string.Empty == directoryName){
+            if (string.Empty == directoryName)
+            {
                 throw new ArgumentException("Parameter cannot be empty!", nameof(directoryName));
             }
 
-            foreach(ProjectItem currentProjectItem in projectItems){
-                if(currentProjectItem.Kind == PROJECT_DIRECTORY_GUID && currentProjectItem.Name == directoryName){
+            foreach (ProjectItem currentProjectItem in projectItems)
+            {
+                if (currentProjectItem.Kind == PROJECT_DIRECTORY_GUID && currentProjectItem.Name == directoryName)
+                {
                     projectItem = currentProjectItem;
                     return true;
                 }
@@ -75,20 +88,25 @@
             return false;
         }
 
-        public static ProjectItem AddFileToProjectItem(ProjectItem projectItem, FileInfo file){
-            if(null == projectItem){
+        public static ProjectItem AddFileToProjectItem(ProjectItem projectItem, FileInfo file)
+        {
+            if (null == projectItem)
+            {
                 throw new ArgumentNullException(nameof(projectItem));
             }
 
-            if(null == file){
+            if (null == file)
+            {
                 throw new ArgumentNullException(nameof(file));
             }
 
-            if(projectItem.Kind != PROJECT_DIRECTORY_GUID){
+            if (projectItem.Kind != PROJECT_DIRECTORY_GUID)
+            {
                 throw new InvalidOperationException("The given project item is not a directory!");
             }
-            
-            if(!file.Exists){
+
+            if (!file.Exists)
+            {
                 throw new FileNotFoundException(file.FullName);
             }
 
@@ -97,41 +115,47 @@
             return newFileItem;
         }
 
-        public SolutionManager(IServiceProvider serviceProvider, string templateFile){
-            if(null == serviceProvider){
+        public SolutionManager(IServiceProvider serviceProvider, string templateFile)
+        {
+            if (null == serviceProvider)
+            {
                 throw new ArgumentNullException(nameof(serviceProvider));
             }
 
-            if(null == templateFile){
+            if (null == templateFile)
+            {
                 throw new ArgumentNullException(nameof(templateFile));
             }
 
-            if(string.Empty == templateFile){
+            if (string.Empty == templateFile)
+            {
                 throw new ArgumentException("Parameter cannot be empty!", nameof(templateFile));
             }
 
-            if(!File.Exists(templateFile)){
-                throw new FileNotFoundException(templateFile);
-            }
-
-            _dte = serviceProvider.GetService(typeof(DTE)) as DTE;
+            _dte = (DTE)serviceProvider.GetService(typeof(DTE));
             _project = _dte.Solution.FindProjectItem(templateFile).ContainingProject;
         }
 
-        public ProjectItem Initialize(string directoryName){
-            if(null == directoryName){
+        public ProjectItem Initialize(string directoryName)
+        {
+            if (null == directoryName)
+            {
                 throw new ArgumentNullException(nameof(directoryName));
             }
 
-            if(string.Empty == directoryName){
+            if (string.Empty == directoryName)
+            {
                 throw new ArgumentException("Parameter cannot be empty!", nameof(directoryName));
             }
 
             ProjectItem result = null;
 
-            if(!IsDirectoryExistsInProjectItems(_project.ProjectItems, directoryName, ref result)){
+            if (!IsDirectoryExistsInProjectItems(_project.ProjectItems, directoryName, ref result))
+            {
                 result = _project.ProjectItems.AddFolder(directoryName);
-            }else{
+            }
+            else
+            {
                 //result.Remove();
                 //Directory.Delete(GetProjectItemFullPath(result), true);
                 //result = _project.ProjectItems.AddFolder(directoryName);
@@ -143,4 +167,4 @@
             return result;
         }
     }
-#>
+}
