@@ -146,7 +146,5 @@
 
             return _webSocket.SendAsync(new ArraySegment<byte>(buffer), WebSocketMessageType.Text, true, _cancellationTokenSource.Token);
         }
-
-
     }
 }

@@ -76,7 +76,7 @@
 
             _receivingTask = socketConnectTask.ContinueWith(async (socketTask) =>
             {
-                while (CurrentState == States.Started)
+                while (CurrentState == States.Started && _socket.Connected)
                 {
                     try
                     {

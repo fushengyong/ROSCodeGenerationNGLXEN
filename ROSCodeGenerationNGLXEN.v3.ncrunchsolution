@@ -3,4 +3,13 @@
     <AllowParallelTestExecution>False</AllowParallelTestExecution>
     <SolutionConfigured>True</SolutionConfigured>
   </Settings>
+  <EngineModes>
+    <EngineMode>
+      <Name>Run pinned tests automatically, others manually</Name>
+      <Settings>
+        <AutoPinNewTests>False</AutoPinNewTests>
+        <TestsToExecuteAutomatically>IsPinned</TestsToExecuteAutomatically>
+      </Settings>
+    </EngineMode>
+  </EngineModes>
 </SolutionConfiguration>
