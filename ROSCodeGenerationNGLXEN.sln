@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27004.2009
+VisualStudioVersion = 15.0.27130.2027
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RosbridgeMessages", "RosbridgeMessages\RosbridgeMessages.csproj", "{0F5C53FD-41B9-4C6C-A518-C5AF23C0D14F}"
 EndProject

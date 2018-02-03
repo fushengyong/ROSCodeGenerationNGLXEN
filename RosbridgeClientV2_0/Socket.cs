@@ -14,7 +14,7 @@
         private readonly ClientWebSocket _webSocket;
         private bool _disposed;
 
-        public bool Connected
+        public bool IsConnected
         {
             get
             {

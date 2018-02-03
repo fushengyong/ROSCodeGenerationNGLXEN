@@ -1,7 +1,8 @@
-﻿namespace RosbridgeClientV2_0.Messages
+﻿namespace RosbridgeClientV2_0.Messages.RosOperations
 {
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
+    using RosbridgeClientV2_0.Constants;
 
     public class RosServiceResponseMessage : RosMessageBase
     {

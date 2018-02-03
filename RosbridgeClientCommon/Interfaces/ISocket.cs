@@ -6,14 +6,14 @@
     public interface ISocket : IDisposable
     {
         /// <summary>
-        /// Rosbridge server URI.
+        /// Rosbridge server URI
         /// </summary>
         Uri URI { get; }
 
         /// <summary>
-        /// True if connected to Rosbridge
+        /// Is connected to Rosbridge
         /// </summary>
-        bool Connected { get; }
+        bool IsConnected { get; }
 
         /// <summary>
         /// Open a Rosbridge server connection

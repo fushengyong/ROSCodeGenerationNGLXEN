@@ -1,6 +1,7 @@
-﻿namespace RosbridgeClientV2_0.Messages
+﻿namespace RosbridgeClientV2_0.Messages.MessageTransformation
 {
     using Newtonsoft.Json;
+    using RosbridgeClientV2_0.Constants;
 
     /// <summary>
     /// For fragmenting large messages.

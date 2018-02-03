@@ -218,7 +218,7 @@
             Guid uniqueId = Guid.NewGuid();
 
             //act
-            string uniqueIdReuslt = _testClassPartialMock.Object.GetUniqueID();
+            string uniqueIdReuslt = _testClassPartialMock.Object.GetNewUniqueID();
 
             //assert
             uniqueIdReuslt.Should().NotBeNull();

@@ -10,7 +10,7 @@
         [JsonProperty("op")]
         public string Operation { get; private set; }
 
-        public RosbridgeMessageBase(string operation)
+        protected RosbridgeMessageBase(string operation)
         {
             Operation = operation;
         }

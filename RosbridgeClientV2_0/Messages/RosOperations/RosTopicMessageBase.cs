@@ -1,4 +1,4 @@
-﻿namespace RosbridgeClientV2_0.Messages
+﻿namespace RosbridgeClientV2_0.Messages.RosOperations
 {
     using Newtonsoft.Json;
 
@@ -13,7 +13,7 @@
         [JsonProperty("topic")]
         public string Topic { get; set; }
 
-        public RosTopicMessageBase(string operation) : base(operation)
+        protected RosTopicMessageBase(string operation) : base(operation)
         {
         }
     }

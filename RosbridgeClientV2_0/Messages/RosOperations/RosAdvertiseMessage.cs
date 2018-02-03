@@ -1,6 +1,7 @@
-﻿namespace RosbridgeClientV2_0.Messages
+﻿namespace RosbridgeClientV2_0.Messages.RosOperations
 {
     using Newtonsoft.Json;
+    using RosbridgeClientV2_0.Constants;
 
     /// <summary>
     /// Use this class to advertise that you are or will be publishing a topic.

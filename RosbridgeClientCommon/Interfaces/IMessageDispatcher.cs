@@ -20,7 +20,7 @@
         States CurrentState { get; }
 
         /// <summary>
-        /// Starts dispatcher
+        /// Start dispatcher
         /// </summary>
         /// <returns></returns>
         Task StartAsync();
@@ -41,6 +41,6 @@
         /// Returns Unique ID
         /// </summary>
         /// <returns></returns>
-        string GetUniqueID();
+        string GetNewUniqueID();
     }
 }

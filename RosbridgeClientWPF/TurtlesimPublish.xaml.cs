@@ -1,5 +1,6 @@
 ﻿namespace RosbridgeClientWPF
 {
+    using RosbridgeClientCommon;
     using RosbridgeClientCommon.Interfaces;
     using RosbridgeClientV2_0;
     using RosbridgeMessages.RosDTOs.geometry_msgs;
@@ -21,8 +22,8 @@
         {
             InitializeComponent();
             Loaded += TurtlesimPublish_Loaded;
-            Closing += TurtlesimPublish_Closing; ;
-            _publisher = new Publisher<Twist>(topic, messageDispatcher);
+            Closing += TurtlesimPublish_Closing;
+            _publisher = new Publisher<Twist>(topic, messageDispatcher, new RosMessageTypeAttributeHelper());
             _viewModel = new TurtlesimPublishViewModel(topic, MIN_STEP, MAX_STEP);
         }
 

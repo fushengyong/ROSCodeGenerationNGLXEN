@@ -22,7 +22,7 @@
             get; private set;
         }
 
-        public string GetUniqueID()
+        public string GetNewUniqueID()
         {
             return Guid.NewGuid().ToString();
         }
@@ -76,7 +76,7 @@
 
             _receivingTask = socketConnectTask.ContinueWith(async (socketTask) =>
             {
-                while (CurrentState == States.Started && _socket.Connected)
+                while (CurrentState == States.Started && _socket.IsConnected)
                 {
                     try
                     {

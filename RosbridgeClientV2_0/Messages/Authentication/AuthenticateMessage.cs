@@ -1,6 +1,7 @@
-﻿namespace RosbridgeClientV2_0.Messages
+﻿namespace RosbridgeClientV2_0.Messages.Authentication
 {
     using Newtonsoft.Json;
+    using RosbridgeClientV2_0.Constants;
 
     /// <summary>
     /// Optional authentication information can be passed via the rosbridge protocol to authenticate a client connection
@@ -17,13 +18,13 @@
         /// IP of the client
         /// </summary>
         [JsonProperty("client")]
-        public string ClientIpAddress { get; set; }
+        public string ClientIPAddress { get; set; }
 
         /// <summary>
         /// IP of the destination
         /// </summary>
         [JsonProperty("dest")]
-        public string DestinationIpAddress { get; set; }
+        public string DestinationIPAddress { get; set; }
 
         /// <summary>
         /// Random string given by the client

@@ -13,17 +13,17 @@
     /// </summary>
     public partial class MainWindow : Window
     {
+        private const string MESSAGE_BOX_ERROR_TITLE = "ERROR";
+        private const string CONNECT_BUTTON_STRING = "Connect";
+        private const string DISCONNECT_BUTTON_STRING = "Disconnect";
+        private const string STATUS_TEXT_BOX_TEXT_CONNECTED = "Connected";
+        private const string STATUS_TEXT_BOX_TEXT_NOT_CONNECTED = "Not Connected";
+        private const string STATUS_TEXT_BOX_TEXT_NOT_VALID_URI = "The given URI is not valid!";
+        private const string STATUS_TEXT_BOX_TEXT_EMPTY_URI_FIELD = "Please fill out the Rosbridge URI field!";
+
         private MainWindowViewModel _viewModel;
         private IMessageDispatcher _messageDispatcher;
         private List<Window> _windowList;
-
-        private const string ConnectButtonString = "Connect";
-        private const string DisconnectButtonString = "Disconnect";
-        private const string StatusTextBoxTextConnected = "Connected";
-        private const string StatusTextBoxTextNotConnected = "Not Connected";
-        private const string StatusTextBoxTextNotValidURI = "The given URI is not valid!";
-        private const string StatusTextBoxTextEmptyURI = "Please fill out the Rosbridge URI field!";
-
 
         public MainWindow()
         {
@@ -52,8 +52,8 @@
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
             DataContext = _viewModel;
-            _viewModel.ConnectButtonText = ConnectButtonString;
-            _viewModel.StatusTextBoxText = StatusTextBoxTextNotConnected;
+            _viewModel.ConnectButtonText = CONNECT_BUTTON_STRING;
+            _viewModel.StatusTextBoxText = STATUS_TEXT_BOX_TEXT_NOT_CONNECTED;
         }
 
         private async void Connect_Click(object sender, RoutedEventArgs e)
@@ -69,7 +69,7 @@
                 _messageDispatcher.Dispose();
                 _messageDispatcher = null;
 
-                _viewModel.StatusTextBoxText = StatusTextBoxTextNotConnected;
+                _viewModel.StatusTextBoxText = STATUS_TEXT_BOX_TEXT_NOT_CONNECTED;
             }
             else
             {
@@ -86,14 +86,14 @@
 
                             if (_messageDispatcher.CurrentState == RosbridgeClientCommon.Enums.States.Started)
                             {
-                                _viewModel.ConnectButtonText = DisconnectButtonString;
+                                _viewModel.ConnectButtonText = DISCONNECT_BUTTON_STRING;
                                 _viewModel.ConnectedToRosBridge = true;
-                                _viewModel.StatusTextBoxText = StatusTextBoxTextConnected;
+                                _viewModel.StatusTextBoxText = STATUS_TEXT_BOX_TEXT_CONNECTED;
                             }
                         }
                         catch (Exception ex)
                         {
-                            MessageBox.Show(ex.Message, "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
+                            MessageBox.Show(ex.Message, MESSAGE_BOX_ERROR_TITLE, MessageBoxButton.OK, MessageBoxImage.Error);
                             _messageDispatcher = null;
                         }
 
@@ -101,16 +101,16 @@
                     }
                     else
                     {
-                        _viewModel.StatusTextBoxText = StatusTextBoxTextNotValidURI;
+                        _viewModel.StatusTextBoxText = STATUS_TEXT_BOX_TEXT_NOT_VALID_URI;
                     }
                 }
                 else
                 {
-                    _viewModel.StatusTextBoxText = StatusTextBoxTextEmptyURI;
+                    _viewModel.StatusTextBoxText = STATUS_TEXT_BOX_TEXT_EMPTY_URI_FIELD;
                 }
             }
 
-            _viewModel.ConnectButtonText = ConnectButtonString;
+            _viewModel.ConnectButtonText = CONNECT_BUTTON_STRING;
             _viewModel.ConnectedToRosBridge = false;
         }
 

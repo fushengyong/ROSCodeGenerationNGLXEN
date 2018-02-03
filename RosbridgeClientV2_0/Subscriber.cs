@@ -1,11 +1,8 @@
 ﻿namespace RosbridgeClientV2_0
 {
-    using Messages;
-    using RosbridgeClientCommon;
-    using RosbridgeClientCommon.Attributes;
     using RosbridgeClientCommon.EventArguments;
-    using RosbridgeClientCommon.Exceptions;
     using RosbridgeClientCommon.Interfaces;
+    using RosbridgeClientV2_0.Messages.RosOperations;
     using System;
     using System.Threading.Tasks;
 
@@ -20,26 +17,14 @@
 
         public string Type { get; private set; }
 
-        public Subscriber(string topic, IMessageDispatcher messageDispatcher)
+        public Subscriber(string topic, IMessageDispatcher messageDispatcher, IRosMessageTypeAttributeHelper rosMessageTypeAttributeHelper)
         {
-            RosMessageTypeAttribute rosMessageTypeAttribute = typeof(TRosMessage).GetCustomAttribute<RosMessageTypeAttribute>();
-
-            if (null == rosMessageTypeAttribute)
-            {
-                throw new RosMessageTypeAttributeNullException(nameof(TRosMessage));
-            }
-
-            if (string.Empty == rosMessageTypeAttribute.RosMessageType)
-            {
-                throw new RosMessageTypeAttributeEmptyException(nameof(TRosMessage));
-            }
-
             if (null == topic)
             {
                 throw new ArgumentNullException(nameof(topic));
             }
 
-            if (string.Empty == topic)
+            if (string.IsNullOrWhiteSpace(topic))
             {
                 throw new ArgumentException("Argument cannot be empty!", nameof(topic));
             }
@@ -49,12 +34,16 @@
                 throw new ArgumentNullException(nameof(messageDispatcher));
             }
 
-            Type = rosMessageTypeAttribute.RosMessageType;
+            if (null == rosMessageTypeAttributeHelper)
+            {
+                throw new ArgumentNullException(nameof(rosMessageTypeAttributeHelper));
+            }
 
             _messageDispatcher = messageDispatcher;
             _messageDispatcher.MessageReceived += RosbridgeMessageReceived;
-            _uniqueId = _messageDispatcher.GetUniqueID();
+            _uniqueId = _messageDispatcher.GetNewUniqueID();
             Topic = topic;
+            Type = rosMessageTypeAttributeHelper.GetRosMessageTypeFromTypeAttribute(typeof(TRosMessage));
         }
 
 

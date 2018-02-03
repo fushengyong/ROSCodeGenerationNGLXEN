@@ -1,6 +1,7 @@
-﻿namespace RosbridgeClientV2_0.Messages
+﻿namespace RosbridgeClientV2_0.Messages.RosbridgeStatus
 {
     using Newtonsoft.Json;
+    using RosbridgeClientV2_0.Constants;
 
     public class StatusLevelMessage : SetStatusLevelMessage
     {

@@ -1,9 +1,9 @@
 ﻿namespace RosbridgeClientV2_0
 {
-    using Messages;
     using Newtonsoft.Json.Linq;
     using RosbridgeClientCommon.EventArguments;
     using RosbridgeClientCommon.Interfaces;
+    using RosbridgeClientV2_0.Messages.RosOperations;
     using System;
     using System.Threading.Tasks;
 
@@ -21,7 +21,7 @@
                 throw new ArgumentNullException(nameof(service));
             }
 
-            if (string.Empty == service)
+            if (string.IsNullOrWhiteSpace(service))
             {
                 throw new ArgumentException("Argument cannot be empty!", nameof(service));
             }
@@ -32,7 +32,7 @@
             }
 
             _messageDispatcher = messageDispatcher;
-            _uniqueId = _messageDispatcher.GetUniqueID();
+            _uniqueId = _messageDispatcher.GetNewUniqueID();
         }
 
         public Task<TServiceResponse> Call(TServiceRequest request)
@@ -63,7 +63,6 @@
                         {
                             taskCompletion.SetResult(null);
                         }
-
                     }
                 }
             };

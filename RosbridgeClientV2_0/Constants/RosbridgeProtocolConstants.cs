@@ -1,4 +1,4 @@
-﻿namespace RosbridgeClientV2_0
+﻿namespace RosbridgeClientV2_0.Constants
 {
     /// <summary>
     /// Rosbridge protocol constants for Rosbridge 2.0

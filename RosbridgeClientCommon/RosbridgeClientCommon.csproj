@@ -44,7 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AttributeHelper.cs" />
+    <Compile Include="RosMessageTypeAttributeHelper.cs" />
     <Compile Include="Attributes\RosMessageTypeAttribute.cs" />
     <Compile Include="Enums\DispatcherStates.cs" />
     <Compile Include="EventArguments\RosbridgeMessageReceivedEventArgs.cs" />
@@ -52,6 +52,7 @@
     <Compile Include="Exceptions\MessageDispatcherException.cs" />
     <Compile Include="Exceptions\RosMessageTypeAttributeEmptyException.cs" />
     <Compile Include="Exceptions\RosMessageTypeAttributeNullException.cs" />
+    <Compile Include="Interfaces\IRosMessageTypeAttributeHelper.cs" />
     <Compile Include="Interfaces\IMessageDispatcher.cs" />
     <Compile Include="Interfaces\IMessageSerializer.cs" />
     <Compile Include="Interfaces\IRosPublisher.cs" />

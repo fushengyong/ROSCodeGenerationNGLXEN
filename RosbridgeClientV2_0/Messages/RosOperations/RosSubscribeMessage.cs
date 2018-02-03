@@ -1,8 +1,9 @@
-﻿namespace RosbridgeClientV2_0.Messages
+﻿namespace RosbridgeClientV2_0.Messages.RosOperations
 {
     using Enums;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Converters;
+    using RosbridgeClientV2_0.Constants;
 
     /// <summary>
     /// Subscribes the client to the specified topic

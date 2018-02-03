@@ -1,4 +1,4 @@
-﻿namespace RosbridgeClientV2_0.Messages
+﻿namespace RosbridgeClientV2_0.Messages.RosOperations
 {
     using Newtonsoft.Json;
 
@@ -7,7 +7,7 @@
         [JsonProperty("id", NullValueHandling = NullValueHandling.Ignore)]
         public string Id { get; set; }
 
-        public RosMessageBase(string operation) : base(operation)
+        protected RosMessageBase(string operation) : base(operation)
         {
         }
     }

@@ -1,7 +1,8 @@
-﻿using Newtonsoft.Json;
-
-namespace RosbridgeClientV2_0.Messages
+﻿namespace RosbridgeClientV2_0.Messages.MessageTransformation
 {
+    using Newtonsoft.Json;
+    using RosbridgeClientV2_0.Constants;
+
     /// <summary>
     /// Some messages (such as point clouds) can be extremely large, and for efficiency reasons we may wish to transfer them as PNG-encoded bytes. 
     /// </summary>

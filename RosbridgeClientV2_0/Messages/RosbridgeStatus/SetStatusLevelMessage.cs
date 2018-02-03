@@ -1,8 +1,9 @@
-﻿namespace RosbridgeClientV2_0.Messages
+﻿namespace RosbridgeClientV2_0.Messages.RosbridgeStatus
 {
     using Enums;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Converters;
+    using RosbridgeClientV2_0.Constants;
 
     /// <summary>
     /// Rosbridge sends status messages to the client relating to the successes and failures of rosbridge protocol commands.

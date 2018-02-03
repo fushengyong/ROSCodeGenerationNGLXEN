@@ -6,7 +6,7 @@
     using RosbridgeClientCommon.Attributes;
     using RosbridgeClientCommon.Exceptions;
     using RosbridgeClientCommon.Interfaces;
-    using RosbridgeClientV2_0.Messages;
+    using RosbridgeClientV2_0.Messages.RosOperations;
     using System;
     using System.Linq;
 
@@ -14,11 +14,13 @@
     public class SubscriberUnitTests
     {
         private Mock<IMessageDispatcher> _messageDispatcherMock;
+        private Mock<IRosMessageTypeAttributeHelper> _rosMessageTypeAttributeHelperMock;
 
         [SetUp]
         public void SetUp()
         {
             _messageDispatcherMock = new Mock<IMessageDispatcher>();
+            _rosMessageTypeAttributeHelperMock = new Mock<IRosMessageTypeAttributeHelper>();
         }
 
         [Test]
@@ -30,7 +32,7 @@
             string topic = "TestTopic";
 
             //act
-            Subscriber<RosMessageTestClass> testClass = new Subscriber<RosMessageTestClass>(topic, _messageDispatcherMock.Object);
+            Subscriber<RosMessageTestClass> testClass = new Subscriber<RosMessageTestClass>(topic, _messageDispatcherMock.Object, _rosMessageTypeAttributeHelperMock.Object);
 
             //assert
             testClass.Topic.Should().Be(topic);
@@ -44,7 +46,7 @@
             string topic = "TestTopic";
 
             //act
-            Action act = () => new Subscriber<object>(topic, _messageDispatcherMock.Object);
+            Action act = () => new Subscriber<object>(topic, _messageDispatcherMock.Object, _rosMessageTypeAttributeHelperMock.Object);
 
             //assert
             act.ShouldThrow<RosMessageTypeAttributeNullException>();
@@ -55,7 +57,7 @@
         {
             //arrange
             string topic = "TestTopic";
-            Subscriber<RosMessageTestClass> testClass = new Subscriber<RosMessageTestClass>(topic, _messageDispatcherMock.Object);
+            Subscriber<RosMessageTestClass> testClass = new Subscriber<RosMessageTestClass>(topic, _messageDispatcherMock.Object, _rosMessageTypeAttributeHelperMock.Object);
 
             //act
             testClass.SubscribeAsync();
@@ -69,7 +71,7 @@
         {
             //arrange
             string topic = "TestTopic";
-            Subscriber<RosMessageTestClass> testClass = new Subscriber<RosMessageTestClass>(topic, _messageDispatcherMock.Object);
+            Subscriber<RosMessageTestClass> testClass = new Subscriber<RosMessageTestClass>(topic, _messageDispatcherMock.Object, _rosMessageTypeAttributeHelperMock.Object);
 
             //act
             testClass.UnsubscribeAsync();
