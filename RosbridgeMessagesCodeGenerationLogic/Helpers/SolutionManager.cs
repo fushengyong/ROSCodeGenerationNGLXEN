@@ -17,9 +17,9 @@
         private Solution2 _solution;
         private Project _project;
         private string _projectName;
-        private string _clientProjectName;
+        private string _rosMessageTypeAttributeProjectName;
 
-        public SolutionManager(IServiceProvider serviceProvider, string projectName, string clientProjectName)
+        public SolutionManager(IServiceProvider serviceProvider, string projectName, string rosMessageTypeAttributeProjectName)
         {
             if (null == serviceProvider)
             {
@@ -31,15 +31,15 @@
                 throw new ArgumentException("Parameter cannot be empty!", nameof(projectName));
             }
 
-            if (string.IsNullOrWhiteSpace(clientProjectName))
+            if (string.IsNullOrWhiteSpace(rosMessageTypeAttributeProjectName))
             {
-                throw new ArgumentException("Parameter cannot be empty!", nameof(clientProjectName));
+                throw new ArgumentException("Parameter cannot be empty!", nameof(rosMessageTypeAttributeProjectName));
             }
 
             DTE dte = (DTE)serviceProvider.GetService(typeof(DTE));
             _solution = (Solution2)dte.Solution;
             _projectName = projectName;
-            _clientProjectName = clientProjectName;
+            _rosMessageTypeAttributeProjectName = rosMessageTypeAttributeProjectName;
         }
 
         public void Initialize()
@@ -59,7 +59,7 @@
 
             Project newProject = GetProjectByName(_projectName);
 
-            Project clientProject = GetProjectByName(_clientProjectName);
+            Project clientProject = GetProjectByName(_rosMessageTypeAttributeProjectName);
 
             VSProject newProjectVSProj = newProject.Object;
             newProjectVSProj.References.AddProject(clientProject);
