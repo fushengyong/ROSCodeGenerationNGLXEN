@@ -11,17 +11,16 @@
     {
         private const string PROJECT_DIRECTORY_GUID = "{6BB5F8EF-4483-11D3-8BCF-00C04F8EC28C}";
         private const string FULL_PATH_ITEM_PROPERTY = "FullPath";
-        private const string PROJECT_TEMPLATE_PATH = "csClassLibrary.vstemplate|FrameworkVersion=4.5.2";
         private const string PROJECT_LANGUAGE = "CSharp";
-        private const string PROJECT_BUILD_CONFIGURATION = "DEBUG";
         private const string DEFAULT_CLASS_NAME = "Class1.cs";
 
         private Solution2 _solution;
         private Project _project;
         private string _projectName;
+        private string _projectTemplateAndFrameworkVersion;
         private string _rosMessageTypeAttributeProjectName;
 
-        public SolutionManager(IServiceProvider serviceProvider, string projectName, string rosMessageTypeAttributeProjectName)
+        public SolutionManager(IServiceProvider serviceProvider, string projectName, string rosMessageTypeAttributeProjectName, string projectTemplateAndFrameworkVersion)
         {
             if (null == serviceProvider)
             {
@@ -48,10 +47,21 @@
                 throw new ArgumentException("Parameter cannot be empty!", nameof(rosMessageTypeAttributeProjectName));
             }
 
+            if (null == projectTemplateAndFrameworkVersion)
+            {
+                throw new ArgumentNullException(nameof(projectTemplateAndFrameworkVersion));
+            }
+
+            if (string.Empty == projectTemplateAndFrameworkVersion)
+            {
+                throw new ArgumentException("Parameter cannot be empty!", nameof(projectTemplateAndFrameworkVersion));
+            }
+
             DTE dte = (DTE)serviceProvider.GetService(typeof(DTE));
             _solution = (Solution2)dte.Solution;
             _projectName = projectName;
             _rosMessageTypeAttributeProjectName = rosMessageTypeAttributeProjectName;
+            _projectTemplateAndFrameworkVersion = projectTemplateAndFrameworkVersion;
         }
 
         public void Initialize()
@@ -64,7 +74,7 @@
                 _solution.Remove(currentProject);
             }
 
-            string classLibraryTemplatePath = _solution.GetProjectTemplate(PROJECT_TEMPLATE_PATH, PROJECT_LANGUAGE);
+            string classLibraryTemplatePath = _solution.GetProjectTemplate(_projectTemplateAndFrameworkVersion, PROJECT_LANGUAGE);
             string solutionPath = Path.GetDirectoryName(_solution.FullName);
 
             _solution.AddFromTemplate(classLibraryTemplatePath, Path.Combine(solutionPath, _projectName), _projectName);

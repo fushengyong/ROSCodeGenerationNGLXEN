@@ -27,7 +27,8 @@
     KeyValueConfigurationCollection appSettings = ConfigFinder.GetConfigFile(serviceProvider, this.Host.TemplateFile).AppSettings.Settings;
     string rosMessagesDirectoryPath = appSettings["RosMessagesDirectoryPath"].Value;
     string rosMessagesProjectName = appSettings["RosMessagesProjectName"].Value;
-    string rosMessageTypeAttributeProjectName = appSettings["rosMessageTypeAttributeProjectName"].Value;
+    string rosMessagesProjectTemplateFrameworkVersion = appSettings["RosMessagesProjectTemplateFrameworkVersion"].Value;
+    string rosMessageTypeAttributeProjectName = appSettings["RosMessageTypeAttributeProjectName"].Value;
     string rosMessageTypeAttributeName = appSettings["RosMessageTypeAttributeName"].Value;
     string rosMessageTypeAttributeNamespace = appSettings["RosMessageTypeAttributeNamespace"].Value;
 
@@ -41,7 +42,7 @@
 
     ITextTemplating textTemplating = serviceProvider.GetService(typeof(STextTemplating)) as ITextTemplating;
     ITextTemplatingSessionHost textTemplatingSessionHost = textTemplating as ITextTemplatingSessionHost;
-    ISolutionManager solutionManager = new SolutionManager(serviceProvider, rosMessagesProjectName, rosMessageTypeAttributeProjectName);
+    ISolutionManager solutionManager = new SolutionManager(serviceProvider, rosMessagesProjectName, rosMessageTypeAttributeProjectName, rosMessagesProjectTemplateFrameworkVersion);
 
     CodeGenerator generator = new CodeGenerator(this.Host, textTemplatingSessionHost, textTemplating, solutionManager, rosMessagesProjectName, rosMessageTypeAttributeName, rosMessageTypeAttributeNamespace);
 
