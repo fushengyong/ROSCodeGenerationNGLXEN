@@ -23,11 +23,6 @@
 
 <# 
     IServiceProvider serviceProvider = (IServiceProvider)this.Host;
-    ITextTemplating textTemplating = serviceProvider.GetService(typeof(STextTemplating)) as ITextTemplating;
-    ITextTemplatingSessionHost textTemplatingSessionHost = textTemplating as ITextTemplatingSessionHost;
-
-    IYAMLParser yamlParser = new YAMLParser(MsgFile.PrimitiveTypeDictionary);
-    FileLoader fileLoader = new FileLoader(yamlParser);
 
     KeyValueConfigurationCollection appSettings = ConfigFinder.GetConfigFile(serviceProvider, this.Host.TemplateFile).AppSettings.Settings;
     string rosMessagesDirectoryPath = appSettings["RosMessagesDirectoryPath"].Value;
@@ -36,12 +31,18 @@
     string rosMessageTypeAttributeName = appSettings["RosMessageTypeAttributeName"].Value;
     string rosMessageTypeAttributeNamespace = appSettings["RosMessageTypeAttributeNamespace"].Value;
 
+    IYAMLParser yamlParser = new YAMLParser(MsgFile.PrimitiveTypeDictionary);
+    FileLoader fileLoader = new FileLoader(yamlParser);
+
     ISet<MsgFile> msgFileSet = new HashSet<MsgFile>();
     ISet<SrvFile> srvFileSet = new HashSet<SrvFile>();
 
     fileLoader.LoadRosFiles(msgFileSet, srvFileSet, rosMessagesDirectoryPath);
-    
+
+    ITextTemplating textTemplating = serviceProvider.GetService(typeof(STextTemplating)) as ITextTemplating;
+    ITextTemplatingSessionHost textTemplatingSessionHost = textTemplating as ITextTemplatingSessionHost;
     ISolutionManager solutionManager = new SolutionManager(serviceProvider, rosMessagesProjectName, rosMessageTypeAttributeProjectName);
+
     CodeGenerator generator = new CodeGenerator(this.Host, textTemplatingSessionHost, textTemplating, solutionManager, rosMessagesProjectName, rosMessageTypeAttributeName, rosMessageTypeAttributeNamespace);
 
     generator.GenerateRosMessages(msgFileSet);

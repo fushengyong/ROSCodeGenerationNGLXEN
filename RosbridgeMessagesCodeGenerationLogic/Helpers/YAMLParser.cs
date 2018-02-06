@@ -29,14 +29,18 @@
             _primitiveTypeDictionary = primitiveTypeDictionary;
         }
 
-        ISet<MessageField> IYAMLParser.YAMLStringToMessageFieldSet(string yamlString)
+        public void SetMsgFileFieldsFromYAMLString(string yamlString, MsgFile msgFile)
         {
             if (null == yamlString)
             {
                 throw new ArgumentNullException(nameof(yamlString));
             }
 
-            HashSet<MessageField> result = new HashSet<MessageField>();
+            if (null == msgFile)
+            {
+                throw new ArgumentNullException(nameof(msgFile));
+            }
+
             foreach (Match currentMatch in YAMLParserRegex.Matches(yamlString))
             {
                 if (currentMatch.Success)
@@ -50,10 +54,21 @@
                     string memberValue = currentMatch.Groups[ConstantValueRegexGroupName].Value;
 
                     MessageField newField = new MessageField(name, _primitiveTypeDictionary.ContainsKey(type) ? _primitiveTypeDictionary[type] : type, namespaceName, isArray, elementCount, memberValue);
-                    result.Add(newField);
+
+                    if (isArray)
+                    {
+                        msgFile.ArrayFieldSet.Add(newField);
+                    }
+                    else if (!string.IsNullOrWhiteSpace(memberValue))
+                    {
+                        msgFile.ConstantFieldSet.Add(newField);
+                    }
+                    else
+                    {
+                        msgFile.FieldSet.Add(newField);
+                    }
                 }
             }
-            return result;
         }
     }
 }

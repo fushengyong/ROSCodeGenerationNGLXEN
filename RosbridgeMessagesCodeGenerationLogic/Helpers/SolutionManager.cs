@@ -13,6 +13,8 @@
         private const string FULL_PATH_ITEM_PROPERTY = "FullPath";
         private const string PROJECT_TEMPLATE_PATH = "csClassLibrary.vstemplate|FrameworkVersion=4.5.2";
         private const string PROJECT_LANGUAGE = "CSharp";
+        private const string PROJECT_BUILD_CONFIGURATION = "DEBUG";
+        private const string DEFAULT_CLASS_NAME = "Class1.cs";
 
         private Solution2 _solution;
         private Project _project;
@@ -26,12 +28,22 @@
                 throw new ArgumentNullException(nameof(serviceProvider));
             }
 
-            if (string.IsNullOrWhiteSpace(projectName))
+            if (null == projectName)
+            {
+                throw new ArgumentNullException(nameof(projectName));
+            }
+
+            if (string.Empty == projectName)
             {
                 throw new ArgumentException("Parameter cannot be empty!", nameof(projectName));
             }
 
-            if (string.IsNullOrWhiteSpace(rosMessageTypeAttributeProjectName))
+            if (null == rosMessageTypeAttributeProjectName)
+            {
+                throw new ArgumentNullException(nameof(rosMessageTypeAttributeProjectName));
+            }
+
+            if (string.Empty == rosMessageTypeAttributeProjectName)
             {
                 throw new ArgumentException("Parameter cannot be empty!", nameof(rosMessageTypeAttributeProjectName));
             }
@@ -48,8 +60,8 @@
 
             if (currentProject != null)
             {
-                _solution.Remove(currentProject);
                 Directory.Delete(Path.GetDirectoryName(currentProject.FullName), true);
+                _solution.Remove(currentProject);
             }
 
             string classLibraryTemplatePath = _solution.GetProjectTemplate(PROJECT_TEMPLATE_PATH, PROJECT_LANGUAGE);
@@ -59,12 +71,26 @@
 
             Project newProject = GetProjectByName(_projectName);
 
+            DeleteDefaultClass(newProject);
+
             Project clientProject = GetProjectByName(_rosMessageTypeAttributeProjectName);
 
             VSProject newProjectVSProj = newProject.Object;
             newProjectVSProj.References.AddProject(clientProject);
 
             _project = newProject;
+        }
+
+        private void DeleteDefaultClass(Project project)
+        {
+            foreach (ProjectItem projectItem in project.ProjectItems)
+            {
+                if (projectItem.Name == DEFAULT_CLASS_NAME)
+                {
+                    File.Delete(GetProjectItemFullPath(projectItem));
+                    projectItem.Remove();
+                }
+            }
         }
 
         private Project GetProjectByName(string projectName)
@@ -80,21 +106,21 @@
             return null;
         }
 
-        public ProjectItem AddFileToProjectItem(ProjectItem projectItem, FileInfo file)
+        public ProjectItem AddFileToProjectItem(ProjectItem projectItem, string filePath)
         {
             if (null == projectItem)
             {
                 throw new ArgumentNullException(nameof(projectItem));
             }
 
-            if (null == file)
+            if (null == filePath)
             {
-                throw new ArgumentNullException(nameof(file));
+                throw new ArgumentNullException(nameof(filePath));
             }
 
-            if (!file.Exists)
+            if (string.Empty == filePath)
             {
-                throw new FileNotFoundException(file.FullName);
+                throw new ArgumentException("Property cannot be empty!", nameof(filePath));
             }
 
             if (projectItem.Kind != PROJECT_DIRECTORY_GUID)
@@ -102,12 +128,22 @@
                 throw new InvalidOperationException("The given project item is not a directory!");
             }
 
-            return projectItem.ProjectItems.AddFromFile(file.FullName);
+            return projectItem.ProjectItems.AddFromFile(filePath);
         }
 
         public ProjectItem AddDirectoryToProject(string directoryName)
         {
-            if (string.IsNullOrWhiteSpace(directoryName))
+            if (null == _project)
+            {
+                throw new InvalidOperationException("Project not initialized yet!");
+            }
+
+            if (null == directoryName)
+            {
+                throw new ArgumentNullException(nameof(directoryName));
+            }
+
+            if (string.Empty == directoryName)
             {
                 throw new ArgumentException("Property cannot be empty!", nameof(directoryName));
             }
