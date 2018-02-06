@@ -5,6 +5,7 @@
 <#@ assembly name="EnvDTE" #>
 <#@ assembly name="System.Core" #>
 <#@ assembly name="System.Configuration" #>
+
 <#@ assembly name="$(SolutionDir)\RosbridgeMessagesCodeGenerationLogic\bin\Debug\RosbridgeMessagesCodeGenerationLogic.dll" #>
 
 <#@ import namespace="RosbridgeMessagesCodeGenerationLogic.Enums" #>
@@ -12,7 +13,6 @@
 <#@ import namespace="RosbridgeMessagesCodeGenerationLogic.BaseClasses" #>
 <#@ import namespace="RosbridgeMessagesCodeGenerationLogic.Interfaces" #>
 <#@ import namespace="System" #>
-<#@ import namespace="EnvDTE" #>
 <#@ import namespace="System.Collections.Generic" #>
 <#@ import namespace="System.Configuration" #> 
 <#@ import namespace="System.IO" #>
@@ -28,22 +28,21 @@
 
     IYAMLParser yamlParser = new YAMLParser(MsgFile.PrimitiveTypeDictionary);
     FileLoader fileLoader = new FileLoader(yamlParser);
-    SolutionManager solutionManager = new SolutionManager(serviceProvider, this.Host.TemplateFile);
 
     KeyValueConfigurationCollection appSettings = ConfigFinder.GetConfigFile(serviceProvider, this.Host.TemplateFile).AppSettings.Settings;
     string rosMessagesDirectoryPath = appSettings["RosMessagesDirectoryPath"].Value;
+    string rosMessagesProjectName = appSettings["RosMessagesProjectName"].Value;
+    string rosMessageTypeAttributeProjectName = appSettings["rosMessageTypeAttributeProjectName"].Value;
     string rosMessageTypeAttributeName = appSettings["RosMessageTypeAttributeName"].Value;
     string rosMessageTypeAttributeNamespace = appSettings["RosMessageTypeAttributeNamespace"].Value;
-    string defaultNamespace = appSettings["RosDTONamespace"].Value;
-    bool projectDefaultNamespaceAsPrefix = false;
-    Boolean.TryParse(appSettings["UseProjectDefaultNamespaceAsPrefix"].Value, out projectDefaultNamespaceAsPrefix);
 
     ISet<MsgFile> msgFileSet = new HashSet<MsgFile>();
     ISet<SrvFile> srvFileSet = new HashSet<SrvFile>();
 
     fileLoader.LoadRosFiles(msgFileSet, srvFileSet, rosMessagesDirectoryPath);
     
-    CodeGenerator generator = new CodeGenerator(this.Host, textTemplatingSessionHost, textTemplating, solutionManager, defaultNamespace, rosMessageTypeAttributeName, rosMessageTypeAttributeNamespace, projectDefaultNamespaceAsPrefix);
+    ISolutionManager solutionManager = new SolutionManager(serviceProvider, rosMessagesProjectName, rosMessageTypeAttributeProjectName);
+    CodeGenerator generator = new CodeGenerator(this.Host, textTemplatingSessionHost, textTemplating, solutionManager, rosMessagesProjectName, rosMessageTypeAttributeName, rosMessageTypeAttributeNamespace);
 
     generator.GenerateRosMessages(msgFileSet);
  #>

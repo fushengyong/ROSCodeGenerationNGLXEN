@@ -4,6 +4,7 @@
     using Microsoft.VisualStudio.TextTemplating;
     using Microsoft.VisualStudio.TextTemplating.VSHost;
     using RosbridgeMessagesCodeGenerationLogic.BaseClasses;
+    using RosbridgeMessagesCodeGenerationLogic.Interfaces;
     using System;
     using System.Collections.Generic;
     using System.IO;
@@ -17,15 +18,14 @@
         private ITextTemplatingEngineHost _host;
         private ITextTemplating _textTemplating;
         private ITextTemplatingSessionHost _textTemplatingHost;
-        private SolutionManager _solutionManager;
-        private ProjectItem _workingDirectory;
+        private ISolutionManager _solutionManager;
         private string _defaultNamespace;
         private string _rosMessageTypeAttributeName;
         private string _rosMessageTypeAttributeNamespace;
         private string _rosMessageCodeGenerationTemplatePath;
         private string _customTimeDataTemplatePath;
 
-        public CodeGenerator(ITextTemplatingEngineHost host, ITextTemplatingSessionHost textTemplatingSessionHost, ITextTemplating textTemplating, SolutionManager solutionManager, string rosClassesDirectoryName, string rosMessageTypeAttributeName, string rosMessageTypeAttributeNamespace, bool useProjectDefaultNamespaceAsPrefix)
+        public CodeGenerator(ITextTemplatingEngineHost host, ITextTemplatingSessionHost textTemplatingSessionHost, ITextTemplating textTemplating, ISolutionManager solutionManager, string rosMessagesProjectName, string rosMessageTypeAttributeName, string rosMessageTypeAttributeNamespace)
         {
             if (null == host)
             {
@@ -47,32 +47,17 @@
                 throw new ArgumentNullException(nameof(solutionManager));
             }
 
-            if (null == rosClassesDirectoryName)
+            if (string.IsNullOrWhiteSpace(rosMessagesProjectName))
             {
-                throw new ArgumentNullException(nameof(rosClassesDirectoryName));
+                throw new ArgumentException("Parameter cannot be empty!", nameof(rosMessagesProjectName));
             }
 
-            if (string.Empty == rosClassesDirectoryName)
-            {
-                throw new ArgumentException("Parameter cannot be empty!", nameof(rosClassesDirectoryName));
-            }
-
-            if (null == rosMessageTypeAttributeName)
-            {
-                throw new ArgumentNullException(nameof(rosMessageTypeAttributeName));
-            }
-
-            if (string.Empty == rosMessageTypeAttributeName)
+            if (string.IsNullOrWhiteSpace(rosMessageTypeAttributeName))
             {
                 throw new ArgumentException("Parameter cannot be empty!", nameof(rosMessageTypeAttributeName));
             }
 
-            if (null == rosMessageTypeAttributeNamespace)
-            {
-                throw new ArgumentNullException(nameof(rosMessageTypeAttributeNamespace));
-            }
-
-            if (string.Empty == rosMessageTypeAttributeNamespace)
+            if (string.IsNullOrWhiteSpace(rosMessageTypeAttributeNamespace))
             {
                 throw new ArgumentException("Parameter cannot be empty!", nameof(rosMessageTypeAttributeNamespace));
             }
@@ -84,10 +69,10 @@
             _rosMessageTypeAttributeName = rosMessageTypeAttributeName;
             _rosMessageTypeAttributeNamespace = rosMessageTypeAttributeNamespace;
 
-            _defaultNamespace = useProjectDefaultNamespaceAsPrefix ? string.Format("{0}.{1}", _solutionManager.DefaultNamespace, rosClassesDirectoryName) : rosClassesDirectoryName;
+            _defaultNamespace = rosMessagesProjectName;
             _rosMessageCodeGenerationTemplatePath = _host.ResolvePath(ROS_MESSAGE_CODE_GENERATION_TEMPLATE_RELATIVE_PATH);
             _customTimeDataTemplatePath = _host.ResolvePath(CUSTOM_TIME_DATA_TEMPLATE_RELATIVE_PATH);
-            _workingDirectory = _solutionManager.Initialize(rosClassesDirectoryName);
+            _solutionManager.Initialize();
         }
 
         public void GenerateRosMessages(ISet<MsgFile> messageSet)
@@ -105,14 +90,13 @@
                     TransformTemplateToFile(_customTimeDataTemplatePath, session, groupDirectoryProjectItem, MsgFile.CUSTOM_TIME_PRIMITIVE_TYPE);
                 }
             }
-            _solutionManager.ActualProject.Save();
         }
 
         private ProjectItem GenerateMsgByNamespace(IGrouping<string, MsgFile> msgGroup, string standardNamespace)
         {
             string directoryName = msgGroup.Key;
 
-            ProjectItem groupDirectoryProjectItem = SolutionManager.AddDirectoryToProjectItem(_workingDirectory, directoryName);
+            ProjectItem groupDirectoryProjectItem = _solutionManager.AddDirectoryToProject(directoryName);
 
             foreach (MsgFile message in msgGroup)
             {
@@ -142,7 +126,7 @@
 
         private void TransformTemplateToFile(string templatePath, TextTemplatingSession session, ProjectItem groupDirectoryProjectItem, string fileName)
         {
-            string directoryPath = SolutionManager.GetProjectItemFullPath(groupDirectoryProjectItem);
+            string directoryPath = _solutionManager.GetProjectItemFullPath(groupDirectoryProjectItem);
 
             _textTemplatingHost.Session = session;
 
@@ -150,17 +134,12 @@
 
             FileInfo newFile = WriteToFile(directoryPath, fileName, transformedTemplate);
 
-            SolutionManager.AddFileToProjectItem(groupDirectoryProjectItem, newFile);
+            _solutionManager.AddFileToProjectItem(groupDirectoryProjectItem, newFile);
         }
 
         private FileInfo WriteToFile(string directoryPath, string fileName, string fileContent)
         {
             FileInfo newFile = new FileInfo(Path.Combine(directoryPath, string.Format("{0}.cs", fileName)));
-
-            if (newFile.Exists)
-            {
-                newFile.Delete();
-            }
 
             File.WriteAllText(newFile.FullName, fileContent);
 

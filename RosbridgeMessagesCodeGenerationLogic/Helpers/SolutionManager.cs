@@ -1,94 +1,86 @@
 ﻿namespace RosbridgeMessagesCodeGenerationLogic.Helpers
 {
     using EnvDTE;
+    using EnvDTE80;
+    using RosbridgeMessagesCodeGenerationLogic.Interfaces;
     using System;
     using System.IO;
+    using VSLangProj;
 
-    public class SolutionManager
+    public class SolutionManager : ISolutionManager
     {
         private const string PROJECT_DIRECTORY_GUID = "{6BB5F8EF-4483-11D3-8BCF-00C04F8EC28C}";
         private const string FULL_PATH_ITEM_PROPERTY = "FullPath";
+        private const string PROJECT_TEMPLATE_PATH = "csClassLibrary.vstemplate|FrameworkVersion=4.5.2";
+        private const string PROJECT_LANGUAGE = "CSharp";
 
-        private DTE _dte;
+        private Solution2 _solution;
         private Project _project;
+        private string _projectName;
+        private string _clientProjectName;
 
-        public Project ActualProject { get { return _project; } }
-        public string DefaultNamespace
+        public SolutionManager(IServiceProvider serviceProvider, string projectName, string clientProjectName)
         {
-            get
+            if (null == serviceProvider)
             {
-                if (null != _project)
-                {
-                    return _project.Properties.Item("RootNamespace").Value.ToString();
-                }
-                else
-                {
-                    return string.Empty;
-                }
+                throw new ArgumentNullException(nameof(serviceProvider));
             }
+
+            if (string.IsNullOrWhiteSpace(projectName))
+            {
+                throw new ArgumentException("Parameter cannot be empty!", nameof(projectName));
+            }
+
+            if (string.IsNullOrWhiteSpace(clientProjectName))
+            {
+                throw new ArgumentException("Parameter cannot be empty!", nameof(clientProjectName));
+            }
+
+            DTE dte = (DTE)serviceProvider.GetService(typeof(DTE));
+            _solution = (Solution2)dte.Solution;
+            _projectName = projectName;
+            _clientProjectName = clientProjectName;
         }
 
-        public static string GetProjectItemFullPath(ProjectItem item)
+        public void Initialize()
         {
-            return item.Properties.Item(FULL_PATH_ITEM_PROPERTY).Value.ToString();
+            Project currentProject = GetProjectByName(_projectName);
+
+            if (currentProject != null)
+            {
+                _solution.Remove(currentProject);
+                Directory.Delete(Path.GetDirectoryName(currentProject.FullName), true);
+            }
+
+            string classLibraryTemplatePath = _solution.GetProjectTemplate(PROJECT_TEMPLATE_PATH, PROJECT_LANGUAGE);
+            string solutionPath = Path.GetDirectoryName(_solution.FullName);
+
+            _solution.AddFromTemplate(classLibraryTemplatePath, Path.Combine(solutionPath, _projectName), _projectName);
+
+            Project newProject = GetProjectByName(_projectName);
+
+            Project clientProject = GetProjectByName(_clientProjectName);
+
+            VSProject newProjectVSProj = newProject.Object;
+            newProjectVSProj.References.AddProject(clientProject);
+
+            _project = newProject;
         }
 
-        public static ProjectItem AddDirectoryToProjectItem(ProjectItem projectItem, string directoryName)
+        private Project GetProjectByName(string projectName)
         {
-            if (null == projectItem)
+            foreach (Project project in _solution.Projects)
             {
-                throw new ArgumentNullException(nameof(projectItem));
-            }
-
-            if (null == directoryName)
-            {
-                throw new ArgumentNullException(nameof(directoryName));
-            }
-
-            if (string.Empty == directoryName)
-            {
-                throw new ArgumentException("Parameter cannot be empty!", nameof(directoryName));
-            }
-
-            ProjectItem result = null;
-
-            if (!IsDirectoryExistsInProjectItems(projectItem.ProjectItems, directoryName, ref result))
-            {
-                result = projectItem.ProjectItems.AddFolder(directoryName);
-            }
-
-            return result;
-        }
-
-        public static bool IsDirectoryExistsInProjectItems(ProjectItems projectItems, string directoryName, ref ProjectItem projectItem)
-        {
-            if (null == projectItems)
-            {
-                throw new ArgumentNullException(nameof(projectItems));
-            }
-
-            if (null == directoryName)
-            {
-                throw new ArgumentNullException(nameof(directoryName));
-            }
-
-            if (string.Empty == directoryName)
-            {
-                throw new ArgumentException("Parameter cannot be empty!", nameof(directoryName));
-            }
-
-            foreach (ProjectItem currentProjectItem in projectItems)
-            {
-                if (currentProjectItem.Kind == PROJECT_DIRECTORY_GUID && currentProjectItem.Name == directoryName)
+                if (project.Name == projectName)
                 {
-                    projectItem = currentProjectItem;
-                    return true;
+                    return project;
                 }
             }
-            return false;
+
+            return null;
         }
 
-        public static ProjectItem AddFileToProjectItem(ProjectItem projectItem, FileInfo file)
+        public ProjectItem AddFileToProjectItem(ProjectItem projectItem, FileInfo file)
         {
             if (null == projectItem)
             {
@@ -100,71 +92,32 @@
                 throw new ArgumentNullException(nameof(file));
             }
 
-            if (projectItem.Kind != PROJECT_DIRECTORY_GUID)
-            {
-                throw new InvalidOperationException("The given project item is not a directory!");
-            }
-
             if (!file.Exists)
             {
                 throw new FileNotFoundException(file.FullName);
             }
 
-            ProjectItem newFileItem = projectItem.ProjectItems.AddFromFile(file.FullName);
+            if (projectItem.Kind != PROJECT_DIRECTORY_GUID)
+            {
+                throw new InvalidOperationException("The given project item is not a directory!");
+            }
 
-            return newFileItem;
+            return projectItem.ProjectItems.AddFromFile(file.FullName);
         }
 
-        public SolutionManager(IServiceProvider serviceProvider, string templateFile)
+        public ProjectItem AddDirectoryToProject(string directoryName)
         {
-            if (null == serviceProvider)
+            if (string.IsNullOrWhiteSpace(directoryName))
             {
-                throw new ArgumentNullException(nameof(serviceProvider));
+                throw new ArgumentException("Property cannot be empty!", nameof(directoryName));
             }
 
-            if (null == templateFile)
-            {
-                throw new ArgumentNullException(nameof(templateFile));
-            }
-
-            if (string.Empty == templateFile)
-            {
-                throw new ArgumentException("Parameter cannot be empty!", nameof(templateFile));
-            }
-
-            _dte = (DTE)serviceProvider.GetService(typeof(DTE));
-            _project = _dte.Solution.FindProjectItem(templateFile).ContainingProject;
+            return _project.ProjectItems.AddFolder(directoryName);
         }
 
-        public ProjectItem Initialize(string directoryName)
+        public string GetProjectItemFullPath(ProjectItem projectItem)
         {
-            if (null == directoryName)
-            {
-                throw new ArgumentNullException(nameof(directoryName));
-            }
-
-            if (string.Empty == directoryName)
-            {
-                throw new ArgumentException("Parameter cannot be empty!", nameof(directoryName));
-            }
-
-            ProjectItem result = null;
-
-            if (!IsDirectoryExistsInProjectItems(_project.ProjectItems, directoryName, ref result))
-            {
-                result = _project.ProjectItems.AddFolder(directoryName);
-            }
-            else
-            {
-                //result.Remove();
-                //Directory.Delete(GetProjectItemFullPath(result), true);
-                //result = _project.ProjectItems.AddFolder(directoryName);
-                throw new InvalidOperationException(string.Format("The folder {0} is already exists!", directoryName));
-            }
-
-            _project.Save();
-
-            return result;
+            return projectItem.Properties.Item(FULL_PATH_ITEM_PROPERTY).Value.ToString();
         }
     }
 }

@@ -34,7 +34,12 @@
   <ItemGroup>
     <Reference Include="EnvDTE, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <EmbedInteropTypes>True</EmbedInteropTypes>
-      <HintPath>..\packages\EnvDTE.8.0.1\lib\net10\EnvDTE.dll</HintPath>
+      <HintPath>..\packages\EnvDTE.8.0.2\lib\net10\EnvDTE.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EnvDTE80, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+      <HintPath>..\packages\EnvDTE80.8.0.2\lib\net10\EnvDTE80.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.VisualStudio.CoreUtility, Version=15.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
@@ -114,7 +119,7 @@
     </Reference>
     <Reference Include="stdole, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <EmbedInteropTypes>True</EmbedInteropTypes>
-      <HintPath>..\packages\stdole.7.0.3301\lib\net10\stdole.dll</HintPath>
+      <HintPath>..\packages\stdole.7.0.3302\lib\net10\stdole.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -126,6 +131,11 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="VSLangProj, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+      <HintPath>..\packages\VSLangProj.7.0.3301\lib\net10\VSLangProj.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseClasses\MessageField.cs" />
@@ -139,12 +149,49 @@
     <Compile Include="Helpers\FileLoader.cs" />
     <Compile Include="Helpers\SolutionManager.cs" />
     <Compile Include="Helpers\YAMLParser.cs" />
+    <Compile Include="Interfaces\ISolutionManager.cs" />
     <Compile Include="Interfaces\IYAMLParser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Templates\CodeGenerators\RosMessage.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>RosMessage.txt</LastGenOutput>
+    </Content>
+    <Content Include="Templates\CodeGenerators\RosMessage.txt">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>RosMessage.tt</DependentUpon>
+    </Content>
+    <Content Include="Templates\CodeGenerators\TimeData.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>TimeData.txt</LastGenOutput>
+    </Content>
+    <Content Include="Templates\CodeGenerators\TimeData.txt">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TimeData.tt</DependentUpon>
+    </Content>
+    <Content Include="Templates\Main.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Main.txt</LastGenOutput>
+    </Content>
+    <Content Include="Templates\Main.txt">
+      <DependentUpon>Main.tt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Content>
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Microsoft.VisualStudio.SDK.EmbedInteropTypes.15.0.12\build\Microsoft.VisualStudio.SDK.EmbedInteropTypes.targets" Condition="Exists('..\packages\Microsoft.VisualStudio.SDK.EmbedInteropTypes.15.0.12\build\Microsoft.VisualStudio.SDK.EmbedInteropTypes.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
