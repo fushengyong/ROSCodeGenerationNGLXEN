@@ -1,4 +1,4 @@
-﻿namespace RosbridgeClientV2_0.UnitTests
+﻿namespace Rosbridge.Client.Common.UnitTests
 {
     using Rosbridge.Client.Common.Attributes;
 

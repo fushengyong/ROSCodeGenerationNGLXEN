@@ -69,6 +69,7 @@
   <ItemGroup>
     <Compile Include="MessageDispatcherUnitTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RosMessageTestClass.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

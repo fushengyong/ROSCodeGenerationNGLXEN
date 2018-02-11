@@ -19,12 +19,12 @@
 
             RosMessageTypeAttribute rosMessageTypeAttribute = attributeCollection.FirstOrDefault() as RosMessageTypeAttribute;
 
-            if (rosMessageTypeAttribute == null)
+            if (null == rosMessageTypeAttribute)
             {
                 throw new RosMessageTypeAttributeNullException();
             }
 
-            if (string.IsNullOrWhiteSpace(rosMessageTypeAttribute.RosMessageType))
+            if (string.Empty == rosMessageTypeAttribute.RosMessageType)
             {
                 throw new RosMessageTypeAttributeEmptyException();
             }
