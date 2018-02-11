@@ -1,9 +1,0 @@
-﻿<ProjectConfiguration>
-  <Settings>
-    <IgnoredTests>
-      <FixtureTestSelector>
-        <FixtureName>RosbridgeClientCommon.UnitTests.MessageDispatcherUnitTests</FixtureName>
-      </FixtureTestSelector>
-    </IgnoredTests>
-  </Settings>
-</ProjectConfiguration>
