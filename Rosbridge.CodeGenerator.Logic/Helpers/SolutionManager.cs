@@ -2,6 +2,7 @@
 {
     using EnvDTE;
     using EnvDTE80;
+    using Rosbridge.CodeGenerator.Logic.Exceptions;
     using Rosbridge.CodeGenerator.Logic.Interfaces;
     using System;
     using System.IO;
@@ -67,17 +68,19 @@
         public void Initialize()
         {
             Project currentProject = GetProjectByName(_projectName);
+            string solutionPath = Path.GetDirectoryName(_solution.FullName);
+            string projectPath = Path.Combine(solutionPath, _projectName);
 
             if (currentProject != null)
             {
-                Directory.Delete(Path.GetDirectoryName(currentProject.FullName), true);
                 _solution.Remove(currentProject);
             }
 
-            string classLibraryTemplatePath = _solution.GetProjectTemplate(_projectTemplateAndFrameworkVersion, PROJECT_LANGUAGE);
-            string solutionPath = Path.GetDirectoryName(_solution.FullName);
+            TryDeleteDirectory(projectPath);
 
-            _solution.AddFromTemplate(classLibraryTemplatePath, Path.Combine(solutionPath, _projectName), _projectName);
+            string classLibraryTemplatePath = _solution.GetProjectTemplate(_projectTemplateAndFrameworkVersion, PROJECT_LANGUAGE);
+
+            _solution.AddFromTemplate(classLibraryTemplatePath, projectPath, _projectName);
 
             Project newProject = GetProjectByName(_projectName);
 
@@ -92,10 +95,76 @@
             }
             else
             {
-                throw new ArgumentNullException(nameof(clientProject));
+                throw new ProjectNotFoundException($"There is no such project: {_rosMessageTypeAttributeProjectName}");
             }
 
             _project = newProject;
+        }
+
+        public ProjectItem AddFileToProjectItem(ProjectItem projectItem, string filePath)
+        {
+            if (null == projectItem)
+            {
+                throw new ArgumentNullException(nameof(projectItem));
+            }
+
+            if (null == filePath)
+            {
+                throw new ArgumentNullException(nameof(filePath));
+            }
+
+            if (string.Empty == filePath)
+            {
+                throw new ArgumentException("Property cannot be empty!", nameof(filePath));
+            }
+
+            if (projectItem.Kind != PROJECT_DIRECTORY_GUID)
+            {
+                throw new InvalidOperationException("The given project item is not a directory!");
+            }
+
+            if (!File.Exists(filePath))
+            {
+                throw new FileNotFoundException("File not found!", filePath);
+            }
+
+            return projectItem.ProjectItems.AddFromFile(filePath);
+        }
+
+        public ProjectItem AddDirectoryToProject(string directoryName)
+        {
+            if (null == _project)
+            {
+                throw new InvalidOperationException("Project not initialized yet!");
+            }
+
+            if (null == directoryName)
+            {
+                throw new ArgumentNullException(nameof(directoryName));
+            }
+
+            if (string.Empty == directoryName)
+            {
+                throw new ArgumentException("Property cannot be empty!", nameof(directoryName));
+            }
+
+            TryDeleteDirectory(Path.Combine(Path.GetDirectoryName(_project.FullName), directoryName));
+
+            return _project.ProjectItems.AddFolder(directoryName);
+        }
+
+        public string GetProjectItemFullPath(ProjectItem projectItem)
+        {
+            return projectItem.Properties.Item(FULL_PATH_ITEM_PROPERTY).Value.ToString();
+        }
+
+        private void TryDeleteDirectory(string directoryPath, bool recursive = true)
+        {
+            try
+            {
+                Directory.Delete(directoryPath, recursive);
+            }
+            catch (Exception) { }
         }
 
         private void DeleteDefaultClass(Project project)
@@ -154,56 +223,6 @@
             }
 
             return null;
-        }
-
-        public ProjectItem AddFileToProjectItem(ProjectItem projectItem, string filePath)
-        {
-            if (null == projectItem)
-            {
-                throw new ArgumentNullException(nameof(projectItem));
-            }
-
-            if (null == filePath)
-            {
-                throw new ArgumentNullException(nameof(filePath));
-            }
-
-            if (string.Empty == filePath)
-            {
-                throw new ArgumentException("Property cannot be empty!", nameof(filePath));
-            }
-
-            if (projectItem.Kind != PROJECT_DIRECTORY_GUID)
-            {
-                throw new InvalidOperationException("The given project item is not a directory!");
-            }
-
-            return projectItem.ProjectItems.AddFromFile(filePath);
-        }
-
-        public ProjectItem AddDirectoryToProject(string directoryName)
-        {
-            if (null == _project)
-            {
-                throw new InvalidOperationException("Project not initialized yet!");
-            }
-
-            if (null == directoryName)
-            {
-                throw new ArgumentNullException(nameof(directoryName));
-            }
-
-            if (string.Empty == directoryName)
-            {
-                throw new ArgumentException("Property cannot be empty!", nameof(directoryName));
-            }
-
-            return _project.ProjectItems.AddFolder(directoryName);
-        }
-
-        public string GetProjectItemFullPath(ProjectItem projectItem)
-        {
-            return projectItem.Properties.Item(FULL_PATH_ITEM_PROPERTY).Value.ToString();
         }
     }
 }

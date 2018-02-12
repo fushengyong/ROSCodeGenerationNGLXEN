@@ -42,7 +42,7 @@
         public ISet<MessageField> ArrayFieldSet { get; private set; }
         public ISet<MessageType> DependencySet { get; private set; }
 
-        public MsgFile(FileInfo file, IYAMLParser yamlParser) : base(file)
+        public MsgFile(IYAMLParser yamlParser, FileInfo file) : base(file)
         {
             if (null == yamlParser)
             {
@@ -57,7 +57,7 @@
             ProcessFields();
         }
 
-        public MsgFile(string fileContent, string className, string namespaceValue, ServiceMessageTypeEnum type, IYAMLParser yamlParser) : base(fileContent, className, namespaceValue)
+        public MsgFile(IYAMLParser yamlParser, string fileContent, string className, string namespaceValue, ServiceMessageTypeEnum type) : base(fileContent, className, namespaceValue)
         {
             if (null == yamlParser)
             {

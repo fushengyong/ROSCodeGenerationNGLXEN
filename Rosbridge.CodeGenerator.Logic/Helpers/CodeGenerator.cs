@@ -100,11 +100,11 @@
                 ProjectItem groupDirectoryProjectItem = GenerateMsgByNamespace(msgGroup, standardNamespace);
                 if (msgGroup.Key == standardNamespace)
                 {
-                    TextTemplatingSession session = new TextTemplatingSession();
-                    session["Namespace"] = string.Format("{0}.{1}", _defaultNamespace, standardNamespace);
+                    ITextTemplatingSession session = new TextTemplatingSession();
+                    session["Namespace"] = $"{_defaultNamespace}{standardNamespace}";
                     session["Type"] = MsgFile.CUSTOM_TIME_PRIMITIVE_TYPE;
 
-                    TransformTemplateToFile(_customTimeDataTemplatePath, File.ReadAllText(_customTimeDataTemplatePath), session, groupDirectoryProjectItem, MsgFile.CUSTOM_TIME_PRIMITIVE_TYPE);
+                    TransformTemplateToFile(session, groupDirectoryProjectItem, _customTimeDataTemplatePath, File.ReadAllText(_customTimeDataTemplatePath), MsgFile.CUSTOM_TIME_PRIMITIVE_TYPE);
                 }
             }
         }
@@ -117,7 +117,7 @@
 
             foreach (MsgFile message in msgGroup)
             {
-                TextTemplatingSession session = new TextTemplatingSession();
+                ITextTemplatingSession session = new TextTemplatingSession();
 
                 session["MessageTypeAttributeName"] = _rosMessageTypeAttributeName;
                 session["MessageTypeAttributeNamespace"] = _rosMessageTypeAttributeNamespace;
@@ -135,13 +135,13 @@
                 session["ArrayFieldList"] = message.ArrayFieldSet.Select(field => Tuple.Create(field.Type.TypeName, field.FieldName, field.ArrayElementCount)).ToList();
                 session["FieldList"] = message.FieldSet.ToDictionary(k => k.FieldName, v => v.Type.TypeName);
 
-                TransformTemplateToFile(_rosMessageCodeGenerationTemplatePath, _rosMessageCodeGenerationTemplateContent, session, groupDirectoryProjectItem, message.Type.TypeName);
+                TransformTemplateToFile(session, groupDirectoryProjectItem, _rosMessageCodeGenerationTemplatePath, _rosMessageCodeGenerationTemplateContent, message.Type.TypeName);
             }
 
             return groupDirectoryProjectItem;
         }
 
-        private void TransformTemplateToFile(string templatePath, string templateContent, TextTemplatingSession session, ProjectItem groupDirectoryProjectItem, string typeName)
+        private void TransformTemplateToFile(ITextTemplatingSession session, ProjectItem groupDirectoryProjectItem, string templatePath, string templateContent, string typeName)
         {
             string directoryPath = _solutionManager.GetProjectItemFullPath(groupDirectoryProjectItem);
 
@@ -156,7 +156,7 @@
 
         private string WriteToFile(string directoryPath, string typeName, string fileContent)
         {
-            string newFilePath = Path.Combine(directoryPath, string.Format("{0}.cs", typeName));
+            string newFilePath = Path.Combine(directoryPath, $"{typeName}.cs");
 
             File.WriteAllText(newFilePath, fileContent);
 

@@ -51,19 +51,19 @@
             ISet<FileInfo> msgFileInfoSet = new HashSet<FileInfo>(
                 Directory.GetFiles(
                     path,
-                    string.Format("*.{0}", MsgFile.FILE_EXTENSION),
+                    $"*.{MsgFile.FILE_EXTENSION}",
                     SearchOption.AllDirectories
                 ).Select(filePath => new FileInfo(filePath)));
 
             ISet<FileInfo> srvFileInfoSet = new HashSet<FileInfo>(
                 Directory.GetFiles(
                     path,
-                    string.Format("*.{0}", SrvFile.FILE_EXTENSION),
+                    $"*.{SrvFile.FILE_EXTENSION}",
                     SearchOption.AllDirectories
                 ).Select(filePath => new FileInfo(filePath)));
 
-            msgFileSet.UnionWith(msgFileInfoSet.Select(FileInfo => new MsgFile(FileInfo, _yamlParser)));
-            srvFileSet.UnionWith(srvFileInfoSet.Select(FileInfo => new SrvFile(FileInfo, _yamlParser)));
+            msgFileSet.UnionWith(msgFileInfoSet.Select(FileInfo => new MsgFile(_yamlParser, FileInfo)));
+            srvFileSet.UnionWith(srvFileInfoSet.Select(FileInfo => new SrvFile(_yamlParser, FileInfo)));
         }
     }
 }

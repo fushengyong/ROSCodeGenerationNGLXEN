@@ -9,10 +9,6 @@
 <#@ assembly name="System.Configuration" #>
 <#@ assembly name="$(TargetPath)" #>
 
-<#@ import namespace="Rosbridge.CodeGenerator.Logic.Enums" #>
-<#@ import namespace="Rosbridge.CodeGenerator.Logic.Helpers" #>
-<#@ import namespace="Rosbridge.CodeGenerator.Logic.BaseClasses" #>
-<#@ import namespace="Rosbridge.CodeGenerator.Logic.Interfaces" #>
 <#@ import namespace="System" #>
 <#@ import namespace="System.Collections.Generic" #>
 <#@ import namespace="System.Configuration" #>
@@ -20,6 +16,10 @@
 <#@ import namespace="System.Linq" #>
 <#@ import namespace="Microsoft.VisualStudio.TextTemplating" #>
 <#@ import namespace="Microsoft.VisualStudio.TextTemplating.VSHost" #>
+<#@ import namespace="Rosbridge.CodeGenerator.Logic.Enums" #>
+<#@ import namespace="Rosbridge.CodeGenerator.Logic.Helpers" #>
+<#@ import namespace="Rosbridge.CodeGenerator.Logic.BaseClasses" #>
+<#@ import namespace="Rosbridge.CodeGenerator.Logic.Interfaces" #>
 
 <# 
     IServiceProvider serviceProvider = (IServiceProvider)this.Host;

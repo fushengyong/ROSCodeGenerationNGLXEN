@@ -20,7 +20,7 @@
 
         private IYAMLParser _yamlParser;
 
-        public SrvFile(FileInfo file, IYAMLParser yamlParser) : base(file)
+        public SrvFile(IYAMLParser yamlParser, FileInfo file) : base(file)
         {
             _yamlParser = yamlParser;
             ProcessFields();
@@ -35,14 +35,14 @@
 
             if (requestString != null)
             {
-                string tempClassName = string.Format("{0}{1}{2}", this.Type.TypeName, TYPE_SEPARATOR, RESPONSE_NAME);
-                Request = new MsgFile(requestString, tempClassName, this.Type.NamespaceName, ServiceMessageTypeEnum.Request, _yamlParser);
+                string tempClassName = $"{this.Type.TypeName}{TYPE_SEPARATOR}{RESPONSE_NAME}";
+                Request = new MsgFile(_yamlParser, requestString, tempClassName, this.Type.NamespaceName, ServiceMessageTypeEnum.Request);
             }
 
             if (responseString != null)
             {
-                string tempClassName = string.Format("{0}{1}{2}", this.Type.TypeName, TYPE_SEPARATOR, REQUEST_NAME);
-                Response = new MsgFile(responseString, tempClassName, this.Type.NamespaceName, ServiceMessageTypeEnum.Response, _yamlParser);
+                string tempClassName = $"{this.Type.TypeName}{TYPE_SEPARATOR}{REQUEST_NAME}";
+                Response = new MsgFile(_yamlParser, responseString, tempClassName, this.Type.NamespaceName, ServiceMessageTypeEnum.Response);
             }
         }
     }

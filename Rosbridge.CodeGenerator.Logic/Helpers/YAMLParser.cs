@@ -15,8 +15,9 @@
         private const string VariableNameRegexGroupName = "name";
         private const string ConstantValueRegexGroupName = "value";
 
-        private const string YAMLParserRegexString = @"^\s*(?:(?<namespace>\w+)\/)?(?<type>\w+)\b(?<isArray>\[(?<elementCount>\d*)\])?\s+(?<name>\w+)(?:\s*=\s*(?<value>\w+))?";
+        private const string YAMLParserRegexString = @"^\s*(?:(?<" + NamespaceRegexGroupName + @">\w+)\/)?(?<" + TypeRegexGroupName + @">\w+)\b(?<" + IsArrayRegexGroupName + @">\[(?<" + ElementCountRegexGroupName + @">\d*)\])?\s+(?<" + VariableNameRegexGroupName + @">\w+)(?:\s*=\s*(?<" + ConstantValueRegexGroupName + @">\w+))?";
         private static Regex YAMLParserRegex = new Regex(YAMLParserRegexString, RegexOptions.IgnoreCase | RegexOptions.Multiline | RegexOptions.Compiled);
+
         private readonly IDictionary<string, string> _primitiveTypeDictionary;
 
         public YAMLParser(IDictionary<string, string> primitiveTypeDictionary)
