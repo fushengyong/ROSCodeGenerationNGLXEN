@@ -5,28 +5,28 @@
 
     public class MessageType
     {
-        public string NamespaceName { get; set; }
-        public string TypeName { get; set; }
+        public string Namespace { get; set; }
+        public string Type { get; set; }
 
-        public MessageType(string namespaceName, string typeName)
+        public MessageType(string @namespace, string type)
         {
-            if (null == namespaceName)
+            if (null == @namespace)
             {
-                throw new ArgumentNullException(nameof(namespaceName));
+                throw new ArgumentNullException(nameof(@namespace));
             }
 
-            if (null == typeName)
+            if (null == type)
             {
-                throw new ArgumentNullException(nameof(typeName));
+                throw new ArgumentNullException(nameof(type));
             }
 
-            if (string.Empty == typeName)
+            if (string.Empty == type)
             {
-                throw new ArgumentException("Parameter cannot be empty!", nameof(typeName));
+                throw new ArgumentException("Parameter cannot be empty!", nameof(type));
             }
 
-            this.NamespaceName = namespaceName;
-            this.TypeName = typeName;
+            this.Namespace = @namespace;
+            this.Type = type;
         }
 
         public override bool Equals(object obj)
@@ -34,7 +34,7 @@
             if (obj is MessageType)
             {
                 MessageType other = obj as MessageType;
-                return this.NamespaceName == other.NamespaceName && this.TypeName == other.TypeName;
+                return this.Namespace == other.Namespace && this.Type == other.Type;
             }
             return false;
         }
@@ -42,8 +42,8 @@
         public override int GetHashCode()
         {
             var hashCode = 158155689;
-            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(NamespaceName);
-            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(TypeName);
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Namespace);
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Type);
             return hashCode;
         }
     }

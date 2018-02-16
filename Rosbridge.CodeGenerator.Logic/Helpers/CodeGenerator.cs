@@ -12,12 +12,22 @@
 
     public class CodeGenerator
     {
+        public const string TEMPLATE_PARAMETER_NAMESPACE = "Namespace";
+        public const string TEMPLATE_PARAMETER_TYPE = "Type";
+        public const string ROS_MESSAGE_TEMPLATE_PARAMETER_MESSAGE_TYPE_ATTRIBUTE_NAME = "MessageTypeAttributeName";
+        public const string ROS_MESSAGE_TEMPLATE_PARAMETER_MESSAGE_TYPE_ATTRIBUTE_NAMESPACE = "MessageTypeAttributeNamespace";
+        public const string ROS_MESSAGE_TEMPLATE_PARAMETER_NAMESPACE_PREFIX = "NamespacePrefix";
+        public const string ROS_MESSAGE_TEMPLATE_PARAMETER_DEPENDENCY_LIST = "DependencyList";
+        public const string ROS_MESSAGE_TEMPLATE_PARAMETER_CONSTANT_FIELD_LIST = "ConstantFieldList";
+        public const string ROS_MESSAGE_TEMPLATE_PARAMETER_ARRAY_FIELD_LIST = "ArrayFieldList";
+        public const string ROS_MESSAGE_TEMPLATE_PARAMETER_FIELD_LIST = "FieldList";
+
         private const string ROS_MESSAGE_CODE_GENERATION_TEMPLATE_RELATIVE_PATH = @"CodeGenerators\RosMessage.tt";
         private const string CUSTOM_TIME_DATA_TEMPLATE_RELATIVE_PATH = @"CodeGenerators\TimeData.tt";
 
-        private ITextTemplatingEngineHost _host;
+        private ITextTemplatingEngineHost _engineHost;
         private ITextTemplating _textTemplating;
-        private ITextTemplatingSessionHost _textTemplatingHost;
+        private ITextTemplatingSessionHost _textTemplatingSessionHost;
         private ISolutionManager _solutionManager;
         private string _defaultNamespace;
         private string _rosMessageTypeAttributeName;
@@ -78,31 +88,31 @@
                 throw new ArgumentException("Parameter cannot be empty!", nameof(rosMessageTypeAttributeNamespace));
             }
 
-            _host = host;
+            _engineHost = host;
             _textTemplating = textTemplating;
-            _textTemplatingHost = textTemplatingSessionHost;
+            _textTemplatingSessionHost = textTemplatingSessionHost;
             _solutionManager = solutionManager;
             _rosMessageTypeAttributeName = rosMessageTypeAttributeName;
             _rosMessageTypeAttributeNamespace = rosMessageTypeAttributeNamespace;
 
             _defaultNamespace = rosMessagesProjectName;
-            _rosMessageCodeGenerationTemplatePath = _host.ResolvePath(ROS_MESSAGE_CODE_GENERATION_TEMPLATE_RELATIVE_PATH);
+            _rosMessageCodeGenerationTemplatePath = _engineHost.ResolvePath(ROS_MESSAGE_CODE_GENERATION_TEMPLATE_RELATIVE_PATH);
             _rosMessageCodeGenerationTemplateContent = File.ReadAllText(_rosMessageCodeGenerationTemplatePath);
-            _customTimeDataTemplatePath = _host.ResolvePath(CUSTOM_TIME_DATA_TEMPLATE_RELATIVE_PATH);
+            _customTimeDataTemplatePath = _engineHost.ResolvePath(CUSTOM_TIME_DATA_TEMPLATE_RELATIVE_PATH);
             _solutionManager.Initialize();
         }
 
         public void GenerateRosMessages(ISet<MsgFile> messageSet)
         {
-            string standardNamespace = messageSet.SingleOrDefault(msg => msg.Type.TypeName == MsgFile.HEADER_TYPE).Type.NamespaceName;
-            foreach (IGrouping<string, MsgFile> msgGroup in messageSet.GroupBy(msg => msg.Type.NamespaceName))
+            string standardNamespace = messageSet.SingleOrDefault(msg => msg.Type.Type == MsgFile.HEADER_TYPE).Type.Namespace;
+            foreach (IGrouping<string, MsgFile> msgGroup in messageSet.GroupBy(msg => msg.Type.Namespace))
             {
                 ProjectItem groupDirectoryProjectItem = GenerateMsgByNamespace(msgGroup, standardNamespace);
                 if (msgGroup.Key == standardNamespace)
                 {
                     ITextTemplatingSession session = new TextTemplatingSession();
-                    session["Namespace"] = $"{_defaultNamespace}{standardNamespace}";
-                    session["Type"] = MsgFile.CUSTOM_TIME_PRIMITIVE_TYPE;
+                    session[TEMPLATE_PARAMETER_NAMESPACE] = $"{_defaultNamespace}{standardNamespace}";
+                    session[TEMPLATE_PARAMETER_TYPE] = MsgFile.CUSTOM_TIME_PRIMITIVE_TYPE;
 
                     TransformTemplateToFile(session, groupDirectoryProjectItem, _customTimeDataTemplatePath, File.ReadAllText(_customTimeDataTemplatePath), MsgFile.CUSTOM_TIME_PRIMITIVE_TYPE);
                 }
@@ -119,23 +129,23 @@
             {
                 ITextTemplatingSession session = new TextTemplatingSession();
 
-                session["MessageTypeAttributeName"] = _rosMessageTypeAttributeName;
-                session["MessageTypeAttributeNamespace"] = _rosMessageTypeAttributeNamespace;
-                session["NamespacePrefix"] = _defaultNamespace;
+                session[ROS_MESSAGE_TEMPLATE_PARAMETER_MESSAGE_TYPE_ATTRIBUTE_NAME] = _rosMessageTypeAttributeName;
+                session[ROS_MESSAGE_TEMPLATE_PARAMETER_MESSAGE_TYPE_ATTRIBUTE_NAMESPACE] = _rosMessageTypeAttributeNamespace;
+                session[ROS_MESSAGE_TEMPLATE_PARAMETER_NAMESPACE_PREFIX] = _defaultNamespace;
                 ISet<string> standardNamespaceSet = new HashSet<string>();
-                if (message.Type.NamespaceName != standardNamespace)
+                if (message.Type.Namespace != standardNamespace)
                 {
                     standardNamespaceSet.Add(standardNamespace);
                 }
-                standardNamespaceSet.UnionWith(message.DependencySet.Select(dep => dep.NamespaceName).ToList());
-                session["DependencyList"] = standardNamespaceSet.ToList();
-                session["MessageNamespace"] = message.Type.NamespaceName;
-                session["MessageType"] = message.Type.TypeName;
-                session["ConstantFieldList"] = message.ConstantFieldSet.Select(field => Tuple.Create(field.Type.TypeName, field.FieldName, field.FieldValue)).ToList();
-                session["ArrayFieldList"] = message.ArrayFieldSet.Select(field => Tuple.Create(field.Type.TypeName, field.FieldName, field.ArrayElementCount)).ToList();
-                session["FieldList"] = message.FieldSet.ToDictionary(k => k.FieldName, v => v.Type.TypeName);
+                standardNamespaceSet.UnionWith(message.DependencySet.Select(dep => dep.Namespace).ToList());
+                session[ROS_MESSAGE_TEMPLATE_PARAMETER_DEPENDENCY_LIST] = standardNamespaceSet.ToList();
+                session[TEMPLATE_PARAMETER_NAMESPACE] = message.Type.Namespace;
+                session[TEMPLATE_PARAMETER_TYPE] = message.Type.Type;
+                session[ROS_MESSAGE_TEMPLATE_PARAMETER_CONSTANT_FIELD_LIST] = message.ConstantFieldSet.Select(field => Tuple.Create(field.Type.Type, field.FieldName, field.FieldValue)).ToList();
+                session[ROS_MESSAGE_TEMPLATE_PARAMETER_ARRAY_FIELD_LIST] = message.ArrayFieldSet.Select(field => Tuple.Create(field.Type.Type, field.FieldName, field.ArrayElementCount)).ToList();
+                session[ROS_MESSAGE_TEMPLATE_PARAMETER_FIELD_LIST] = message.FieldSet.ToDictionary(k => k.FieldName, v => v.Type.Type);
 
-                TransformTemplateToFile(session, groupDirectoryProjectItem, _rosMessageCodeGenerationTemplatePath, _rosMessageCodeGenerationTemplateContent, message.Type.TypeName);
+                TransformTemplateToFile(session, groupDirectoryProjectItem, _rosMessageCodeGenerationTemplatePath, _rosMessageCodeGenerationTemplateContent, message.Type.Type);
             }
 
             return groupDirectoryProjectItem;
@@ -145,7 +155,7 @@
         {
             string directoryPath = _solutionManager.GetProjectItemFullPath(groupDirectoryProjectItem);
 
-            _textTemplatingHost.Session = session;
+            _textTemplatingSessionHost.Session = session;
 
             string transformedTemplate = _textTemplating.ProcessTemplate(templatePath, templateContent);
 

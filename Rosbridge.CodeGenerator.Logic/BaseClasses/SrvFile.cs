@@ -35,14 +35,14 @@
 
             if (requestString != null)
             {
-                string tempClassName = $"{this.Type.TypeName}{TYPE_SEPARATOR}{RESPONSE_NAME}";
-                Request = new MsgFile(_yamlParser, requestString, tempClassName, this.Type.NamespaceName, ServiceMessageTypeEnum.Request);
+                string tempClassName = $"{this.Type.Type}{TYPE_SEPARATOR}{RESPONSE_NAME}";
+                Request = new MsgFile(_yamlParser, requestString, tempClassName, this.Type.Namespace, ServiceMessageTypeEnum.Request);
             }
 
             if (responseString != null)
             {
-                string tempClassName = $"{this.Type.TypeName}{TYPE_SEPARATOR}{REQUEST_NAME}";
-                Response = new MsgFile(_yamlParser, responseString, tempClassName, this.Type.NamespaceName, ServiceMessageTypeEnum.Response);
+                string tempClassName = $"{this.Type.Type}{TYPE_SEPARATOR}{REQUEST_NAME}";
+                Response = new MsgFile(_yamlParser, responseString, tempClassName, this.Type.Namespace, ServiceMessageTypeEnum.Response);
             }
         }
     }

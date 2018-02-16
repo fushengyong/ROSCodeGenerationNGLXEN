@@ -88,14 +88,14 @@
         {
             foreach (MessageField field in fieldSet)
             {
-                if (this.Type.TypeName == field.Type.TypeName && CustomTimePrimitiveTypeSet.Contains(this.Type.TypeName))
+                if (this.Type.Type == field.Type.Type && CustomTimePrimitiveTypeSet.Contains(this.Type.Type))
                 {
-                    field.Type.TypeName = CUSTOM_TIME_PRIMITIVE_TYPE;
+                    field.Type.Type = CUSTOM_TIME_PRIMITIVE_TYPE;
                 }
 
-                if (!string.IsNullOrEmpty(field.Type.NamespaceName) && this.Type.NamespaceName != field.Type.NamespaceName)
+                if (!string.IsNullOrEmpty(field.Type.Namespace) && this.Type.Namespace != field.Type.Namespace)
                 {
-                    DependencySet.Add(new MessageType(field.Type.NamespaceName, field.Type.TypeName));
+                    DependencySet.Add(new MessageType(field.Type.Namespace, field.Type.Type));
                 }
             }
         }

@@ -21,6 +21,7 @@
     <Content Include="Templates\CodeGenerators\RosMessage.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>RosMessage.txt</LastGenOutput>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Content>
     <Content Include="Templates\CodeGenerators\RosMessage.txt">
       <DependentUpon>RosMessage.tt</DependentUpon>
@@ -29,6 +30,7 @@
     </Content>
     <Content Include="Templates\CodeGenerators\TimeData.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Content>
     <Content Include="Templates\CodeGenerators\TimeData.txt">
       <DependentUpon>TimeData.tt</DependentUpon>
@@ -38,7 +40,9 @@
   <ItemGroup>
     <PackageReference Include="EnvDTE80" Version="8.0.2" />
     <PackageReference Include="Microsoft.VisualStudio.TextTemplating.15.0" Version="15.5.27130" />
+    <PackageReference Include="System.CodeDom" Version="4.4.0" />
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="4.4.1" />
+    <PackageReference Include="System.Runtime" Version="4.3.0" />
     <PackageReference Include="VSLangProj" Version="7.0.3301" />
     <PackageReference Update="Microsoft.NETCore.App" Version="2.0.0" />
   </ItemGroup>
