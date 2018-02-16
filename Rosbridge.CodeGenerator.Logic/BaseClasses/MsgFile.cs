@@ -1,5 +1,6 @@
 ﻿namespace Rosbridge.CodeGenerator.Logic.BaseClasses
 {
+    using Rosbridge.CodeGenerator.Logic.Constants;
     using Rosbridge.CodeGenerator.Logic.Enums;
     using Rosbridge.CodeGenerator.Logic.Interfaces;
     using System;
@@ -8,31 +9,11 @@
 
     public class MsgFile : RosFile
     {
-        public const string FILE_EXTENSION = "msg";
-        public const string HEADER_TYPE = "Header";
-        public const string CUSTOM_TIME_PRIMITIVE_TYPE = "TimeData";
-
-        public static readonly Dictionary<string, string> PrimitiveTypeDictionary = new Dictionary<string, string> {
-            {"float64", "double"},
-            {"uint64", "ulong"},
-            {"uint32", "uint"},
-            {"uint16", "ushort"},
-            {"uint8", "byte"},
-            {"int64", "long"},
-            {"int32", "int"},
-            {"int16", "short"},
-            {"int8", "sbyte"},
-            {"byte", "byte"},
-            {"bool", "bool"},
-            {"char", "char"},
-            {"string", "string"},
-            {"float32", "Single"},
-            {"time", "Time"},
-            {"duration", "Duration"}
-        };
-        public static readonly ISet<MessageType> MessageTypeSet = new HashSet<MessageType>();
-
-        private static readonly ISet<string> CustomTimePrimitiveTypeSet = new HashSet<string> { "Time", "Duration" };
+        private static string STANDARD_NAMESPACE_VALUE;
+        public static string STANDARD_NAMESPACE
+        {
+            get { return STANDARD_NAMESPACE_VALUE; }
+        }
 
         private IYAMLParser _yamlParser;
 
@@ -81,16 +62,19 @@
             AddDependencies(this.ArrayFieldSet);
             AddDependencies(this.ConstantFieldSet);
 
-            MessageTypeSet.Add(this.Type);
+            if (this.Type.Type.ToLower() == RosConstants.MessageTypes.HEADER_TYPE.ToLower())
+            {
+                STANDARD_NAMESPACE_VALUE = this.Type.Namespace;
+            }
         }
 
         private void AddDependencies(ISet<MessageField> fieldSet)
         {
             foreach (MessageField field in fieldSet)
             {
-                if (this.Type.Type == field.Type.Type && CustomTimePrimitiveTypeSet.Contains(this.Type.Type))
+                if (this.Type.Type == field.Type.Type && RosConstants.MessageTypes.CustomTimePrimitiveTypeSet.Contains(this.Type.Type))
                 {
-                    field.Type.Type = CUSTOM_TIME_PRIMITIVE_TYPE;
+                    field.Type.Type = RosConstants.MessageTypes.CUSTOM_TIME_PRIMITIVE_TYPE;
                 }
 
                 if (!string.IsNullOrEmpty(field.Type.Namespace) && this.Type.Namespace != field.Type.Namespace)

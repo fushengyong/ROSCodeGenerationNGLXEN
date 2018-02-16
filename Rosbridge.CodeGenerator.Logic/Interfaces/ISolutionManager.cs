@@ -6,7 +6,7 @@
     {
         void Initialize();
         ProjectItem AddFileToProjectItem(ProjectItem projectItem, string filePath);
-        ProjectItem AddDirectoryToProject(string directoryName);
+        ProjectItem AddNewDirectoryToProject(string directoryName);
         string GetProjectItemFullPath(ProjectItem projectItem);
     }
 }

@@ -10,7 +10,7 @@
         public string FieldValue { get; private set; }
         public int ArrayElementCount { get; private set; }
         public bool IsArray { get; private set; }
-        public bool IsConst { get { return !string.IsNullOrEmpty(FieldValue); } }
+        public bool IsConst { get { return !string.IsNullOrWhiteSpace(FieldValue); } }
 
         public MessageField(string fieldName, string typeName, string namespaceName, bool isArray, int arrayElementCount, string fieldValue)
         {

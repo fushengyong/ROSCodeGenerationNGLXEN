@@ -20,6 +20,7 @@
 <#@ import namespace="Rosbridge.CodeGenerator.Logic.Helpers" #>
 <#@ import namespace="Rosbridge.CodeGenerator.Logic.BaseClasses" #>
 <#@ import namespace="Rosbridge.CodeGenerator.Logic.Interfaces" #>
+<#@ import namespace="Rosbridge.CodeGenerator.Logic.Constants" #>
 
 <# 
     IServiceProvider serviceProvider = (IServiceProvider)this.Host;
@@ -38,7 +39,7 @@
     string rosMessageTypeAttributeNamespace = appSettings["RosMessageTypeAttributeNamespace"].Value;
     string rosMessageTypeAttributeName = appSettings["RosMessageTypeAttributeName"].Value;
 
-    IYAMLParser yamlParser = new YAMLParser(MsgFile.PrimitiveTypeDictionary);
+    IYAMLParser yamlParser = new YAMLParser(RosConstants.MessageTypes.PrimitiveTypeDictionary);
     FileLoader fileLoader = new FileLoader(yamlParser);
 
     ISet<MsgFile> msgFileSet = new HashSet<MsgFile>();

@@ -4,6 +4,8 @@
     using Microsoft.VisualStudio.TextTemplating;
     using Microsoft.VisualStudio.TextTemplating.VSHost;
     using Rosbridge.CodeGenerator.Logic.BaseClasses;
+    using Rosbridge.CodeGenerator.Logic.Constants;
+    using Rosbridge.CodeGenerator.Logic.Exceptions;
     using Rosbridge.CodeGenerator.Logic.Interfaces;
     using System;
     using System.Collections.Generic;
@@ -12,20 +14,10 @@
 
     public class CodeGenerator
     {
-        public const string TEMPLATE_PARAMETER_NAMESPACE = "Namespace";
-        public const string TEMPLATE_PARAMETER_TYPE = "Type";
-        public const string ROS_MESSAGE_TEMPLATE_PARAMETER_MESSAGE_TYPE_ATTRIBUTE_NAME = "MessageTypeAttributeName";
-        public const string ROS_MESSAGE_TEMPLATE_PARAMETER_MESSAGE_TYPE_ATTRIBUTE_NAMESPACE = "MessageTypeAttributeNamespace";
-        public const string ROS_MESSAGE_TEMPLATE_PARAMETER_NAMESPACE_PREFIX = "NamespacePrefix";
-        public const string ROS_MESSAGE_TEMPLATE_PARAMETER_DEPENDENCY_LIST = "DependencyList";
-        public const string ROS_MESSAGE_TEMPLATE_PARAMETER_CONSTANT_FIELD_LIST = "ConstantFieldList";
-        public const string ROS_MESSAGE_TEMPLATE_PARAMETER_ARRAY_FIELD_LIST = "ArrayFieldList";
-        public const string ROS_MESSAGE_TEMPLATE_PARAMETER_FIELD_LIST = "FieldList";
-
         private const string ROS_MESSAGE_CODE_GENERATION_TEMPLATE_RELATIVE_PATH = @"CodeGenerators\RosMessage.tt";
         private const string CUSTOM_TIME_DATA_TEMPLATE_RELATIVE_PATH = @"CodeGenerators\TimeData.tt";
 
-        private ITextTemplatingEngineHost _engineHost;
+        private ITextTemplatingEngineHost _textTemplatingEngineHost;
         private ITextTemplating _textTemplating;
         private ITextTemplatingSessionHost _textTemplatingSessionHost;
         private ISolutionManager _solutionManager;
@@ -88,7 +80,7 @@
                 throw new ArgumentException("Parameter cannot be empty!", nameof(rosMessageTypeAttributeNamespace));
             }
 
-            _engineHost = host;
+            _textTemplatingEngineHost = host;
             _textTemplating = textTemplating;
             _textTemplatingSessionHost = textTemplatingSessionHost;
             _solutionManager = solutionManager;
@@ -96,57 +88,73 @@
             _rosMessageTypeAttributeNamespace = rosMessageTypeAttributeNamespace;
 
             _defaultNamespace = rosMessagesProjectName;
-            _rosMessageCodeGenerationTemplatePath = _engineHost.ResolvePath(ROS_MESSAGE_CODE_GENERATION_TEMPLATE_RELATIVE_PATH);
+            _rosMessageCodeGenerationTemplatePath = _textTemplatingEngineHost.ResolvePath(ROS_MESSAGE_CODE_GENERATION_TEMPLATE_RELATIVE_PATH);
             _rosMessageCodeGenerationTemplateContent = File.ReadAllText(_rosMessageCodeGenerationTemplatePath);
-            _customTimeDataTemplatePath = _engineHost.ResolvePath(CUSTOM_TIME_DATA_TEMPLATE_RELATIVE_PATH);
+            _customTimeDataTemplatePath = _textTemplatingEngineHost.ResolvePath(CUSTOM_TIME_DATA_TEMPLATE_RELATIVE_PATH);
             _solutionManager.Initialize();
         }
 
         public void GenerateRosMessages(ISet<MsgFile> messageSet)
         {
-            string standardNamespace = messageSet.SingleOrDefault(msg => msg.Type.Type == MsgFile.HEADER_TYPE).Type.Namespace;
-            foreach (IGrouping<string, MsgFile> msgGroup in messageSet.GroupBy(msg => msg.Type.Namespace))
+            string standardNamespace = MsgFile.STANDARD_NAMESPACE;
+
+            if (string.IsNullOrWhiteSpace(standardNamespace))
+            {
+                throw new NoStandardNamespaceException();
+            }
+
+            IEnumerable<IGrouping<string, MsgFile>> messageGroupList = messageSet.GroupBy(msg => msg.Type.Namespace);
+
+            IGrouping<string, MsgFile> standardNamespaceGroup = messageGroupList.SingleOrDefault(group => group.Key == standardNamespace);
+            ProjectItem standardNamespaceDirectoryProjectItem = GenerateMsgByNamespace(standardNamespaceGroup, standardNamespace);
+
+            GenerateCustomTimePrimitiveType(standardNamespaceDirectoryProjectItem, standardNamespace);
+
+            foreach (IGrouping<string, MsgFile> msgGroup in messageGroupList.Where(group => group.Key != standardNamespace))
             {
                 ProjectItem groupDirectoryProjectItem = GenerateMsgByNamespace(msgGroup, standardNamespace);
-                if (msgGroup.Key == standardNamespace)
-                {
-                    ITextTemplatingSession session = new TextTemplatingSession();
-                    session[TEMPLATE_PARAMETER_NAMESPACE] = $"{_defaultNamespace}{standardNamespace}";
-                    session[TEMPLATE_PARAMETER_TYPE] = MsgFile.CUSTOM_TIME_PRIMITIVE_TYPE;
-
-                    TransformTemplateToFile(session, groupDirectoryProjectItem, _customTimeDataTemplatePath, File.ReadAllText(_customTimeDataTemplatePath), MsgFile.CUSTOM_TIME_PRIMITIVE_TYPE);
-                }
             }
+        }
+
+        private void GenerateCustomTimePrimitiveType(ProjectItem standardNamespaceDirectoryProjectItem, string standardNamespace)
+        {
+            ITextTemplatingSession session = _textTemplatingSessionHost.CreateSession();
+            session[TemplateParameterConstants.TimeData.NAMESPACE] = $"{_defaultNamespace}.{standardNamespace}";
+            session[TemplateParameterConstants.TimeData.TYPE] = RosConstants.MessageTypes.CUSTOM_TIME_PRIMITIVE_TYPE;
+
+            TransformTemplateToFile(session, standardNamespaceDirectoryProjectItem, _customTimeDataTemplatePath, File.ReadAllText(_customTimeDataTemplatePath), RosConstants.MessageTypes.CUSTOM_TIME_PRIMITIVE_TYPE);
         }
 
         private ProjectItem GenerateMsgByNamespace(IGrouping<string, MsgFile> msgGroup, string standardNamespace)
         {
             string directoryName = msgGroup.Key;
 
-            ProjectItem groupDirectoryProjectItem = _solutionManager.AddDirectoryToProject(directoryName);
+            ProjectItem groupDirectoryProjectItem = _solutionManager.AddNewDirectoryToProject(directoryName);
 
             foreach (MsgFile message in msgGroup)
             {
-                ITextTemplatingSession session = new TextTemplatingSession();
+                ITextTemplatingSession session = _textTemplatingSessionHost.CreateSession();
 
-                session[ROS_MESSAGE_TEMPLATE_PARAMETER_MESSAGE_TYPE_ATTRIBUTE_NAME] = _rosMessageTypeAttributeName;
-                session[ROS_MESSAGE_TEMPLATE_PARAMETER_MESSAGE_TYPE_ATTRIBUTE_NAMESPACE] = _rosMessageTypeAttributeNamespace;
-                session[ROS_MESSAGE_TEMPLATE_PARAMETER_NAMESPACE_PREFIX] = _defaultNamespace;
+                session[TemplateParameterConstants.RosMessage.ROS_MESSAGE_TYPE_ATTRIBUTE_NAMESPACE] = _rosMessageTypeAttributeNamespace;
+                session[TemplateParameterConstants.RosMessage.ROS_MESSAGE_TYPE_ATTRIBUTE_NAME] = _rosMessageTypeAttributeName;
+                session[TemplateParameterConstants.RosMessage.NAMESPACE_PREFIX] = _defaultNamespace;
+
                 ISet<string> standardNamespaceSet = new HashSet<string>();
                 if (message.Type.Namespace != standardNamespace)
                 {
                     standardNamespaceSet.Add(standardNamespace);
                 }
                 standardNamespaceSet.UnionWith(message.DependencySet.Select(dep => dep.Namespace).ToList());
-                session[ROS_MESSAGE_TEMPLATE_PARAMETER_DEPENDENCY_LIST] = standardNamespaceSet.ToList();
-                session[TEMPLATE_PARAMETER_NAMESPACE] = message.Type.Namespace;
-                session[TEMPLATE_PARAMETER_TYPE] = message.Type.Type;
-                session[ROS_MESSAGE_TEMPLATE_PARAMETER_CONSTANT_FIELD_LIST] = message.ConstantFieldSet.Select(field => Tuple.Create(field.Type.Type, field.FieldName, field.FieldValue)).ToList();
-                session[ROS_MESSAGE_TEMPLATE_PARAMETER_ARRAY_FIELD_LIST] = message.ArrayFieldSet.Select(field => Tuple.Create(field.Type.Type, field.FieldName, field.ArrayElementCount)).ToList();
-                session[ROS_MESSAGE_TEMPLATE_PARAMETER_FIELD_LIST] = message.FieldSet.ToDictionary(k => k.FieldName, v => v.Type.Type);
+
+                session[TemplateParameterConstants.RosMessage.DEPENDENCY_LIST] = standardNamespaceSet.ToList();
+                session[TemplateParameterConstants.RosMessage.NAMESPACE] = message.Type.Namespace;
+                session[TemplateParameterConstants.RosMessage.TYPE] = message.Type.Type;
+                session[TemplateParameterConstants.RosMessage.CONSTANT_FIELD_LIST] = message.ConstantFieldSet.Select(field => Tuple.Create(field.Type.Type, field.FieldName, field.FieldValue)).ToList();
+                session[TemplateParameterConstants.RosMessage.ARRAY_FIELD_LIST] = message.ArrayFieldSet.Select(field => Tuple.Create(field.Type.Type, field.FieldName, field.ArrayElementCount)).ToList();
+                session[TemplateParameterConstants.RosMessage.FIELD_LIST] = message.FieldSet.ToDictionary(k => k.FieldName, v => v.Type.Type);
 
                 TransformTemplateToFile(session, groupDirectoryProjectItem, _rosMessageCodeGenerationTemplatePath, _rosMessageCodeGenerationTemplateContent, message.Type.Type);
-            }
+            };
 
             return groupDirectoryProjectItem;
         }

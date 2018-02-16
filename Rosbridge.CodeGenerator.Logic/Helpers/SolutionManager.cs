@@ -131,7 +131,7 @@
             return projectItem.ProjectItems.AddFromFile(filePath);
         }
 
-        public ProjectItem AddDirectoryToProject(string directoryName)
+        public ProjectItem AddNewDirectoryToProject(string directoryName)
         {
             if (null == _project)
             {

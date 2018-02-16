@@ -3,7 +3,7 @@
     using Microsoft.VisualStudio.TextTemplating;
     using Microsoft.VisualStudio.TextTemplating.VSHost;
     using NUnit.Framework;
-    using Rosbridge.CodeGenerator.Logic.Helpers;
+    using Rosbridge.CodeGenerator.Logic.Constants;
     using Rosbridge.CodeGenerator.Logic.UnitTests.Utilities;
     using System;
     using System.Collections.Generic;
@@ -65,15 +65,15 @@
         {
             ITextTemplatingSession session = new TextTemplatingSession();
 
-            session[CodeGenerator.ROS_MESSAGE_TEMPLATE_PARAMETER_MESSAGE_TYPE_ATTRIBUTE_NAMESPACE] = messageTypeAttributeNamespace;
-            session[CodeGenerator.ROS_MESSAGE_TEMPLATE_PARAMETER_MESSAGE_TYPE_ATTRIBUTE_NAME] = messageTypeAttributeName;
-            session[CodeGenerator.ROS_MESSAGE_TEMPLATE_PARAMETER_NAMESPACE_PREFIX] = namespacePrefix;
-            session[CodeGenerator.TEMPLATE_PARAMETER_NAMESPACE] = @namespace;
-            session[CodeGenerator.TEMPLATE_PARAMETER_TYPE] = type;
-            session[CodeGenerator.ROS_MESSAGE_TEMPLATE_PARAMETER_DEPENDENCY_LIST] = dependencyList;
-            session[CodeGenerator.ROS_MESSAGE_TEMPLATE_PARAMETER_CONSTANT_FIELD_LIST] = constantFieldList;
-            session[CodeGenerator.ROS_MESSAGE_TEMPLATE_PARAMETER_ARRAY_FIELD_LIST] = arrayFieldList;
-            session[CodeGenerator.ROS_MESSAGE_TEMPLATE_PARAMETER_FIELD_LIST] = fieldList;
+            session[TemplateParameterConstants.RosMessage.ROS_MESSAGE_TYPE_ATTRIBUTE_NAMESPACE] = messageTypeAttributeNamespace;
+            session[TemplateParameterConstants.RosMessage.ROS_MESSAGE_TYPE_ATTRIBUTE_NAME] = messageTypeAttributeName;
+            session[TemplateParameterConstants.RosMessage.NAMESPACE_PREFIX] = namespacePrefix;
+            session[TemplateParameterConstants.RosMessage.NAMESPACE] = @namespace;
+            session[TemplateParameterConstants.RosMessage.TYPE] = type;
+            session[TemplateParameterConstants.RosMessage.DEPENDENCY_LIST] = dependencyList;
+            session[TemplateParameterConstants.RosMessage.CONSTANT_FIELD_LIST] = constantFieldList;
+            session[TemplateParameterConstants.RosMessage.ARRAY_FIELD_LIST] = arrayFieldList;
+            session[TemplateParameterConstants.RosMessage.FIELD_LIST] = fieldList;
 
             return session;
         }

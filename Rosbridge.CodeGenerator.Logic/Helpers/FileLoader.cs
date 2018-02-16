@@ -1,6 +1,7 @@
 ﻿namespace Rosbridge.CodeGenerator.Logic.Helpers
 {
     using Rosbridge.CodeGenerator.Logic.BaseClasses;
+    using Rosbridge.CodeGenerator.Logic.Constants;
     using Rosbridge.CodeGenerator.Logic.Interfaces;
     using System;
     using System.Collections.Generic;
@@ -51,14 +52,14 @@
             ISet<FileInfo> msgFileInfoSet = new HashSet<FileInfo>(
                 Directory.GetFiles(
                     path,
-                    $"*.{MsgFile.FILE_EXTENSION}",
+                    $"*.{RosConstants.FileExtensions.MSG_FILE_EXTENSION}",
                     SearchOption.AllDirectories
                 ).Select(filePath => new FileInfo(filePath)));
 
             ISet<FileInfo> srvFileInfoSet = new HashSet<FileInfo>(
                 Directory.GetFiles(
                     path,
-                    $"*.{SrvFile.FILE_EXTENSION}",
+                    $"*.{RosConstants.FileExtensions.MSG_FILE_EXTENSION}",
                     SearchOption.AllDirectories
                 ).Select(filePath => new FileInfo(filePath)));
 
