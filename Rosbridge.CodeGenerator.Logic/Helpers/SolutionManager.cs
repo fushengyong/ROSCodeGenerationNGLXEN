@@ -5,7 +5,9 @@
     using Rosbridge.CodeGenerator.Logic.Exceptions;
     using Rosbridge.CodeGenerator.Logic.Interfaces;
     using System;
+    using System.Diagnostics;
     using System.IO;
+    using System.Runtime.InteropServices;
     using VSLangProj;
 
     public class SolutionManager : ISolutionManager
@@ -68,13 +70,18 @@
         public void Initialize()
         {
             Project currentProject = GetProjectByName(_projectName);
-            string solutionPath = Path.GetDirectoryName(_solution.FullName);
-            string projectPath = Path.Combine(solutionPath, _projectName);
 
             if (currentProject != null)
             {
-                _solution.Remove(currentProject);
+                try
+                {
+                    _solution.Remove(currentProject);
+                }
+                catch (COMException e) { Debug.WriteLine(e.Message); }
             }
+
+            string solutionPath = Path.GetDirectoryName(_solution.FullName);
+            string projectPath = Path.Combine(solutionPath, _projectName);
 
             TryDeleteDirectory(projectPath);
 
@@ -164,7 +171,7 @@
             {
                 Directory.Delete(directoryPath, recursive);
             }
-            catch (Exception) { }
+            catch (DirectoryNotFoundException e) { Debug.WriteLine(e.Message); }
         }
 
         private void DeleteDefaultClass(Project project)
