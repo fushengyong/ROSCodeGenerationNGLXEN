@@ -186,9 +186,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extensions\CompilerErrorCollectionExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TemplateUnitTests\RosMessagesTemplateUnitTests.cs" />
+    <Compile Include="TemplateUnitTests\TimeDataTemplateUnitTests.cs" />
     <Compile Include="Utilities\ExecutingProjectFinder.cs" />
+    <Compile Include="Utilities\RoslynUtilities.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Rosbridge.CodeGeneration.Logic\Rosbridge.CodeGeneration.Logic.csproj">
