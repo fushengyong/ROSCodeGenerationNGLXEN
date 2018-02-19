@@ -1,0 +1,75 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Templates\CodeGenerators\RosMessage.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Templates\CodeGenerators\RosMessage.tt" />
+    <None Remove="Templates\CodeGenerators\RosMessage.txt" />
+    <None Remove="Templates\CodeGenerators\TimeData.tt" />
+    <None Remove="Templates\CodeGenerators\TimeData.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="Templates\CodeGenerators\RosMessage.txt">
+      <DependentUpon>RosMessage.tt</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Templates\CodeGenerators\RosMessage.cs">
+      <DependentUpon>RosMessage.tt</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Content>
+    <Content Include="Templates\CodeGenerators\RosMessage.tt">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <LastGenOutput>RosMessage.txt</LastGenOutput>
+      <Generator>TextTemplatingFileGenerator</Generator>
+    </Content>
+    <Content Include="Templates\CodeGenerators\TimeData.tt">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <LastGenOutput>TimeData.txt</LastGenOutput>
+      <Generator>TextTemplatingFileGenerator</Generator>
+    </Content>
+    <Content Include="Templates\CodeGenerators\TimeData.txt">
+      <DependentUpon>TimeData.tt</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="EnvDTE80" Version="8.0.2" />
+    <PackageReference Include="Microsoft.VisualStudio.TextTemplating.14.0" Version="14.3.25407" />
+    <PackageReference Include="VSLangProj" Version="7.0.3301" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Templates\Main.tt">
+      <LastGenOutput>Main.txt</LastGenOutput>
+      <Generator>TextTemplatingFileGenerator</Generator>
+    </None>
+    <None Update="Templates\Main.txt">
+      <DependentUpon>Main.tt</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+  </ItemGroup>
+
+  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+    <Exec Command="taskkill /f /fi &quot;imagename eq T4VSHostProcess.exe&quot;" />
+  </Target>
+
+</Project>

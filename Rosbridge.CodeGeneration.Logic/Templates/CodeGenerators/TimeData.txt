@@ -1,0 +1,10 @@
+﻿namespace wpf_msgs{
+    public struct WindowState{
+        public uint sec { get; set; }
+        public uint nsec { get; set; }
+
+        public bool Equals(WindowState other){
+            return (sec == other.sec && nsec == other.nsec);
+        }    
+    }
+}

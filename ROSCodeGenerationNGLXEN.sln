@@ -9,17 +9,21 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rosbridge.Client.Common", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rosbridge.Client.V2_0", "Rosbridge.Client.V2_0\Rosbridge.Client.V2_0.csproj", "{FBC42B0A-715F-4ABF-881E-6F7E0E8BF54A}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Rosbridge.CodeGenerator", "Rosbridge.CodeGenerator", "{D641F79A-4251-4888-968E-1529D49E29FB}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rosbridge.CodeGenerator.Logic", "Rosbridge.CodeGenerator.Logic\Rosbridge.CodeGenerator.Logic.csproj", "{E43848CC-C1E9-45CF-9680-8F1AF9C872DF}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rosbridge.Client.Common.UnitTests", "Rosbridge.Client.Common.UnitTests\Rosbridge.Client.Common.UnitTests.csproj", "{465952FE-6B64-4A5D-B1E4-01844159C63A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rosbridge.Client.V2_0.UnitTests", "Rosbridge.Client.V2_0.UnitTests\Rosbridge.Client.V2_0.UnitTests.csproj", "{A4E61E7E-15B4-4610-8AAA-1AE69860D6A7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rosbridge.Client.WPF", "Rosbridge.Client.WPF\Rosbridge.Client.WPF.csproj", "{3C8EBFEB-588F-451A-A29C-EC7A70BDC4CC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rosbridge.CodeGenerator.Logic.UnitTests", "Rosbridge.CodeGenerator.Logic.UnitTests\Rosbridge.CodeGenerator.Logic.UnitTests.csproj", "{8EDF4429-251A-416D-BB68-93F227191BCF}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "T4Template.Utilities", "T4Template.Utilities", "{C0A568E5-886F-4E3F-B438-49E1F468F7EF}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "T4Template.Utilities.TemplateProcess", "T4Template.Utilities.TemplateProcess\T4Template.Utilities.TemplateProcess.csproj", "{2B83D41E-E97C-42DD-9D85-A4E351F89AA8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Rosbridge.CodeGeneration", "Rosbridge.CodeGeneration", "{349315F5-9E17-4C06-8052-6FD4CD58D532}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rosbridge.CodeGeneration.Logic", "Rosbridge.CodeGeneration.Logic\Rosbridge.CodeGeneration.Logic.csproj", "{B514BA6B-772F-48BB-B20E-2C87184F5699}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rosbridge.CodeGeneration.Logic.UnitTests", "Rosbridge.CodeGeneration.Logic.UnitTests\Rosbridge.CodeGeneration.Logic.UnitTests.csproj", "{C6E46F93-E7E4-43BE-8F8E-5DDB6F351AAE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,10 +39,6 @@ Global
 		{FBC42B0A-715F-4ABF-881E-6F7E0E8BF54A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FBC42B0A-715F-4ABF-881E-6F7E0E8BF54A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FBC42B0A-715F-4ABF-881E-6F7E0E8BF54A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E43848CC-C1E9-45CF-9680-8F1AF9C872DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E43848CC-C1E9-45CF-9680-8F1AF9C872DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E43848CC-C1E9-45CF-9680-8F1AF9C872DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E43848CC-C1E9-45CF-9680-8F1AF9C872DF}.Release|Any CPU.Build.0 = Release|Any CPU
 		{465952FE-6B64-4A5D-B1E4-01844159C63A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{465952FE-6B64-4A5D-B1E4-01844159C63A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{465952FE-6B64-4A5D-B1E4-01844159C63A}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -51,10 +51,18 @@ Global
 		{3C8EBFEB-588F-451A-A29C-EC7A70BDC4CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3C8EBFEB-588F-451A-A29C-EC7A70BDC4CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3C8EBFEB-588F-451A-A29C-EC7A70BDC4CC}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8EDF4429-251A-416D-BB68-93F227191BCF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8EDF4429-251A-416D-BB68-93F227191BCF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8EDF4429-251A-416D-BB68-93F227191BCF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8EDF4429-251A-416D-BB68-93F227191BCF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2B83D41E-E97C-42DD-9D85-A4E351F89AA8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2B83D41E-E97C-42DD-9D85-A4E351F89AA8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2B83D41E-E97C-42DD-9D85-A4E351F89AA8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2B83D41E-E97C-42DD-9D85-A4E351F89AA8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B514BA6B-772F-48BB-B20E-2C87184F5699}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B514BA6B-772F-48BB-B20E-2C87184F5699}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B514BA6B-772F-48BB-B20E-2C87184F5699}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B514BA6B-772F-48BB-B20E-2C87184F5699}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C6E46F93-E7E4-43BE-8F8E-5DDB6F351AAE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C6E46F93-E7E4-43BE-8F8E-5DDB6F351AAE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C6E46F93-E7E4-43BE-8F8E-5DDB6F351AAE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C6E46F93-E7E4-43BE-8F8E-5DDB6F351AAE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -62,11 +70,12 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{B03D0CD3-6BCA-4643-A366-D47FE84F87C1} = {4D4B7E7A-A53F-463E-9F52-581846F73332}
 		{FBC42B0A-715F-4ABF-881E-6F7E0E8BF54A} = {4D4B7E7A-A53F-463E-9F52-581846F73332}
-		{E43848CC-C1E9-45CF-9680-8F1AF9C872DF} = {D641F79A-4251-4888-968E-1529D49E29FB}
 		{465952FE-6B64-4A5D-B1E4-01844159C63A} = {4D4B7E7A-A53F-463E-9F52-581846F73332}
 		{A4E61E7E-15B4-4610-8AAA-1AE69860D6A7} = {4D4B7E7A-A53F-463E-9F52-581846F73332}
 		{3C8EBFEB-588F-451A-A29C-EC7A70BDC4CC} = {4D4B7E7A-A53F-463E-9F52-581846F73332}
-		{8EDF4429-251A-416D-BB68-93F227191BCF} = {D641F79A-4251-4888-968E-1529D49E29FB}
+		{2B83D41E-E97C-42DD-9D85-A4E351F89AA8} = {C0A568E5-886F-4E3F-B438-49E1F468F7EF}
+		{B514BA6B-772F-48BB-B20E-2C87184F5699} = {349315F5-9E17-4C06-8052-6FD4CD58D532}
+		{C6E46F93-E7E4-43BE-8F8E-5DDB6F351AAE} = {349315F5-9E17-4C06-8052-6FD4CD58D532}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2DCDA1A9-0229-43A4-B1BB-16503DCFC8FC}

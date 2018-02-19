@@ -102,7 +102,7 @@
 
             if (CurrentState != States.Started)
             {
-                throw new MessageDispatcherException("Dispatcher not started!");
+                throw new MessageDispatcherException("Dispatcher is not started!");
             }
 
             CurrentState = States.Stopping;
@@ -126,6 +126,11 @@
 
         public Task SendAsync<TMessage>(TMessage message) where TMessage : class, new()
         {
+            if (null == message)
+            {
+                throw new ArgumentNullException(nameof(message));
+            }
+
             if (_disposed)
             {
                 throw new ObjectDisposedException(nameof(MessageDispatcher));
@@ -133,7 +138,7 @@
 
             if (CurrentState != States.Started)
             {
-                throw new MessageDispatcherException("Dispatcher not started!");
+                throw new MessageDispatcherException("Dispatcher is not started!");
             }
 
             return _socket.SendAsync(_serializer.Serialize(message));
