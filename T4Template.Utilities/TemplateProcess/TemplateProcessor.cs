@@ -3,13 +3,13 @@
     using Microsoft.VisualStudio.TextTemplating;
     using System;
     using System.IO;
-    using T4Template.Utilities.TemplateProcess.Interfaces;
+    using T4Template.Utilities.Interfaces;
 
     public class TemplateProcessor : ITemplateProcessor
     {
-        private CustomTextTemplatingEngineHost _textTemplatingEngineHost;
+        private ICustomTextTemplatingEngineHost _textTemplatingEngineHost;
 
-        public TemplateProcessor(CustomTextTemplatingEngineHost textTemplatingEngineHost)
+        public TemplateProcessor(ICustomTextTemplatingEngineHost textTemplatingEngineHost)
         {
             _textTemplatingEngineHost = textTemplatingEngineHost;
         }

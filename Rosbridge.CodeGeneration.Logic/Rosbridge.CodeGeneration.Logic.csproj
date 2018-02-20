@@ -4,14 +4,16 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <LangVersion>6</LangVersion>
+  </PropertyGroup>
+
   <ItemGroup>
     <Compile Remove="Templates\CodeGenerators\RosMessage.cs" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="Templates\CodeGenerators\RosMessage.tt" />
     <None Remove="Templates\CodeGenerators\RosMessage.txt" />
-    <None Remove="Templates\CodeGenerators\TimeData.tt" />
     <None Remove="Templates\CodeGenerators\TimeData.txt" />
   </ItemGroup>
 
@@ -29,16 +31,6 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Content>
-    <Content Include="Templates\CodeGenerators\RosMessage.tt">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-      <LastGenOutput>RosMessage.txt</LastGenOutput>
-      <Generator>TextTemplatingFileGenerator</Generator>
-    </Content>
-    <Content Include="Templates\CodeGenerators\TimeData.tt">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-      <LastGenOutput>TimeData.txt</LastGenOutput>
-      <Generator>TextTemplatingFileGenerator</Generator>
-    </Content>
     <Content Include="Templates\CodeGenerators\TimeData.txt">
       <DependentUpon>TimeData.tt</DependentUpon>
       <DesignTime>True</DesignTime>
@@ -53,6 +45,16 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="Templates\CodeGenerators\RosMessage.tt">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <LastGenOutput>RosMessage.txt</LastGenOutput>
+      <Generator>TextTemplatingFileGenerator</Generator>
+    </None>
+    <None Update="Templates\CodeGenerators\TimeData.tt">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <LastGenOutput>TimeData.txt</LastGenOutput>
+      <Generator>TextTemplatingFileGenerator</Generator>
+    </None>
     <None Update="Templates\Main.tt">
       <LastGenOutput>Main.txt</LastGenOutput>
       <Generator>TextTemplatingFileGenerator</Generator>

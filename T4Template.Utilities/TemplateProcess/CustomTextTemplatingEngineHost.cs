@@ -6,6 +6,7 @@
     using System.Collections.Generic;
     using System.IO;
     using System.Text;
+    using T4Template.Utilities.Interfaces;
 
     /// <summary>
     ///The text template transformation engine is responsible for running   
@@ -13,9 +14,9 @@
     ///The host is responsible for all input and output, locating files,   
     ///and anything else related to the external environment.  
     /// </summary>
-    public class CustomTextTemplatingEngineHost : ITextTemplatingEngineHost, ITextTemplatingSessionHost
+    public class CustomTextTemplatingEngineHost : ICustomTextTemplatingEngineHost
     {
-        private const string APP_DOMAIN_NAME = "Custom T4 Transform Domain";
+        private const string NEW_APP_DOMAIN_NAME = "Custom T4 Transform Domain";
 
         private string _templateFilePathValue;
         /// <summary>
@@ -109,11 +110,11 @@
             }
         }
 
-        private bool _useCurrentAppDomain;
+        private AppDomain _appDomainToUse;
 
-        public CustomTextTemplatingEngineHost(bool useCurrentAppDomain = false)
+        public CustomTextTemplatingEngineHost(AppDomain appDomainToUse = null)
         {
-            this._useCurrentAppDomain = useCurrentAppDomain;
+            this._appDomainToUse = appDomainToUse;
         }
 
         /// <summary>
@@ -309,13 +310,13 @@
         public AppDomain ProvideTemplatingAppDomain(string content)
         {
             //This host will provide a new application domain each time the   
-            if (_useCurrentAppDomain)
+            if (null != _appDomainToUse)
             {
-                return AppDomain.CurrentDomain;
+                return _appDomainToUse;
             }
             else
             {
-                return AppDomain.CreateDomain(APP_DOMAIN_NAME);
+                return AppDomain.CreateDomain(NEW_APP_DOMAIN_NAME);
             }
             //This could be changed to return the current appdomain, but new   
             //assemblies are loaded into this AppDomain on a regular basis.  

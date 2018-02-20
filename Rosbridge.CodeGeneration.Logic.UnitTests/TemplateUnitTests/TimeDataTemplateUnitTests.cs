@@ -6,15 +6,16 @@
     using Microsoft.VisualStudio.TextTemplating;
     using NUnit.Framework;
     using Rosbridge.CodeGeneration.Logic.Constants;
-    using Rosbridge.CodeGeneration.Logic.UnitTests.Extensions;
     using Rosbridge.CodeGeneration.Logic.UnitTests.Utilities;
     using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
     using System.Reflection;
+    using T4Template.Utilities.Extensions;
+    using T4Template.Utilities.Interfaces;
+    using T4Template.Utilities.TemplateCompile;
     using T4Template.Utilities.TemplateProcess;
-    using T4Template.Utilities.TemplateProcess.Interfaces;
 
     [TestFixture]
     public class TimeDataTemplateUnitTests
@@ -48,8 +49,9 @@
         };
 
         private FileInfo _template;
-        private CustomTextTemplatingEngineHost _textTemplatingEngineHost;
+        private ICustomTextTemplatingEngineHost _textTemplatingEngineHost;
         private ITemplateProcessor _templateProcessor;
+        private ITemplateCompiler _templateCompiler;
 
         [SetUp]
         public void SetUp()
@@ -68,8 +70,9 @@
                 throw new FileNotFoundException(_template.FullName);
             }
 
-            _textTemplatingEngineHost = new CustomTextTemplatingEngineHost(true);
+            _textTemplatingEngineHost = new CustomTextTemplatingEngineHost(AppDomain.CurrentDomain);
             _templateProcessor = new TemplateProcessor(_textTemplatingEngineHost);
+            _templateCompiler = new TemplateCompiler();
         }
 
         [Test]
@@ -78,14 +81,14 @@
             //arrange
             string testNamespace = "testNamespace";
             string testType = "testType";
-            ITextTemplatingSession session = CreateTemplateHost(testNamespace, testType);
+            ITextTemplatingSession session = CreateTemplateSession(testNamespace, testType);
 
             //act
             string templateOutput = _templateProcessor.ProcessTemplateWithSession(_template, session);
 
             //assert
-            SyntaxTree parsedTemplateOutput = CSharpSyntaxTree.ParseText(templateOutput);
-            Assembly compiledAssembly = RoslynUtilities.CompileAndLoadSyntaxTree(parsedTemplateOutput, DefaultCompilationOptions, DefaultReferences);
+            SyntaxTree parsedTemplateOutput = _templateCompiler.ParseTemplateOutput(templateOutput);
+            Assembly compiledAssembly = _templateCompiler.CompileSyntaxTree(parsedTemplateOutput, DefaultCompilationOptions, DefaultReferences, MethodBase.GetCurrentMethod().Name);
             compiledAssembly.Should().NotBeNull();
             compiledAssembly.DefinedTypes.Should().NotBeNull();
             compiledAssembly.DefinedTypes.Should().HaveCount(1);
@@ -98,6 +101,7 @@
             equalsMethod.Should().NotBeNull();
             equalsMethod.ReturnType.Should().Be(EQUALS_METHOD.Value);
             PropertyInfo[] propertyList = resultType.GetProperties();
+            propertyList.Should().HaveCount(2);
             propertyList.Should().Contain(property => property.Name == SEC_PROPERTY.Key && property.PropertyType == SEC_PROPERTY.Value);
             propertyList.Should().Contain(property => property.Name == NSEC_PROPERTY.Key && property.PropertyType == NSEC_PROPERTY.Value);
         }
@@ -108,13 +112,13 @@
             //arrange
             string testNamespace = null;
             string testType = "testType";
-            ITextTemplatingSession session = CreateTemplateHost(testNamespace, testType);
+            ITextTemplatingSession session = CreateTemplateSession(testNamespace, testType);
 
             //act
             string templateOutput = _templateProcessor.ProcessTemplateWithSession(_template, session);
 
             //assert
-            _textTemplatingEngineHost.Errors.ContainsException<NullReferenceException>(_template.FullName).Should().BeTrue();
+            _textTemplatingEngineHost.Errors.Any(error => error.FileName == _template.FullName && error.ErrorText.Contains(typeof(NullReferenceException).Name)).Should().BeTrue();
         }
 
         [Test]
@@ -123,13 +127,13 @@
             //arrange
             string testNamespace = "";
             string testType = "testType";
-            ITextTemplatingSession session = CreateTemplateHost(testNamespace, testType);
+            ITextTemplatingSession session = CreateTemplateSession(testNamespace, testType);
 
             //act
             string templateOutput = _templateProcessor.ProcessTemplateWithSession(_template, session);
 
             //assert
-            _textTemplatingEngineHost.Errors.ContainsException<ArgumentException>(_template.FullName).Should().BeTrue();
+            _textTemplatingEngineHost.Errors.Any(error => error.FileName == _template.FullName && error.ErrorText.Contains(typeof(ArgumentException).Name)).Should().BeTrue();
         }
 
         [Test]
@@ -138,13 +142,13 @@
             //arrange
             string testNamespace = "testNamespace";
             string testType = null;
-            ITextTemplatingSession session = CreateTemplateHost(testNamespace, testType);
+            ITextTemplatingSession session = CreateTemplateSession(testNamespace, testType);
 
             //act
             string templateOutput = _templateProcessor.ProcessTemplateWithSession(_template, session);
 
             //assert
-            _textTemplatingEngineHost.Errors.ContainsException<NullReferenceException>(_template.FullName).Should().BeTrue();
+            _textTemplatingEngineHost.Errors.Any(error => error.FileName == _template.FullName && error.ErrorText.Contains(typeof(NullReferenceException).Name)).Should().BeTrue();
         }
 
         [Test]
@@ -153,16 +157,16 @@
             //arrange
             string testNamespace = "testNamespace";
             string testType = "";
-            ITextTemplatingSession session = CreateTemplateHost(testNamespace, testType);
+            ITextTemplatingSession session = CreateTemplateSession(testNamespace, testType);
 
             //act
             string templateOutput = _templateProcessor.ProcessTemplateWithSession(_template, session);
 
             //assert
-            _textTemplatingEngineHost.Errors.ContainsException<ArgumentException>(_template.FullName).Should().BeTrue();
+            _textTemplatingEngineHost.Errors.Any(error => error.FileName == _template.FullName && error.ErrorText.Contains(typeof(ArgumentException).Name)).Should().BeTrue();
         }
 
-        private ITextTemplatingSession CreateTemplateHost(string @namespace, string type)
+        private ITextTemplatingSession CreateTemplateSession(string @namespace, string type)
         {
             ITextTemplatingSession session = new TextTemplatingSession();
 

@@ -20,6 +20,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>6</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -186,21 +187,19 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Extensions\CompilerErrorCollectionExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TemplateUnitTests\RosMessagesTemplateUnitTests.cs" />
     <Compile Include="TemplateUnitTests\TimeDataTemplateUnitTests.cs" />
     <Compile Include="Utilities\ExecutingProjectFinder.cs" />
-    <Compile Include="Utilities\RoslynUtilities.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Rosbridge.CodeGeneration.Logic\Rosbridge.CodeGeneration.Logic.csproj">
       <Project>{b514ba6b-772f-48bb-b20e-2c87184f5699}</Project>
       <Name>Rosbridge.CodeGeneration.Logic</Name>
     </ProjectReference>
-    <ProjectReference Include="..\T4Template.Utilities.TemplateProcess\T4Template.Utilities.TemplateProcess.csproj">
-      <Project>{2b83d41e-e97c-42dd-9d85-a4e351f89aa8}</Project>
-      <Name>T4Template.Utilities.TemplateProcess</Name>
+    <ProjectReference Include="..\T4Template.Utilities\T4Template.Utilities.csproj">
+      <Project>{25aa2c74-6b2c-4072-b1aa-807edcd7fef2}</Project>
+      <Name>T4Template.Utilities</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

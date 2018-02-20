@@ -9,8 +9,8 @@
 
     public class ServiceClient<TServiceRequest, TServiceResponse> : IRosServiceClient<TServiceRequest, TServiceResponse> where TServiceRequest : class, new() where TServiceResponse : class, new()
     {
-        private IMessageDispatcher _messageDispatcher;
         private readonly string _uniqueId;
+        private IMessageDispatcher _messageDispatcher;
 
         public string Service { get; private set; }
 
@@ -21,7 +21,7 @@
                 throw new ArgumentNullException(nameof(service));
             }
 
-            if (string.IsNullOrWhiteSpace(service))
+            if (string.Empty == service)
             {
                 throw new ArgumentException("Argument cannot be empty!", nameof(service));
             }
@@ -35,13 +35,8 @@
             _uniqueId = _messageDispatcher.GetNewUniqueID();
         }
 
-        public Task<TServiceResponse> Call(TServiceRequest request)
+        public Task<TServiceResponse> Call(TServiceRequest request = null)
         {
-            if (null == request)
-            {
-                throw new ArgumentNullException(nameof(request));
-            }
-
             TaskCompletionSource<TServiceResponse> taskCompletion = new TaskCompletionSource<TServiceResponse>();
 
             MessageReceivedHandler rosbridgeMessageHandler = (object sender, RosbridgeMessageReceivedEventArgs args) =>
@@ -76,7 +71,7 @@
                     await _messageDispatcher.SendAsync(new RosCallServiceMessage()
                     {
                         Id = _uniqueId,
-                        Service = Service
+                        Service = this.Service
                     });
                 }
                 else
@@ -86,7 +81,7 @@
                     await _messageDispatcher.SendAsync(new RosCallServiceMessage()
                     {
                         Id = _uniqueId,
-                        Service = Service,
+                        Service = this.Service,
                         Arguments = arguments
                     });
                 }
