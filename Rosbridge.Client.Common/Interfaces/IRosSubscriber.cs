@@ -5,6 +5,10 @@
 
     public delegate void RosMessageReceivedHandler<TRosMessage>(object sender, RosMessageReceivedEventArgs<TRosMessage> args) where TRosMessage : class, new();
 
+    /// <summary>
+    /// ROS topic subscriber
+    /// </summary>
+    /// <typeparam name="TRosMessage"></typeparam>
     public interface IRosSubscriber<TRosMessage> where TRosMessage : class, new()
     {
         /// <summary>

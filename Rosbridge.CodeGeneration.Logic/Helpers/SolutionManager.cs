@@ -10,6 +10,9 @@
     using System.Runtime.InteropServices;
     using VSLangProj;
 
+    /// <summary>
+    /// SolutionManager for solution file and folder operations
+    /// </summary>
     public class SolutionManager : ISolutionManager
     {
         private const string PROJECT_DIRECTORY_GUID = "{6BB5F8EF-4483-11D3-8BCF-00C04F8EC28C}";

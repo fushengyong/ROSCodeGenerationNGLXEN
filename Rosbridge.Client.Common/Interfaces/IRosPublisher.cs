@@ -2,6 +2,10 @@
 {
     using System.Threading.Tasks;
 
+    /// <summary>
+    /// Publish message to a ROS topic
+    /// </summary>
+    /// <typeparam name="TRosMessage"></typeparam>
     public interface IRosPublisher<TRosMessage> where TRosMessage : class, new()
     {
         /// <summary>

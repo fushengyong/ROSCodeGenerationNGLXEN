@@ -3,6 +3,9 @@
     using System;
     using System.Threading.Tasks;
 
+    /// <summary>
+    /// Websocket connection handler
+    /// </summary>
     public interface ISocket : IDisposable
     {
         /// <summary>

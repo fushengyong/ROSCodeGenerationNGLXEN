@@ -2,6 +2,9 @@
 {
     using System;
 
+    /// <summary>
+    /// Helps extract ROS message type from any type
+    /// </summary>
     public interface IRosMessageTypeAttributeHelper
     {
         /// <summary>

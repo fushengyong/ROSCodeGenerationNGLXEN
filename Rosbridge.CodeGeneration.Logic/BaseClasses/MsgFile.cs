@@ -6,19 +6,43 @@
     using System.Collections.Generic;
     using System.IO;
 
+    /// <summary>
+    /// DTO for an .msg file
+    /// </summary>
     public class MsgFile : RosFile
     {
+        /// <summary>
+        /// Value of the standard namespace property
+        /// </summary>
         private static string standardNamespaceValue;
+        /// <summary>
+        /// The standard namespace of the message files. (Where the HEADER type is located)
+        /// </summary>
         public static string StandardNamespace
         {
             get { return standardNamespaceValue; }
         }
 
+        /// <summary>
+        /// YAML parser
+        /// </summary>
         private IYAMLParser _yamlParser;
 
+        /// <summary>
+        /// Message dependeny collection
+        /// </summary>
         public ISet<MessageType> DependencySet { get; private set; }
+        /// <summary>
+        /// Message field collection
+        /// </summary>
         public ISet<MessageField> FieldSet { get; private set; }
+        /// <summary>
+        /// Message constant field collection
+        /// </summary>
         public ISet<MessageField> ConstantFieldSet { get; private set; }
+        /// <summary>
+        /// Message array field collection
+        /// </summary>
         public ISet<MessageField> ArrayFieldSet { get; private set; }
 
         public MsgFile(IYAMLParser yamlParser, FileInfo file) : base(file)
@@ -65,6 +89,10 @@
             }
         }
 
+        /// <summary>
+        /// Collect dependencies from a field collection
+        /// </summary>
+        /// <param name="fieldSet"></param>
         private void AddDependencies(ISet<MessageField> fieldSet)
         {
             foreach (MessageField field in fieldSet)

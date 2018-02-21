@@ -5,6 +5,9 @@
     using System.IO;
     using System.Text.RegularExpressions;
 
+    /// <summary>
+    /// Find app.config in the given template file's project
+    /// </summary>
     public static class ConfigFinder
     {
         public static string GetConfigFilePath(IServiceProvider serviceProvider, string templateFile)
@@ -28,11 +31,11 @@
             Project project = dte.Solution.FindProjectItem(templateFile).ContainingProject;
 
             string configFilePath = null;
-            foreach (ProjectItem item in project.ProjectItems)
+            foreach (ProjectItem projectItem in project.ProjectItems)
             {
-                if (Regex.IsMatch(item.Name, "(app|web).config", RegexOptions.IgnoreCase | RegexOptions.Compiled))
+                if (Regex.IsMatch(projectItem.Name, "(app|web).config", RegexOptions.IgnoreCase | RegexOptions.Compiled))
                 {
-                    configFilePath = item.get_FileNames(0);
+                    configFilePath = projectItem.get_FileNames(0);
                 }
             }
 

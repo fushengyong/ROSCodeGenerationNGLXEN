@@ -2,6 +2,9 @@
 {
     using System;
 
+    /// <summary>
+    /// Use this attribute to specify the ROS message type of the class
+    /// </summary>
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
     public class RosMessageTypeAttribute : Attribute
     {

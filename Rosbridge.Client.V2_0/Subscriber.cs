@@ -72,7 +72,7 @@
             {
                 RosPublishMessage receivedPublishMessage = args.RosBridgeMessage.ToObject<RosPublishMessage>();
 
-                if (null != RosMessageReceived && null != receivedPublishMessage && !string.IsNullOrEmpty(receivedPublishMessage.Topic) && receivedPublishMessage.Topic.Equals(Topic))
+                if (null != RosMessageReceived && null != receivedPublishMessage && !string.IsNullOrEmpty(receivedPublishMessage.Topic) && receivedPublishMessage.Topic.Equals(this.Topic))
                 {
                     TRosMessage receivedRosMessage = receivedPublishMessage.Message.ToObject<TRosMessage>();
                     RosMessageReceived(this, new RosMessageReceivedEventArgs<TRosMessage>(receivedRosMessage));

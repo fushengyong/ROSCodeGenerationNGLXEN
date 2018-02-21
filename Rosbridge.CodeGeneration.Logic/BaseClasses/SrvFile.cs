@@ -5,6 +5,9 @@
     using System.IO;
     using System.Linq;
 
+    /// <summary>
+    /// DTO for an .srv file
+    /// </summary>
     public class SrvFile : RosFile
     {
         private const string INPUT_OUTPUT_SEPARATOR = "---";
@@ -12,9 +15,18 @@
         private const string RESPONSE_NAME = "Response";
         private const string TYPE_SEPARATOR = "__";
 
-        public MsgFile Response { get; private set; }
+        /// <summary>
+        /// Service request message
+        /// </summary>
         public MsgFile Request { get; private set; }
+        /// <summary>
+        /// Service response message
+        /// </summary>
+        public MsgFile Response { get; private set; }
 
+        /// <summary>
+        /// YAML parser
+        /// </summary>
         private IYAMLParser _yamlParser;
 
         public SrvFile(IYAMLParser yamlParser, FileInfo file) : base(file)

@@ -2,9 +2,13 @@
 {
     using System;
 
+    /// <summary>
+    /// Contains the received ROS message object
+    /// </summary>
+    /// <typeparam name="TRosMessage"></typeparam>
     public class RosMessageReceivedEventArgs<TRosMessage> : EventArgs where TRosMessage : class, new()
     {
-        public TRosMessage RosMessage { get; }
+        public TRosMessage RosMessage { get; private set; }
 
         public RosMessageReceivedEventArgs(TRosMessage message)
         {

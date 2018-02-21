@@ -1,5 +1,8 @@
 ﻿namespace Rosbridge.CodeGeneration.Logic.Constants
 {
+    /// <summary>
+    /// Code generator template parameters
+    /// </summary>
     public static class TemplateParameterConstants
     {
         public static class RosMessage

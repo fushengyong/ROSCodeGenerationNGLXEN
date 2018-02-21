@@ -7,6 +7,9 @@
 
     public delegate void MessageReceivedHandler(object sender, RosbridgeMessageReceivedEventArgs args);
 
+    /// <summary>
+    /// Rosbridge message dispatcher. Helps communicate with Rosbridge server
+    /// </summary>
     public interface IMessageDispatcher : IDisposable
     {
         /// <summary>

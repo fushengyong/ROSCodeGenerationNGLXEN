@@ -5,13 +5,28 @@
     using System.IO;
     using System.Linq;
 
+    /// <summary>
+    /// DTO base for a ROS file (.msg, .srv)
+    /// </summary>
     public abstract class RosFile
     {
         private readonly string[] RosPackageFolderNameArray = { "msg", "srv", "msgs", "srvs" };
 
+        /// <summary>
+        /// ROS file FileInfo
+        /// </summary>
         public FileInfo RosFileInfo { get; private set; }
+        /// <summary>
+        /// ROS file package DirectoryInfo
+        /// </summary>
         public DirectoryInfo PackageDirectoryInfo { get; private set; }
+        /// <summary>
+        /// ROS file filcontent. In YAML format
+        /// </summary>
         public string FileContent { get; private set; }
+        /// <summary>
+        /// ROS file type
+        /// </summary>
         public MessageType Type { get; private set; }
 
         public RosFile(FileInfo file)
@@ -84,6 +99,9 @@
             return false;
         }
 
+        /// <summary>
+        /// Process the ROS file content
+        /// </summary>
         protected abstract void ProcessFields();
 
         private void SetPackageDirectoryInfo()

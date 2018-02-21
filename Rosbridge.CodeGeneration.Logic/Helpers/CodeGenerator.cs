@@ -12,6 +12,9 @@
     using System.IO;
     using System.Linq;
 
+    /// <summary>
+    /// Code generation controller
+    /// </summary>
     public class CodeGenerator
     {
         private const string ROS_MESSAGE_CODE_GENERATION_TEMPLATE_RELATIVE_PATH = @"CodeGenerators\RosMessage.tt";

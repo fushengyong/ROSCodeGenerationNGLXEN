@@ -8,6 +8,9 @@
     using System.IO;
     using System.Linq;
 
+    /// <summary>
+    /// FileLoader for load ROS files (.msg, .srv)
+    /// </summary>
     public class FileLoader
     {
         private IYAMLParser _yamlParser;
@@ -22,7 +25,13 @@
             _yamlParser = yamlParser;
         }
 
-        public void LoadRosFiles(ISet<MsgFile> messageFileSet, ISet<SrvFile> serviceFileSet, string path)
+        /// <summary>
+        /// Load .msg and .srv files from the given path
+        /// </summary>
+        /// <param name="messageFileSet"></param>
+        /// <param name="serviceFileSet"></param>
+        /// <param name="directoryPath"></param>
+        public void LoadRosFiles(ISet<MsgFile> messageFileSet, ISet<SrvFile> serviceFileSet, string directoryPath)
         {
             if (null == messageFileSet)
             {
@@ -34,31 +43,31 @@
                 throw new ArgumentNullException(nameof(serviceFileSet));
             }
 
-            if (null == path)
+            if (null == directoryPath)
             {
-                throw new ArgumentNullException(nameof(path));
+                throw new ArgumentNullException(nameof(directoryPath));
             }
 
-            if (string.Empty == path)
+            if (string.Empty == directoryPath)
             {
-                throw new ArgumentException("Parameter cannot be empty!", nameof(path));
+                throw new ArgumentException("Parameter cannot be empty!", nameof(directoryPath));
             }
 
-            if (!Directory.Exists(path))
+            if (!Directory.Exists(directoryPath))
             {
-                throw new DirectoryNotFoundException(path);
+                throw new DirectoryNotFoundException(directoryPath);
             }
 
             ISet<FileInfo> msgFileInfoSet = new HashSet<FileInfo>(
                 Directory.GetFiles(
-                    path,
+                    directoryPath,
                     $"*.{RosConstants.FileExtensions.MSG_FILE_EXTENSION}",
                     SearchOption.AllDirectories
                 ).Select(filePath => new FileInfo(filePath)));
 
             ISet<FileInfo> srvFileInfoSet = new HashSet<FileInfo>(
                 Directory.GetFiles(
-                    path,
+                    directoryPath,
                     $"*.{RosConstants.FileExtensions.MSG_FILE_EXTENSION}",
                     SearchOption.AllDirectories
                 ).Select(filePath => new FileInfo(filePath)));

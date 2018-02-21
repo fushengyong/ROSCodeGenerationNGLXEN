@@ -3,13 +3,34 @@
     using System;
     using System.Collections.Generic;
 
+    /// <summary>
+    /// ROS message field class
+    /// </summary>
     public class MessageField
     {
+        /// <summary>
+        /// Type of the message field
+        /// </summary>
         public MessageType Type { get; private set; }
+        /// <summary>
+        /// Field variable name
+        /// </summary>
         public string FieldName { get; private set; }
+        /// <summary>
+        /// Field value, if the field is constant
+        /// </summary>
         public string FieldValue { get; private set; }
+        /// <summary>
+        /// Field array size, if the field is an array
+        /// </summary>
         public int ArrayElementCount { get; private set; }
+        /// <summary>
+        /// True if the field is an array
+        /// </summary>
         public bool IsArray { get; private set; }
+        /// <summary>
+        /// True if the field has value
+        /// </summary>
         public bool IsConst { get { return !string.IsNullOrWhiteSpace(FieldValue); } }
 
         public MessageField(string fieldName, string typeName, string namespaceName, bool isArray, int arrayElementCount, string fieldValue)

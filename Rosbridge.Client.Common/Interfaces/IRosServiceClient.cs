@@ -2,6 +2,11 @@
 {
     using System.Threading.Tasks;
 
+    /// <summary>
+    /// ROS service caller
+    /// </summary>
+    /// <typeparam name="TServiceRequest"></typeparam>
+    /// <typeparam name="TServiceResponse"></typeparam>
     public interface IRosServiceClient<TServiceRequest, TServiceResponse> where TServiceRequest : class, new() where TServiceResponse : class, new()
     {
         /// <summary>

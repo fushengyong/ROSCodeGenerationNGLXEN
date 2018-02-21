@@ -3,9 +3,18 @@
     using System;
     using System.Collections.Generic;
 
+    /// <summary>
+    /// ROS message type class. Contains type's namespace and type's name
+    /// </summary>
     public class MessageType
     {
+        /// <summary>
+        /// Type's namespace
+        /// </summary>
         public string Namespace { get; private set; }
+        /// <summary>
+        /// Type's name
+        /// </summary>
         public string Type { get; set; }
 
         public MessageType(string @namespace, string type)

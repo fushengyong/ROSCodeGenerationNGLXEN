@@ -2,6 +2,9 @@
 {
     using Newtonsoft.Json.Linq;
 
+    /// <summary>
+    /// JSON serializer/deserializer
+    /// </summary>
     public interface IMessageSerializer
     {
         /// <summary>
