@@ -5,6 +5,9 @@
     using System.IO;
     using T4Template.Utilities.Interfaces;
 
+    /// <summary>
+    /// T4 template processor
+    /// </summary>
     public class TemplateProcessor : ITemplateProcessor
     {
         private ICustomTextTemplatingEngineHost _textTemplatingEngineHost;
@@ -14,6 +17,12 @@
             _textTemplatingEngineHost = textTemplatingEngineHost;
         }
 
+        /// <summary>
+        /// Process the given template with the given session
+        /// </summary>
+        /// <param name="template"></param>
+        /// <param name="session"></param>
+        /// <returns></returns>
         public string ProcessTemplateWithSession(FileInfo template, ITextTemplatingSession session)
         {
             if (null == template)

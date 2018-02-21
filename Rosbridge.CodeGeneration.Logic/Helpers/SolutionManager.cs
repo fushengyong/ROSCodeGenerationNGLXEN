@@ -190,42 +190,38 @@
         {
             foreach (Project project in _solution.Projects)
             {
-                if (project.Kind == ProjectKinds.vsProjectKindSolutionFolder)
+                Project resultProject = GetProjectByNameRecursively(project, projectName);
+                if (null != resultProject)
                 {
-                    Project subProject = GetSubProjectByName(project, projectName);
-                    if (null != subProject)
-                    {
-                        return subProject;
-                    }
-                    else
-                    {
-                        continue;
-                    }
-                }
-                else
-                {
-                    string tmpProjectName = project.Name;
-                    if (tmpProjectName == projectName)
-                    {
-                        return project;
-                    }
+                    return resultProject;
                 }
             }
 
             return null;
         }
 
-        private Project GetSubProjectByName(Project solutionFolderProject, string projectName)
+        private Project GetProjectByNameRecursively(Project solutionProject, string projectName)
         {
-            foreach (ProjectItem projectItem in solutionFolderProject.ProjectItems)
+            if (solutionProject.Kind == ProjectKinds.vsProjectKindSolutionFolder)
             {
-                if (null != projectItem.SubProject)
+                foreach (ProjectItem projectItem in solutionProject.ProjectItems)
                 {
-                    Project tmpProject = projectItem.SubProject as Project;
-                    if (tmpProject.Name == projectName)
+                    if (null != projectItem.SubProject)
                     {
-                        return tmpProject;
+                        Project tmpProject = projectItem.SubProject as Project;
+                        Project resultProject = GetProjectByNameRecursively(tmpProject, projectName);
+                        if (null != resultProject)
+                        {
+                            return resultProject;
+                        }
                     }
+                }
+            }
+            else
+            {
+                if (solutionProject.Name == projectName)
+                {
+                    return solutionProject;
                 }
             }
 

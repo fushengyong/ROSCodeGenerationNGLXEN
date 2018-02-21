@@ -8,7 +8,7 @@
     public interface ITemplateCompiler
     {
         /// <summary>
-        /// Parse the given template output to a syntax tree.
+        /// Parse the given template output into a syntax tree.
         /// </summary>
         /// <param name="templateOutput"></param>
         /// <returns></returns>

@@ -5,7 +5,7 @@
 
     public class MessageType
     {
-        public string Namespace { get; set; }
+        public string Namespace { get; private set; }
         public string Type { get; set; }
 
         public MessageType(string @namespace, string type)

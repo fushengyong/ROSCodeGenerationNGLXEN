@@ -7,8 +7,6 @@
 
     public class SrvFile : RosFile
     {
-        public const string FILE_EXTENSION = "srv";
-
         private const string INPUT_OUTPUT_SEPARATOR = "---";
         private const string REQUEST_NAME = "Request";
         private const string RESPONSE_NAME = "Response";
