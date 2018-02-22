@@ -1,48 +1,92 @@
 ﻿namespace Rosbridge.Client.Common.UnitTests
 {
+    using FluentAssertions;
     using NUnit.Framework;
+    using Rosbridge.Client.Common.Attributes;
+    using Rosbridge.Client.Common.Exceptions;
+    using Rosbridge.Client.Common.UnitTests.Utilities;
     using System;
-    using System.Reflection;
-    using System.Reflection.Emit;
 
     [TestFixture]
     public class RosMessageTypeAttributeHelperUnitTests
     {
         private RosMessageTypeAttributeHelper _testClass;
+        private TypeBuilder _typeBuilder;
 
         [SetUp]
         public void SetUp()
         {
             _testClass = new RosMessageTypeAttributeHelper();
+            _typeBuilder = new TypeBuilder("TestAssembly", System.Reflection.Emit.AssemblyBuilderAccess.Run, "TestModule");
         }
 
         [Test]
-        public void Test()
+        public void RosMessageTypeAttributeHelper_UnitTest_TypeOk_ShouldReturnProperRosMessageTypeString()
         {
             //arrange
-            //TypeBuilder tb = GetTypeBuilder();
-            //CustomAttributeBuilder c = new CustomAttributeBuilder();
+            string typeName = "testType";
+            string rosMessageType = "testRosMessageType";
 
-            //tb.GetCustomAttributesData().Add
+            _typeBuilder.Inicialize(typeName, System.Reflection.TypeAttributes.Public, null);
+            _typeBuilder.AddCustomAttribute(typeof(RosMessageTypeAttribute), new Type[] { typeof(string) }, new object[] { rosMessageType });
+
+            Type testType = _typeBuilder.CreateType();
+
             //act
+            string resultRosMessageTypeString = _testClass.GetRosMessageTypeFromTypeAttribute(testType);
+
             //assert
+            resultRosMessageTypeString.Should().NotBeNull();
+            resultRosMessageTypeString.Should().Be(rosMessageType);
         }
 
-        private static TypeBuilder GetTypeBuilder()
+        [Test]
+        public void RosMessageTypeAttributeHelper_UnitTest_ArgumentNull_ShouldThrowArgumentNullException()
         {
-            var typeSignature = "MyDynamicType";
-            var an = new AssemblyName(typeSignature);
-            AssemblyBuilder assemblyBuilder = AppDomain.CurrentDomain.DefineDynamicAssembly(an, AssemblyBuilderAccess.Run);
-            ModuleBuilder moduleBuilder = assemblyBuilder.DefineDynamicModule("MainModule");
-            TypeBuilder tb = moduleBuilder.DefineType(typeSignature,
-                    TypeAttributes.Public |
-                    TypeAttributes.Class |
-                    TypeAttributes.AutoClass |
-                    TypeAttributes.AnsiClass |
-                    TypeAttributes.BeforeFieldInit |
-                    TypeAttributes.AutoLayout,
-                    null);
-            return tb;
+            //arrange
+            Type testType = null;
+
+            //act
+            Action act = () => _testClass.GetRosMessageTypeFromTypeAttribute(testType);
+
+            //assert
+            act.Should().ThrowExactly<ArgumentNullException>();
+        }
+
+        [Test]
+        public void RosMessageTypeAttributeHelper_UnitTest_NoRosMessageTypeAttributeOnType_ShouldThrowRosMessageTypeAttributeNullException()
+        {
+            //arrange
+            string typeName = "testType";
+
+            _typeBuilder.Inicialize(typeName, System.Reflection.TypeAttributes.Public, null);
+
+            Type testType = _typeBuilder.CreateType();
+
+            //act
+            Action act = () => _testClass.GetRosMessageTypeFromTypeAttribute(testType);
+
+            //assert
+            act.Should().ThrowExactly<RosMessageTypeAttributeNullException>();
+        }
+
+        [Test]
+        public void RosMessageTypeAttributeHelper_UnitTest_EmptyRosMessageType_ShouldThrowRosMessageTypeAttributeEmptyException()
+        {
+            //arrange
+            string typeName = "testType";
+            string rosMessageType = "";
+
+            _typeBuilder.Inicialize(typeName, System.Reflection.TypeAttributes.Public, null);
+            _typeBuilder.AddCustomAttribute(typeof(RosMessageTypeAttribute), new Type[] { typeof(string) }, new object[] { rosMessageType });
+
+            Type testType = _typeBuilder.CreateType();
+
+            //act
+            Action act = () => _testClass.GetRosMessageTypeFromTypeAttribute(testType);
+
+            //assert
+            act.Should().ThrowExactly<RosMessageTypeAttributeEmptyException>();
         }
     }
 }

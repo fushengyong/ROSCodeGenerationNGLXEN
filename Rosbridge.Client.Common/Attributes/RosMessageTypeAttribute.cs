@@ -3,21 +3,21 @@
     using System;
 
     /// <summary>
-    /// Use this attribute to specify the ROS message type of the class
+    /// Use this attribute to specify the ROS message type that the class represents
     /// </summary>
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
     public class RosMessageTypeAttribute : Attribute
     {
         public string RosMessageType { get; private set; }
 
-        public RosMessageTypeAttribute(string type)
+        public RosMessageTypeAttribute(string rosMessageType)
         {
-            if (null == type)
+            if (null == rosMessageType)
             {
-                throw new ArgumentNullException(nameof(type));
+                throw new ArgumentNullException(nameof(rosMessageType));
             }
 
-            RosMessageType = type;
+            RosMessageType = rosMessageType;
         }
     }
 }
