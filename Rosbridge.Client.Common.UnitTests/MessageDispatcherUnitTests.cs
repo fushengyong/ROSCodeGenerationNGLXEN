@@ -109,7 +109,7 @@
         }
 
         [Test]
-        public async Task StartAsync_UnitTest_EverythinkOk_ShouldReceiveEvent()
+        public async Task StartAsync_UnitTest_EverythingOk_ShouldReceiveEvent()
         {
             //arrange
             byte[] bufferMock = new byte[1];
@@ -158,19 +158,6 @@
 
             //assert
             act.Should().ThrowExactly<MessageDispatcherException>();
-        }
-
-        [Test]
-        public void StopAsync_UnitTest_NotWait_ObjectShouldBeInStoppingState()
-        {
-            //arrange
-            _testClassPartialMock.Object._currentState = States.Started;
-
-            //act
-            Task result = _testClassPartialMock.Object.StopAsync();
-
-            //assert
-            _testClassPartialMock.Object.CurrentState.Should().Be(States.Stopping);
         }
 
         [Test]
