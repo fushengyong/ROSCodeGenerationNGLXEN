@@ -75,17 +75,18 @@
         public void RosMessagesTemplate_UnitTest_ParametersOK_TemplateCreatesAppropriateOutput()
         {
             //arrange
-            string rosbridgeAttributeNamespace = typeof(RosMessageTypeAttribute).Namespace;
-            string rosbridgeAttributeType = nameof(RosMessageTypeAttribute);
+            Type rosMessageTypeAttributeType = typeof(RosMessageTypeAttribute);
+            string rosbridgeAttributeNamespace = rosMessageTypeAttributeType.Namespace;
+            string rosbridgeAttributeType = rosMessageTypeAttributeType.Name;
             string namespacePrefix = "testPrefix";
             string testNamespace = "testNamespace";
             string testType = "testType";
             string[] testDependencies = new string[] { };
-            IEnumerable<Tuple<string, string, string>> testConstantFields = new List<Tuple<string, string, string>>() { Tuple.Create("string", "TestFieldName1", "TestValue") };
-            IEnumerable<Tuple<string, string, int>> testArrayFields = new List<Tuple<string, string, int>>() { Tuple.Create("string", "TestFieldName2", 2) };
+            IEnumerable<Tuple<string, string, string>> testConstantFields = new List<Tuple<string, string, string>>() { Tuple.Create("String", "TestFieldName1", "TestValue") };
+            IEnumerable<Tuple<string, string, int>> testArrayFields = new List<Tuple<string, string, int>>() { Tuple.Create("String", "TestFieldName2", 2) };
             IDictionary<string, string> testFields = new Dictionary<string, string>()
             {
-                { "TestFieldName3", "string" }
+                { "TestFieldName3", "String" }
             };
 
             ITextTemplatingSession session = CreateTemplateSession(
@@ -105,13 +106,50 @@
             //assert
             SyntaxTree parsedTemplateOutput = _templateCompiler.ParseTemplateOutput(templateOutput);
             Assembly compiledAssembly = _templateCompiler.CompileSyntaxTree(parsedTemplateOutput, DefaultCompilationOptions, DefaultReferences, MethodBase.GetCurrentMethod().Name);
+
             compiledAssembly.Should().NotBeNull();
             compiledAssembly.DefinedTypes.Should().NotBeNull();
             compiledAssembly.DefinedTypes.Should().HaveCount(1);
+
+            //type check
             Type resultType = compiledAssembly.DefinedTypes.First();
             resultType.Name.Should().Be(testType);
             resultType.Namespace.Should().Be($"{namespacePrefix}.{testNamespace}");
             resultType.IsValueType.Should().BeFalse();
+            resultType.CustomAttributes.Should().Contain(attribute => attribute.AttributeType == rosMessageTypeAttributeType);
+
+            IEnumerable<FieldInfo> resultConstantFieldCollection = resultType.GetFields().Where(field => field.IsLiteral && !field.IsInitOnly).ToList();
+            resultConstantFieldCollection.Should().NotBeNull();
+            resultConstantFieldCollection.Should().HaveCount(1);
+
+            Tuple<string, string, string> testConstantField = testConstantFields.First();
+            FieldInfo resultConstantField = resultConstantFieldCollection.SingleOrDefault(field => field.Name == testConstantField.Item2);
+            resultConstantField.Should().NotBeNull();
+            resultConstantField.FieldType.Name.Should().Be(testConstantField.Item1);
+
+            IEnumerable<PropertyInfo> resultPropertyCollection = resultType.GetProperties();
+            resultPropertyCollection.Should().NotBeNull();
+            resultPropertyCollection.Should().HaveCount(testArrayFields.Count() + testFields.Count);
+
+            Tuple<string, string, int> testArrayField = testArrayFields.First();
+            PropertyInfo resultArrayProperty = resultPropertyCollection.SingleOrDefault(property => property.Name == testArrayField.Item2);
+            resultArrayProperty.Should().NotBeNull();
+            resultArrayProperty.PropertyType.IsArray.Should().BeTrue();
+            resultArrayProperty.PropertyType.GetElementType().Name.Should().Be(testArrayField.Item1);
+
+            KeyValuePair<string, string> testField = testFields.FirstOrDefault();
+            PropertyInfo resultFieldProperty = resultPropertyCollection.SingleOrDefault(property => property.Name == testField.Key);
+            resultFieldProperty.Should().NotBeNull();
+            resultFieldProperty.PropertyType.Name.Should().Be(testField.Value);
+
+            //instance check
+            dynamic instantiatedResultType = Activator.CreateInstance(resultType);
+
+            dynamic resultConstantFieldInstanceValue = resultConstantField.GetValue(instantiatedResultType);
+            testConstantField.Item3.Should().Be(resultConstantFieldInstanceValue);
+
+            dynamic resultArrayPropertyInstanceValue = resultArrayProperty.GetValue(instantiatedResultType);
+            testArrayField.Item3.Should().Be(resultArrayPropertyInstanceValue.Length);
         }
 
         private ITextTemplatingSession CreateTemplateSession(string messageTypeAttributeNamespace, string messageTypeAttributeName, string namespacePrefix, string @namespace, string type, IEnumerable<string> dependencyList, IEnumerable<Tuple<string, string, string>> constantFieldList, IEnumerable<Tuple<string, string, int>> arrayFieldList, IDictionary<string, string> fieldList)

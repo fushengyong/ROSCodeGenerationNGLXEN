@@ -21,6 +21,7 @@
     public class TimeDataTemplateUnitTests
     {
         private const string TEMPLATE_RELATIVE_PATH_TO_EXECUTING_PROJECT_DIRECTORY = @"..\Rosbridge.CodeGeneration.Logic\Templates\CodeGenerators\TimeData.tt";
+
         private readonly KeyValuePair<string, Type> EQUALS_METHOD = new KeyValuePair<string, Type>("Equals", typeof(Boolean));
         private readonly KeyValuePair<string, Type> SEC_PROPERTY = new KeyValuePair<string, Type>("sec", typeof(UInt32));
         private readonly KeyValuePair<string, Type> NSEC_PROPERTY = new KeyValuePair<string, Type>("nsec", typeof(UInt32));
@@ -86,21 +87,33 @@
             //assert
             SyntaxTree parsedTemplateOutput = _templateCompiler.ParseTemplateOutput(templateOutput);
             Assembly compiledAssembly = _templateCompiler.CompileSyntaxTree(parsedTemplateOutput, DefaultCompilationOptions, DefaultReferences, MethodBase.GetCurrentMethod().Name);
+
             compiledAssembly.Should().NotBeNull();
             compiledAssembly.DefinedTypes.Should().NotBeNull();
             compiledAssembly.DefinedTypes.Should().HaveCount(1);
+
             Type resultType = compiledAssembly.DefinedTypes.First();
             resultType.Namespace.Should().Be(testNamespace);
             resultType.Name.Should().Be(testType);
             resultType.IsValueType.Should().BeTrue();
-            MemberInfo[] memberList = resultType.GetMembers();
-            MethodInfo equalsMethod = (MethodInfo)memberList.FirstOrDefault(member => member.Name == EQUALS_METHOD.Key && member.MemberType == MemberTypes.Method);
-            equalsMethod.Should().NotBeNull();
-            equalsMethod.ReturnType.Should().Be(EQUALS_METHOD.Value);
-            PropertyInfo[] propertyList = resultType.GetProperties();
-            propertyList.Should().HaveCount(2);
-            propertyList.Should().Contain(property => property.Name == SEC_PROPERTY.Key && property.PropertyType == SEC_PROPERTY.Value);
-            propertyList.Should().Contain(property => property.Name == NSEC_PROPERTY.Key && property.PropertyType == NSEC_PROPERTY.Value);
+
+            IEnumerable<MethodInfo> resultMethodCollection = resultType.GetMethods();
+            resultMethodCollection.Should().NotBeNull();
+
+            MethodInfo resultEqualsMethod = resultMethodCollection.FirstOrDefault(member => member.Name == EQUALS_METHOD.Key);
+            resultEqualsMethod.Should().NotBeNull();
+            resultEqualsMethod.ReturnType.Should().Be(EQUALS_METHOD.Value);
+
+            IEnumerable<PropertyInfo> resultPropertyCollection = resultType.GetProperties();
+            resultPropertyCollection.Should().HaveCount(2);
+
+            PropertyInfo resultSecProperty = resultPropertyCollection.SingleOrDefault(property => property.Name == SEC_PROPERTY.Key);
+            resultSecProperty.Should().NotBeNull();
+            resultSecProperty.PropertyType.Should().Be(SEC_PROPERTY.Value);
+
+            PropertyInfo resultNSecProperty = resultPropertyCollection.SingleOrDefault(property => property.Name == NSEC_PROPERTY.Key);
+            resultNSecProperty.Should().NotBeNull();
+            resultNSecProperty.PropertyType.Should().Be(NSEC_PROPERTY.Value);
         }
 
         [Test]
