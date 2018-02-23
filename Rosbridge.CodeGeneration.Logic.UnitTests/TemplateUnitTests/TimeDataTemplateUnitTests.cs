@@ -117,25 +117,10 @@
         }
 
         [Test]
-        public void TimeDataTemplate_UnitTest_NamespaceParameterNull_TemplateShouldThrowNullException()
-        {
-            //arrange
-            string testNamespace = null;
-            string testType = "testType";
-            ITextTemplatingSession session = CreateTemplateSession(testNamespace, testType);
-
-            //act
-            string templateOutput = _templateProcessor.ProcessTemplateWithSession(_template, session);
-
-            //assert
-            _textTemplatingEngineHost.Errors.Any(error => error.FileName == _template.FullName && error.ErrorText.Contains(typeof(NullReferenceException).Name)).Should().BeTrue();
-        }
-
-        [Test]
         public void TimeDataTemplate_UnitTest_NamespaceParameterEmpty_TemplateShouldThrowArgumentException()
         {
             //arrange
-            string testNamespace = "";
+            string testNamespace = string.Empty;
             string testType = "testType";
             ITextTemplatingSession session = CreateTemplateSession(testNamespace, testType);
 
@@ -143,22 +128,9 @@
             string templateOutput = _templateProcessor.ProcessTemplateWithSession(_template, session);
 
             //assert
+            templateOutput.Should().NotBeNull();
+            _textTemplatingEngineHost.Errors.Should().HaveCount(1);
             _textTemplatingEngineHost.Errors.Any(error => error.FileName == _template.FullName && error.ErrorText.Contains(typeof(ArgumentException).Name)).Should().BeTrue();
-        }
-
-        [Test]
-        public void TimeDataTemplate_UnitTest_TypeParameterNull_TemplateShouldThrowNullException()
-        {
-            //arrange
-            string testNamespace = "testNamespace";
-            string testType = null;
-            ITextTemplatingSession session = CreateTemplateSession(testNamespace, testType);
-
-            //act
-            string templateOutput = _templateProcessor.ProcessTemplateWithSession(_template, session);
-
-            //assert
-            _textTemplatingEngineHost.Errors.Any(error => error.FileName == _template.FullName && error.ErrorText.Contains(typeof(NullReferenceException).Name)).Should().BeTrue();
         }
 
         [Test]
@@ -166,13 +138,15 @@
         {
             //arrange
             string testNamespace = "testNamespace";
-            string testType = "";
+            string testType = string.Empty;
             ITextTemplatingSession session = CreateTemplateSession(testNamespace, testType);
 
             //act
             string templateOutput = _templateProcessor.ProcessTemplateWithSession(_template, session);
 
             //assert
+            templateOutput.Should().NotBeNull();
+            _textTemplatingEngineHost.Errors.Should().HaveCount(1);
             _textTemplatingEngineHost.Errors.Any(error => error.FileName == _template.FullName && error.ErrorText.Contains(typeof(ArgumentException).Name)).Should().BeTrue();
         }
 

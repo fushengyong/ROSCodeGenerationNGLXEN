@@ -13,6 +13,7 @@
     using System.IO;
     using System.Linq;
     using System.Reflection;
+    using T4Template.Utilities.Extensions;
     using T4Template.Utilities.Interfaces;
     using T4Template.Utilities.TemplateCompile;
     using T4Template.Utilities.TemplateProcess;
@@ -72,7 +73,7 @@
         }
 
         [Test]
-        public void RosMessagesTemplate_UnitTest_ParametersOK_TemplateCreatesAppropriateOutput()
+        public void RosMessagesTemplate_UnitTest_TpyeInfosConstantFieldInfosArrayAndNormalPropertyInfosSetAsSessionParameters_TemplateCreatesAppropriateTypeWithConstantFieldsArrayAndNormalProperties()
         {
             //arrange
             Type rosMessageTypeAttributeType = typeof(RosMessageTypeAttribute);
@@ -81,7 +82,7 @@
             string namespacePrefix = "testPrefix";
             string testNamespace = "testNamespace";
             string testType = "testType";
-            string[] testDependencies = new string[] { };
+            IEnumerable<string> testDependencies = new string[] { };
             IEnumerable<Tuple<string, string, string>> testConstantFields = new List<Tuple<string, string, string>>() { Tuple.Create("String", "TestFieldName1", "TestValue") };
             IEnumerable<Tuple<string, string, int>> testArrayFields = new List<Tuple<string, string, int>>() { Tuple.Create("String", "TestFieldName2", 2) };
             IDictionary<string, string> testFields = new Dictionary<string, string>()
@@ -150,6 +151,249 @@
 
             dynamic resultArrayPropertyInstanceValue = resultArrayProperty.GetValue(instantiatedResultType);
             testArrayField.Item3.Should().Be(resultArrayPropertyInstanceValue.Length);
+        }
+
+        [Test]
+        public void RosMessagesTemplate_UnitTest_TypeInfoWithoutConstantFieldInfoOrPropertyInfo_TemplateCreatesAppropriateTypeWithoutConstantFieldsOrProperties()
+        {
+            //arrange
+            Type rosMessageTypeAttributeType = typeof(RosMessageTypeAttribute);
+            string rosbridgeAttributeNamespace = rosMessageTypeAttributeType.Namespace;
+            string rosbridgeAttributeType = rosMessageTypeAttributeType.Name;
+            string namespacePrefix = "testPrefix";
+            string testNamespace = "testNamespace";
+            string testType = "testType";
+            IEnumerable<string> testDependencies = new string[] { };
+            IEnumerable<Tuple<string, string, string>> testConstantFields = new List<Tuple<string, string, string>>();
+            IEnumerable<Tuple<string, string, int>> testArrayFields = new List<Tuple<string, string, int>>();
+            IDictionary<string, string> testFields = new Dictionary<string, string>();
+
+            ITextTemplatingSession session = CreateTemplateSession(
+                rosbridgeAttributeNamespace,
+                rosbridgeAttributeType,
+                namespacePrefix,
+                testNamespace,
+                testType,
+                testDependencies,
+                testConstantFields,
+                testArrayFields,
+                testFields);
+
+            //act
+            string templateOutput = _templateProcessor.ProcessTemplateWithSession(_template, session);
+
+            //assert
+            SyntaxTree parsedTemplateOutput = _templateCompiler.ParseTemplateOutput(templateOutput);
+            Assembly compiledAssembly = _templateCompiler.CompileSyntaxTree(parsedTemplateOutput, DefaultCompilationOptions, DefaultReferences, MethodBase.GetCurrentMethod().Name);
+
+            compiledAssembly.Should().NotBeNull();
+            compiledAssembly.DefinedTypes.Should().NotBeNull();
+            compiledAssembly.DefinedTypes.Should().HaveCount(1);
+
+            //type check
+            Type resultType = compiledAssembly.DefinedTypes.First();
+            resultType.Name.Should().Be(testType);
+            resultType.Namespace.Should().Be($"{namespacePrefix}.{testNamespace}");
+            resultType.IsValueType.Should().BeFalse();
+            resultType.CustomAttributes.Should().Contain(attribute => attribute.AttributeType == rosMessageTypeAttributeType);
+
+            IEnumerable<FieldInfo> resultConstantFieldCollection = resultType.GetFields().Where(field => field.IsLiteral && !field.IsInitOnly).ToList();
+            resultConstantFieldCollection.Should().NotBeNull();
+            resultConstantFieldCollection.Should().BeEmpty();
+
+            IEnumerable<PropertyInfo> resultPropertyCollection = resultType.GetProperties();
+            resultPropertyCollection.Should().NotBeNull();
+            resultPropertyCollection.Should().BeEmpty();
+        }
+
+        [Test]
+        public void RosMessageTemplate_UnitTest_RosMessageTypeAttributeTypeNamespaceIsEmpty_ShouldThrowArgumentException()
+        {
+            //arrange
+            Type rosMessageTypeAttributeType = typeof(RosMessageTypeAttribute);
+            string rosbridgeAttributeNamespace = string.Empty;
+            string rosbridgeAttributeType = rosMessageTypeAttributeType.Name;
+            string namespacePrefix = "testPrefix";
+            string testNamespace = "testNamespace";
+            string testType = "testType";
+            IEnumerable<string> testDependencies = new string[] { };
+            IEnumerable<Tuple<string, string, string>> testConstantFields = new List<Tuple<string, string, string>>() { Tuple.Create("String", "TestFieldName1", "TestValue") };
+            IEnumerable<Tuple<string, string, int>> testArrayFields = new List<Tuple<string, string, int>>() { Tuple.Create("String", "TestFieldName2", 2) };
+            IDictionary<string, string> testFields = new Dictionary<string, string>()
+            {
+                { "TestFieldName3", "String" }
+            };
+
+            ITextTemplatingSession session = CreateTemplateSession(
+                rosbridgeAttributeNamespace,
+                rosbridgeAttributeType,
+                namespacePrefix,
+                testNamespace,
+                testType,
+                testDependencies,
+                testConstantFields,
+                testArrayFields,
+                testFields);
+
+            //act
+            string templateOutput = _templateProcessor.ProcessTemplateWithSession(_template, session);
+
+            //assert
+            templateOutput.Should().NotBeNull();
+            _textTemplatingEngineHost.Errors.Should().HaveCount(1);
+            _textTemplatingEngineHost.Errors.Any(error => error.FileName == _template.FullName && error.ErrorText.Contains(typeof(ArgumentException).Name)).Should().BeTrue();
+        }
+
+        [Test]
+        public void RosMessageTemplate_UnitTest_RosMessageTypeAttributeTypeNameIsEmpty_ShouldThrowArgumentException()
+        {
+            //arrange
+            Type rosMessageTypeAttributeType = typeof(RosMessageTypeAttribute);
+            string rosbridgeAttributeNamespace = rosMessageTypeAttributeType.Namespace;
+            string rosbridgeAttributeType = string.Empty;
+            string namespacePrefix = "testPrefix";
+            string testNamespace = "testNamespace";
+            string testType = "testType";
+            IEnumerable<string> testDependencies = new string[] { };
+            IEnumerable<Tuple<string, string, string>> testConstantFields = new List<Tuple<string, string, string>>() { Tuple.Create("String", "TestFieldName1", "TestValue") };
+            IEnumerable<Tuple<string, string, int>> testArrayFields = new List<Tuple<string, string, int>>() { Tuple.Create("String", "TestFieldName2", 2) };
+            IDictionary<string, string> testFields = new Dictionary<string, string>()
+            {
+                { "TestFieldName3", "String" }
+            };
+
+            ITextTemplatingSession session = CreateTemplateSession(
+                rosbridgeAttributeNamespace,
+                rosbridgeAttributeType,
+                namespacePrefix,
+                testNamespace,
+                testType,
+                testDependencies,
+                testConstantFields,
+                testArrayFields,
+                testFields);
+
+            //act
+            string templateOutput = _templateProcessor.ProcessTemplateWithSession(_template, session);
+
+            //assert
+            templateOutput.Should().NotBeNull();
+            _textTemplatingEngineHost.Errors.Should().HaveCount(1);
+            _textTemplatingEngineHost.Errors.Any(error => error.FileName == _template.FullName && error.ErrorText.Contains(typeof(ArgumentException).Name)).Should().BeTrue();
+        }
+
+        [Test]
+        public void RosMessageTemplate_UnitTest_NamespacePrefixIsEmpty_ShouldThrowArgumentException()
+        {
+            //arrange
+            Type rosMessageTypeAttributeType = typeof(RosMessageTypeAttribute);
+            string rosbridgeAttributeNamespace = rosMessageTypeAttributeType.Namespace;
+            string rosbridgeAttributeType = rosMessageTypeAttributeType.Name;
+            string namespacePrefix = string.Empty;
+            string testNamespace = "testNamespace";
+            string testType = "testType";
+            IEnumerable<string> testDependencies = new string[] { };
+            IEnumerable<Tuple<string, string, string>> testConstantFields = new List<Tuple<string, string, string>>() { Tuple.Create("String", "TestFieldName1", "TestValue") };
+            IEnumerable<Tuple<string, string, int>> testArrayFields = new List<Tuple<string, string, int>>() { Tuple.Create("String", "TestFieldName2", 2) };
+            IDictionary<string, string> testFields = new Dictionary<string, string>()
+            {
+                { "TestFieldName3", "String" }
+            };
+
+            ITextTemplatingSession session = CreateTemplateSession(
+                rosbridgeAttributeNamespace,
+                rosbridgeAttributeType,
+                namespacePrefix,
+                testNamespace,
+                testType,
+                testDependencies,
+                testConstantFields,
+                testArrayFields,
+                testFields);
+
+            //act
+            string templateOutput = _templateProcessor.ProcessTemplateWithSession(_template, session);
+
+            //assert
+            templateOutput.Should().NotBeNull();
+            _textTemplatingEngineHost.Errors.Should().HaveCount(1);
+            _textTemplatingEngineHost.Errors.Any(error => error.FileName == _template.FullName && error.ErrorText.Contains(typeof(ArgumentException).Name)).Should().BeTrue();
+        }
+
+        [Test]
+        public void RosMessageTemplate_UnitTest_MessageNamespaceIsEmpty_ShouldThrowArgumentException()
+        {
+            //arrange
+            Type rosMessageTypeAttributeType = typeof(RosMessageTypeAttribute);
+            string rosbridgeAttributeNamespace = rosMessageTypeAttributeType.Namespace;
+            string rosbridgeAttributeType = rosMessageTypeAttributeType.Name;
+            string namespacePrefix = "testPrefix";
+            string testNamespace = string.Empty;
+            string testType = "testType";
+            IEnumerable<string> testDependencies = new string[] { };
+            IEnumerable<Tuple<string, string, string>> testConstantFields = new List<Tuple<string, string, string>>() { Tuple.Create("String", "TestFieldName1", "TestValue") };
+            IEnumerable<Tuple<string, string, int>> testArrayFields = new List<Tuple<string, string, int>>() { Tuple.Create("String", "TestFieldName2", 2) };
+            IDictionary<string, string> testFields = new Dictionary<string, string>()
+            {
+                { "TestFieldName3", "String" }
+            };
+
+            ITextTemplatingSession session = CreateTemplateSession(
+                rosbridgeAttributeNamespace,
+                rosbridgeAttributeType,
+                namespacePrefix,
+                testNamespace,
+                testType,
+                testDependencies,
+                testConstantFields,
+                testArrayFields,
+                testFields);
+
+            //act
+            string templateOutput = _templateProcessor.ProcessTemplateWithSession(_template, session);
+
+            //assert
+            templateOutput.Should().NotBeNull();
+            _textTemplatingEngineHost.Errors.Should().HaveCount(1);
+            _textTemplatingEngineHost.Errors.Any(error => error.FileName == _template.FullName && error.ErrorText.Contains(typeof(ArgumentException).Name)).Should().BeTrue();
+        }
+
+        [Test]
+        public void RosMessageTemplate_UnitTest_MessageTypeIsEmpty_ShouldThrowArgumentException()
+        {
+            //arrange
+            Type rosMessageTypeAttributeType = typeof(RosMessageTypeAttribute);
+            string rosbridgeAttributeNamespace = rosMessageTypeAttributeType.Namespace;
+            string rosbridgeAttributeType = rosMessageTypeAttributeType.Name;
+            string namespacePrefix = "testPrefix";
+            string testNamespace = "testNamespace";
+            string testType = string.Empty;
+            IEnumerable<string> testDependencies = new string[] { };
+            IEnumerable<Tuple<string, string, string>> testConstantFields = new List<Tuple<string, string, string>>() { Tuple.Create("String", "TestFieldName1", "TestValue") };
+            IEnumerable<Tuple<string, string, int>> testArrayFields = new List<Tuple<string, string, int>>() { Tuple.Create("String", "TestFieldName2", 2) };
+            IDictionary<string, string> testFields = new Dictionary<string, string>()
+            {
+                { "TestFieldName3", "String" }
+            };
+
+            ITextTemplatingSession session = CreateTemplateSession(
+                rosbridgeAttributeNamespace,
+                rosbridgeAttributeType,
+                namespacePrefix,
+                testNamespace,
+                testType,
+                testDependencies,
+                testConstantFields,
+                testArrayFields,
+                testFields);
+
+            //act
+            string templateOutput = _templateProcessor.ProcessTemplateWithSession(_template, session);
+
+            //assert
+            templateOutput.Should().NotBeNull();
+            _textTemplatingEngineHost.Errors.Should().HaveCount(1);
+            _textTemplatingEngineHost.Errors.Any(error => error.FileName == _template.FullName && error.ErrorText.Contains(typeof(ArgumentException).Name)).Should().BeTrue();
         }
 
         private ITextTemplatingSession CreateTemplateSession(string messageTypeAttributeNamespace, string messageTypeAttributeName, string namespacePrefix, string @namespace, string type, IEnumerable<string> dependencyList, IEnumerable<Tuple<string, string, string>> constantFieldList, IEnumerable<Tuple<string, string, int>> arrayFieldList, IDictionary<string, string> fieldList)

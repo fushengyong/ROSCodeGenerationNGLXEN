@@ -115,9 +115,6 @@
             byte[] bufferMock = new byte[1];
             Task<byte[]> receiveAsyncTask = new Task<byte[]>(() => { return bufferMock; });
             JObject messageMock = new JObject();
-            bool eventRaised = false;
-            MessageReceivedHandler eventHandler = (sender, args) => { eventRaised = true; };
-            _testClassPartialMock.Object.MessageReceived += eventHandler;
 
             _testClassPartialMock.Object._currentState = States.Stopped;
             _socketMock.SetupGet(socket => socket.IsConnected).Returns(true);
