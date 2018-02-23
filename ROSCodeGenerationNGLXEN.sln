@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27130.2027
+VisualStudioVersion = 15.0.27130.2036
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Rosbridge.Client", "Rosbridge.Client", "{4D4B7E7A-A53F-463E-9F52-581846F73332}"
 EndProject
@@ -25,8 +25,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "T4Template", "T4Template", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "T4Template.Utilities", "T4Template.Utilities\T4Template.Utilities.csproj", "{25AA2C74-6B2C-4072-B1AA-807EDCD7FEF2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RosMessages", "RosMessages\RosMessages.csproj", "{134D50FD-2A4F-4C81-A4D5-84F085B3637E}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -44,31 +42,21 @@ Global
 		{465952FE-6B64-4A5D-B1E4-01844159C63A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{465952FE-6B64-4A5D-B1E4-01844159C63A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{465952FE-6B64-4A5D-B1E4-01844159C63A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{465952FE-6B64-4A5D-B1E4-01844159C63A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A4E61E7E-15B4-4610-8AAA-1AE69860D6A7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A4E61E7E-15B4-4610-8AAA-1AE69860D6A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A4E61E7E-15B4-4610-8AAA-1AE69860D6A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A4E61E7E-15B4-4610-8AAA-1AE69860D6A7}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3C8EBFEB-588F-451A-A29C-EC7A70BDC4CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3C8EBFEB-588F-451A-A29C-EC7A70BDC4CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3C8EBFEB-588F-451A-A29C-EC7A70BDC4CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3C8EBFEB-588F-451A-A29C-EC7A70BDC4CC}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B514BA6B-772F-48BB-B20E-2C87184F5699}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B514BA6B-772F-48BB-B20E-2C87184F5699}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B514BA6B-772F-48BB-B20E-2C87184F5699}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B514BA6B-772F-48BB-B20E-2C87184F5699}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C6E46F93-E7E4-43BE-8F8E-5DDB6F351AAE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{C6E46F93-E7E4-43BE-8F8E-5DDB6F351AAE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C6E46F93-E7E4-43BE-8F8E-5DDB6F351AAE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C6E46F93-E7E4-43BE-8F8E-5DDB6F351AAE}.Release|Any CPU.Build.0 = Release|Any CPU
 		{25AA2C74-6B2C-4072-B1AA-807EDCD7FEF2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{25AA2C74-6B2C-4072-B1AA-807EDCD7FEF2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{25AA2C74-6B2C-4072-B1AA-807EDCD7FEF2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{25AA2C74-6B2C-4072-B1AA-807EDCD7FEF2}.Release|Any CPU.Build.0 = Release|Any CPU
-		{134D50FD-2A4F-4C81-A4D5-84F085B3637E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{134D50FD-2A4F-4C81-A4D5-84F085B3637E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{134D50FD-2A4F-4C81-A4D5-84F085B3637E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{134D50FD-2A4F-4C81-A4D5-84F085B3637E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
