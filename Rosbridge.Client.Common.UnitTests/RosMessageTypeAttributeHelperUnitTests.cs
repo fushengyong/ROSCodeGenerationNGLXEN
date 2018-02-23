@@ -21,7 +21,7 @@
         }
 
         [Test]
-        public void RosMessageTypeAttributeHelper_UnitTest_TypeOk_ShouldReturnProperRosMessageTypeString()
+        public void GetRosMessageTypeFromTypeAttribute_UnitTest_TypeOk_ShouldReturnProperRosMessageTypeString()
         {
             //arrange
             string typeName = "testType";
@@ -41,7 +41,7 @@
         }
 
         [Test]
-        public void RosMessageTypeAttributeHelper_UnitTest_ArgumentNull_ShouldThrowArgumentNullException()
+        public void GetRosMessageTypeFromTypeAttribute_UnitTest_ArgumentNull_ShouldThrowArgumentNullException()
         {
             //arrange
             Type testType = null;
@@ -54,7 +54,7 @@
         }
 
         [Test]
-        public void RosMessageTypeAttributeHelper_UnitTest_NoRosMessageTypeAttributeOnType_ShouldThrowRosMessageTypeAttributeNullException()
+        public void GetRosMessageTypeFromTypeAttribute_UnitTest_NoRosMessageTypeAttributeOnType_ShouldThrowRosMessageTypeAttributeNullException()
         {
             //arrange
             string typeName = "testType";
@@ -71,7 +71,7 @@
         }
 
         [Test]
-        public void RosMessageTypeAttributeHelper_UnitTest_EmptyRosMessageType_ShouldThrowRosMessageTypeAttributeEmptyException()
+        public void GetRosMessageTypeFromTypeAttribute_UnitTest_EmptyRosMessageType_ShouldThrowRosMessageTypeAttributeEmptyException()
         {
             //arrange
             string typeName = "testType";

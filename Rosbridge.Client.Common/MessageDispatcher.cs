@@ -12,14 +12,15 @@
     {
         private ISocket _socket;
         private IMessageSerializer _serializer;
-        private bool _disposed;
-        private Task _receivingTask;
+        protected internal bool _disposed;
+        protected internal Task _receivingTask;
+        protected internal States _currentState;
 
         public event MessageReceivedHandler MessageReceived;
 
         public States CurrentState
         {
-            get; private set;
+            get { return _currentState; }
         }
 
         public string GetNewUniqueID()
@@ -42,7 +43,7 @@
             _socket = socket;
             _serializer = serializer;
             _disposed = false;
-            CurrentState = States.Stopped;
+            _currentState = States.Stopped;
         }
 
         public Task StartAsync()
@@ -52,14 +53,14 @@
                 throw new ObjectDisposedException(nameof(MessageDispatcher));
             }
 
-            if (CurrentState != States.Stopped)
+            if (_currentState != States.Stopped)
             {
                 throw new MessageDispatcherException("Dispatcher is not stopped!");
             }
 
             Task socketConnectTask = Task.Run(async () =>
             {
-                CurrentState = States.Starting;
+                _currentState = States.Starting;
 
                 try
                 {
@@ -67,16 +68,16 @@
                 }
                 catch
                 {
-                    CurrentState = States.Stopped;
+                    _currentState = States.Stopped;
                     throw;
                 }
 
-                CurrentState = States.Started;
+                _currentState = States.Started;
             });
 
             _receivingTask = socketConnectTask.ContinueWith(async (socketTask) =>
             {
-                while (_socket.IsConnected && CurrentState == States.Started)
+                while (_socket.IsConnected && _currentState == States.Started)
                 {
                     try
                     {
@@ -100,12 +101,12 @@
                 throw new ObjectDisposedException(nameof(MessageDispatcher));
             }
 
-            if (CurrentState != States.Started)
+            if (_currentState != States.Started)
             {
                 throw new MessageDispatcherException("Dispatcher is not started!");
             }
 
-            CurrentState = States.Stopping;
+            _currentState = States.Stopping;
 
             return Task.Run(async () =>
             {
@@ -120,7 +121,7 @@
                     _receivingTask = null;
                 }
 
-                CurrentState = States.Stopped;
+                _currentState = States.Stopped;
             });
         }
 
@@ -152,7 +153,7 @@
             }
 
             _disposed = true;
-            CurrentState = States.Stopped;
+            _currentState = States.Stopped;
 
             Task.Run(async () =>
             {

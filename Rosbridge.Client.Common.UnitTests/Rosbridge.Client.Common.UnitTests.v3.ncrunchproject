@@ -1,9 +1,24 @@
 ﻿<ProjectConfiguration>
   <Settings>
     <IgnoredTests>
-      <FixtureTestSelector>
-        <FixtureName>RosbridgeClientCommon.UnitTests.MessageDispatcherUnitTests</FixtureName>
-      </FixtureTestSelector>
+      <NamedTestSelector>
+        <TestName>RosbridgeClientCommon.UnitTests.MessageDispatcherUnitTests.GetNewUniqueID_UnitTest_ShouldBeGuid</TestName>
+      </NamedTestSelector>
+      <NamedTestSelector>
+        <TestName>RosbridgeClientCommon.UnitTests.MessageDispatcherUnitTests.StartAsync_UnitTest_ClassDisposed_ShouldThrowObjectDisposedException</TestName>
+      </NamedTestSelector>
+      <NamedTestSelector>
+        <TestName>RosbridgeClientCommon.UnitTests.MessageDispatcherUnitTests.StartAsync_UnitTest_CurrentStateIsNotStopped_ShouldThrowMessageDispatcherException</TestName>
+      </NamedTestSelector>
+      <NamedTestSelector>
+        <TestName>RosbridgeClientCommon.UnitTests.MessageDispatcherUnitTests.StartAsync_UnitTest_EverythingOk_DispatcherShouldStarted</TestName>
+      </NamedTestSelector>
+      <NamedTestSelector>
+        <TestName>RosbridgeClientCommon.UnitTests.MessageDispatcherUnitTests.StartAsync_UnitTest_EverythinkOk_ShouldReceiveEvent</TestName>
+      </NamedTestSelector>
+      <NamedTestSelector>
+        <TestName>RosbridgeClientCommon.UnitTests.MessageDispatcherUnitTests.StartAsync_UnitTest_SocketThrowException_ShouldThrowExceptionDispatcherShouldStopped</TestName>
+      </NamedTestSelector>
     </IgnoredTests>
   </Settings>
 </ProjectConfiguration>
