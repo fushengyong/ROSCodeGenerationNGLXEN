@@ -29,15 +29,12 @@
         new[]
         {
                     "System",
-                    "System.IO",
-                    "System.Net",
                     "System.Linq",
         };
         private static readonly CSharpCompilationOptions DefaultCompilationOptions =
         new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary)
                 .WithOverflowChecks(true)
                 .WithPlatform(Platform.X86)
-                .WithOptimizationLevel(OptimizationLevel.Release)
                 .WithUsings(DefaultNamespaces);
         private static readonly IEnumerable<MetadataReference> DefaultReferences =
         new[]

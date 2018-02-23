@@ -5,6 +5,7 @@
     using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.VisualStudio.TextTemplating;
     using NUnit.Framework;
+    using Rosbridge.Client.Common.Attributes;
     using Rosbridge.CodeGeneration.Logic.Constants;
     using Rosbridge.CodeGeneration.Logic.UnitTests.Utilities;
     using System;
@@ -25,15 +26,12 @@
         new[]
         {
                     "System",
-                    "System.IO",
-                    "System.Net",
                     "System.Linq",
         };
         private static readonly CSharpCompilationOptions DefaultCompilationOptions =
         new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary)
                 .WithOverflowChecks(true)
                 .WithPlatform(Platform.X86)
-                .WithOptimizationLevel(OptimizationLevel.Release)
                 .WithUsings(DefaultNamespaces);
         private static readonly IEnumerable<MetadataReference> DefaultReferences =
         new[]
@@ -41,7 +39,9 @@
                     MetadataReference.CreateFromFile(typeof (object).Assembly.Location),
                     MetadataReference.CreateFromFile(typeof (System.Linq.Enumerable).Assembly.Location),
                     MetadataReference.CreateFromFile(typeof (System.GenericUriParser).Assembly.Location),
-                    MetadataReference.CreateFromFile(typeof (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException).Assembly.Location)
+                    MetadataReference.CreateFromFile(typeof (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException).Assembly.Location),
+                    MetadataReference.CreateFromFile(Assembly.Load("netstandard, Version=2.0.0.0").Location),
+                    MetadataReference.CreateFromFile(typeof (RosMessageTypeAttribute).Assembly.Location),
         };
 
         private FileInfo _template;
@@ -75,17 +75,17 @@
         public void RosMessagesTemplate_UnitTest_ParametersOK_TemplateCreatesAppropriateOutput()
         {
             //arrange
-            string rosbridgeAttributeNamespace = "System";
-            string rosbridgeAttributeType = "testRosType";
+            string rosbridgeAttributeNamespace = typeof(RosMessageTypeAttribute).Namespace;
+            string rosbridgeAttributeType = nameof(RosMessageTypeAttribute);
             string namespacePrefix = "testPrefix";
             string testNamespace = "testNamespace";
             string testType = "testType";
             string[] testDependencies = new string[] { };
-            IEnumerable<Tuple<string, string, string>> testConstantFields = new List<Tuple<string, string, string>>() { Tuple.Create("TestType", "TestName", "TestValue") };
-            IEnumerable<Tuple<string, string, int>> testArrayFields = new List<Tuple<string, string, int>>() { Tuple.Create("TestType", "TestName", 2) };
+            IEnumerable<Tuple<string, string, string>> testConstantFields = new List<Tuple<string, string, string>>() { Tuple.Create("string", "TestFieldName1", "TestValue") };
+            IEnumerable<Tuple<string, string, int>> testArrayFields = new List<Tuple<string, string, int>>() { Tuple.Create("string", "TestFieldName2", 2) };
             IDictionary<string, string> testFields = new Dictionary<string, string>()
             {
-                { "TestFieldName", "TestFieldValue" }
+                { "TestFieldName3", "string" }
             };
 
             ITextTemplatingSession session = CreateTemplateSession(
