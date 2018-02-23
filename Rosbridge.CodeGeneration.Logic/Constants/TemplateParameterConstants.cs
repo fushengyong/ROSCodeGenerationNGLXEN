@@ -3,7 +3,7 @@
     /// <summary>
     /// Code generator template parameters
     /// </summary>
-    public static class TemplateParameterConstants
+    internal static class TemplateParameterConstants
     {
         public static class RosMessage
         {

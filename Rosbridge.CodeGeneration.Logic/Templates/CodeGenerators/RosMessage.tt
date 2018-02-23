@@ -76,7 +76,7 @@ namespace <#= AddPrefixToNamespace(Namespace) #> {
     [<#= MessageTypeAttributeName #>("<#= Namespace #>/<#= Type #>")]
     public class <#= Type #> { 
 <# foreach(Tuple<string, string, string> constantField in ConstantFieldList){ #>
-        public const <#= constantField.Item1 #> <#= constantField.Item2 #> = <# if(constantField.Item1 == "char"){ #>'<#= constantField.Item3 #>'<# }else if(constantField.Item1 == "string"){ #>"<#= constantField.Item3 #>"<# } else { #><#= constantField.Item3 #><# } #>;
+        public const <#= constantField.Item1 #> <#= constantField.Item2 #> = <# if(constantField.Item1.ToLower() == "char"){ #>'<#= constantField.Item3 #>'<# }else if(constantField.Item1.ToLower() == "string"){ #>"<#= constantField.Item3 #>"<# } else { #><#= constantField.Item3 #><# } #>;
 <# } foreach(Tuple<string, string, int> arrayField in ArrayFieldList){ #>
         public <#= arrayField.Item1 #>[] <#= arrayField.Item2 #> { get; set; }
 <# } foreach(KeyValuePair<string, string> field in FieldList){ #>

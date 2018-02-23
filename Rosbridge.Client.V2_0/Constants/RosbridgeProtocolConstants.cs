@@ -3,7 +3,7 @@
     /// <summary>
     /// Rosbridge protocol constants for Rosbridge 2.0
     /// </summary>
-    public static class RosbridgeProtocolConstants
+    internal static class RosbridgeProtocolConstants
     {
         public static class MessageTransformation
         {

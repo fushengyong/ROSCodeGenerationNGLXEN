@@ -26,11 +26,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="Templates\CodeGenerators\RosMessage.cs">
-      <DependentUpon>RosMessage.tt</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Content>
     <Content Include="Templates\CodeGenerators\TimeData.txt">
       <DependentUpon>TimeData.tt</DependentUpon>
       <DesignTime>True</DesignTime>

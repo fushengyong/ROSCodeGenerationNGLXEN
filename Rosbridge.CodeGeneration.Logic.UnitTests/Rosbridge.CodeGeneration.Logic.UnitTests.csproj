@@ -193,6 +193,10 @@
     <Compile Include="Utilities\ExecutingProjectFinder.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Rosbridge.Client.Common\Rosbridge.Client.Common.csproj">
+      <Project>{b03d0cd3-6bca-4643-a366-d47fe84f87c1}</Project>
+      <Name>Rosbridge.Client.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Rosbridge.CodeGeneration.Logic\Rosbridge.CodeGeneration.Logic.csproj">
       <Project>{b514ba6b-772f-48bb-b20e-2c87184f5699}</Project>
       <Name>Rosbridge.CodeGeneration.Logic</Name>
