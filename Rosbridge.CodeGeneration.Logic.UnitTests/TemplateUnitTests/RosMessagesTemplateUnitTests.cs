@@ -1,5 +1,6 @@
 ﻿namespace Rosbridge.CodeGeneration.Logic.UnitTests.TemplateUnitTests
 {
+    using FluentAssertions;
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.VisualStudio.TextTemplating;
@@ -9,6 +10,8 @@
     using System;
     using System.Collections.Generic;
     using System.IO;
+    using System.Linq;
+    using System.Reflection;
     using T4Template.Utilities.Interfaces;
     using T4Template.Utilities.TemplateCompile;
     using T4Template.Utilities.TemplateProcess;
@@ -68,46 +71,48 @@
             _templateCompiler = new TemplateCompiler();
         }
 
-        //[Test]
-        //public void RosMessagesTemplate_UnitTest_ParametersOK_TemplateCreatesAppropriateOutput()
-        //{
-        //    //arrange
-        //    string rosbridgeAttributeNamespace = "testRosNamespace";
-        //    string rosbridgeAttributeType = "testRosType";
-        //    string namespacePrefix = "testPrefix";
-        //    string testNamespace = "testNamespace";
-        //    string testType = "testType";
-        //    string[] testDependencies = new string[] { };
-        //    IEnumerable<Tuple<string, string, string>> testConstantFields = new List<Tuple<string, string, string>>() { Tuple.Create("TestType", "TestName", "TestValue") };
-        //    IEnumerable<Tuple<string, string, int>> testArrayFields = new List<Tuple<string, string, int>>() { Tuple.Create("TestType", "TestName", 2) };
-        //    IDictionary<string, string> testFields = new Dictionary<string, string>();
-        //    testFields.Add("TestFieldName", "TestFieldValue");
+        [Test]
+        public void RosMessagesTemplate_UnitTest_ParametersOK_TemplateCreatesAppropriateOutput()
+        {
+            //arrange
+            string rosbridgeAttributeNamespace = "System";
+            string rosbridgeAttributeType = "testRosType";
+            string namespacePrefix = "testPrefix";
+            string testNamespace = "testNamespace";
+            string testType = "testType";
+            string[] testDependencies = new string[] { };
+            IEnumerable<Tuple<string, string, string>> testConstantFields = new List<Tuple<string, string, string>>() { Tuple.Create("TestType", "TestName", "TestValue") };
+            IEnumerable<Tuple<string, string, int>> testArrayFields = new List<Tuple<string, string, int>>() { Tuple.Create("TestType", "TestName", 2) };
+            IDictionary<string, string> testFields = new Dictionary<string, string>()
+            {
+                { "TestFieldName", "TestFieldValue" }
+            };
 
-        //    ITextTemplatingSession session = CreateTemplateSession(
-        //        rosbridgeAttributeNamespace,
-        //        rosbridgeAttributeType,
-        //        namespacePrefix,
-        //        testNamespace,
-        //        testType,
-        //        testDependencies,
-        //        testConstantFields,
-        //        testArrayFields,
-        //        testFields);
+            ITextTemplatingSession session = CreateTemplateSession(
+                rosbridgeAttributeNamespace,
+                rosbridgeAttributeType,
+                namespacePrefix,
+                testNamespace,
+                testType,
+                testDependencies,
+                testConstantFields,
+                testArrayFields,
+                testFields);
 
-        //    //act
-        //    string templateOutput = _templateProcessor.ProcessTemplateWithSession(_template, session);
+            //act
+            string templateOutput = _templateProcessor.ProcessTemplateWithSession(_template, session);
 
-        //    //assert
-        //    SyntaxTree parsedTemplateOutput = _templateCompiler.ParseTemplateOutput(templateOutput);
-        //    Assembly compiledAssembly = _templateCompiler.CompileSyntaxTree(parsedTemplateOutput, DefaultCompilationOptions, DefaultReferences, MethodBase.GetCurrentMethod().Name);
-        //    compiledAssembly.Should().NotBeNull();
-        //    compiledAssembly.DefinedTypes.Should().NotBeNull();
-        //    compiledAssembly.DefinedTypes.Should().HaveCount(1);
-        //    Type resultType = compiledAssembly.DefinedTypes.First();
-        //    resultType.Name.Should().Be(testType);
-        //    resultType.Namespace.Should().Be($"{namespacePrefix}.{testNamespace}");
-        //    resultType.IsValueType.Should().BeFalse();
-        //}
+            //assert
+            SyntaxTree parsedTemplateOutput = _templateCompiler.ParseTemplateOutput(templateOutput);
+            Assembly compiledAssembly = _templateCompiler.CompileSyntaxTree(parsedTemplateOutput, DefaultCompilationOptions, DefaultReferences, MethodBase.GetCurrentMethod().Name);
+            compiledAssembly.Should().NotBeNull();
+            compiledAssembly.DefinedTypes.Should().NotBeNull();
+            compiledAssembly.DefinedTypes.Should().HaveCount(1);
+            Type resultType = compiledAssembly.DefinedTypes.First();
+            resultType.Name.Should().Be(testType);
+            resultType.Namespace.Should().Be($"{namespacePrefix}.{testNamespace}");
+            resultType.IsValueType.Should().BeFalse();
+        }
 
         private ITextTemplatingSession CreateTemplateSession(string messageTypeAttributeNamespace, string messageTypeAttributeName, string namespacePrefix, string @namespace, string type, IEnumerable<string> dependencyList, IEnumerable<Tuple<string, string, string>> constantFieldList, IEnumerable<Tuple<string, string, int>> arrayFieldList, IDictionary<string, string> fieldList)
         {
