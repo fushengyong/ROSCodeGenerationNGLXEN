@@ -14,6 +14,7 @@
         private IMessageSerializer _serializer;
         protected internal bool _disposed;
         protected internal Task _receivingTask;
+        protected internal Task _disposingTask;
         protected internal States _currentState;
 
         public event MessageReceivedHandler MessageReceived;
@@ -87,7 +88,10 @@
 
                         MessageReceived?.Invoke(this, new RosbridgeMessageReceivedEventArgs(message));
                     }
-                    catch { }
+                    catch
+                    {
+                        // ignored
+                    }
                 }
             });
 
@@ -155,7 +159,7 @@
             _disposed = true;
             _currentState = States.Stopped;
 
-            Task.Run(async () =>
+            _disposingTask = Task.Run(async () =>
             {
                 try
                 {
@@ -181,7 +185,10 @@
                         _serializer = null;
                     }
                 }
-                catch { }
+                catch
+                {
+                    // ignored
+                }
             });
 
             GC.SuppressFinalize(this);

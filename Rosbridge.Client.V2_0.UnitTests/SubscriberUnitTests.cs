@@ -1,4 +1,4 @@
-﻿namespace RosbridgeClientV2_0.UnitTests
+﻿namespace Rosbridge.Client.V2_0.UnitTests
 {
     using Moq;
     using NUnit.Framework;
