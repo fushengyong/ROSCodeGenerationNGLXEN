@@ -33,39 +33,30 @@
         /// </summary>
         public bool IsConst { get { return !string.IsNullOrWhiteSpace(FieldValue); } }
 
-        public MessageField(string fieldName, string typeName, string namespaceName, bool isArray, int arrayElementCount, string fieldValue)
+        public MessageField(string fieldName, string type, string @namespace, bool isArray, int arrayElementCount, string fieldValue)
         {
-            if (null == fieldName)
-            {
-                throw new ArgumentNullException(nameof(fieldName));
-            }
-
-            if (string.Empty == fieldName)
+            if (string.IsNullOrWhiteSpace(fieldName))
             {
                 throw new ArgumentException("Parameter cannot be empty!", nameof(fieldName));
             }
 
-            if (null == typeName)
+            if (string.IsNullOrWhiteSpace(type))
             {
-                throw new ArgumentNullException(nameof(fieldName));
+                throw new ArgumentException("Parameter cannot be empty!", nameof(type));
             }
 
-            if (string.Empty == typeName)
+            if (null == @namespace)
             {
-                throw new ArgumentException("Parameter cannot be empty!", nameof(typeName));
-            }
-
-            if (null == namespaceName)
-            {
-                throw new ArgumentNullException(nameof(fieldName));
+                throw new ArgumentNullException(nameof(@namespace));
             }
 
             if (null == fieldValue)
             {
-                throw new ArgumentNullException(nameof(fieldName));
+                throw new ArgumentNullException(nameof(fieldValue));
+
             }
 
-            this.Type = new MessageType(namespaceName, typeName);
+            this.Type = new MessageType(@namespace, type);
             this.FieldName = fieldName;
             this.IsArray = isArray;
             this.ArrayElementCount = arrayElementCount;
@@ -79,6 +70,7 @@
                 MessageField anotherMember = obj as MessageField;
                 return this.FieldName == anotherMember.FieldName;
             }
+
             return false;
         }
 

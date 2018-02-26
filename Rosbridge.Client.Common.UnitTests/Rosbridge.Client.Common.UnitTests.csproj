@@ -71,13 +71,16 @@
     <Compile Include="MessageDispatcherUnitTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RosMessageTypeAttributeHelperUnitTests.cs" />
-    <Compile Include="Utilities\TypeBuilder.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Common.Testing.Utilities\Common.Testing.Utilities.csproj">
+      <Project>{7115af9b-9e38-45da-bb38-2d68cfadff16}</Project>
+      <Name>Common.Testing.Utilities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Rosbridge.Client.Common\Rosbridge.Client.Common.csproj">
       <Project>{B03D0CD3-6BCA-4643-A366-D47FE84F87C1}</Project>
       <Name>Rosbridge.Client.Common</Name>

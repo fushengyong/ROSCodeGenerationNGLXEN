@@ -38,7 +38,7 @@
     string rosMessageTypeAttributeName = appSettings["RosMessageTypeAttributeName"].Value;
 
     IYAMLParser yamlParser = new YAMLParser(RosConstants.MessageTypes.PrimitiveTypeDictionary);
-    FileLoader fileLoader = new FileLoader(yamlParser);
+    ROSFileLoader fileLoader = new ROSFileLoader(yamlParser);
 
     ISet<MsgFile> messageFileSet = new HashSet<MsgFile>();
     ISet<SrvFile> serviceFileSet = new HashSet<SrvFile>();

@@ -16,12 +16,7 @@
 
         public ServiceClient(string service, IMessageDispatcher messageDispatcher)
         {
-            if (null == service)
-            {
-                throw new ArgumentNullException(nameof(service));
-            }
-
-            if (string.Empty == service)
+            if (string.IsNullOrWhiteSpace(service))
             {
                 throw new ArgumentException("Argument cannot be empty!", nameof(service));
             }

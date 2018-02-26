@@ -19,11 +19,6 @@
 
         public Subscriber(string topic, IMessageDispatcher messageDispatcher, IRosMessageTypeAttributeHelper rosMessageTypeAttributeHelper)
         {
-            if (null == topic)
-            {
-                throw new ArgumentNullException(nameof(topic));
-            }
-
             if (string.IsNullOrWhiteSpace(topic))
             {
                 throw new ArgumentException("Argument cannot be empty!", nameof(topic));

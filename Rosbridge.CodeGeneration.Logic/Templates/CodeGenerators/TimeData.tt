@@ -3,19 +3,11 @@
 <#@ parameter type="System.String" name="Namespace" #>
 <#@ parameter type="System.String" name="Type" #>
 <#
-    if(null == Namespace){
-        throw new ArgumentNullException(nameof(Namespace));
-    }
-
-    if(string.Empty == Namespace){
+    if(string.IsNullOrWhiteSpace(Namespace)){
         throw new ArgumentException("The argument cannot be empty!", nameof(Namespace));
     }
 
-    if(null == Type){
-        throw new ArgumentNullException(nameof(Type));
-    }
-
-    if(string.Empty == Type){
+    if(string.IsNullOrWhiteSpace(Type)){
         throw new ArgumentException("The argument cannot be empty!", nameof(Type));
     }
 #>

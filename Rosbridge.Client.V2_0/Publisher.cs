@@ -17,11 +17,6 @@
 
         public Publisher(string topic, IMessageDispatcher messageDispatcher, IRosMessageTypeAttributeHelper rosMessageTypeAttributeHelper)
         {
-            if (null == topic)
-            {
-                throw new ArgumentNullException(nameof(topic));
-            }
-
             if (string.IsNullOrWhiteSpace(topic))
             {
                 throw new ArgumentException("Argument cannot be empty!", nameof(topic));
@@ -64,6 +59,11 @@
 
         public Task PublishAsync(TRosMessage message)
         {
+            if (null == message)
+            {
+                throw new ArgumentNullException(nameof(message));
+            }
+
             JObject jsonMessage = JObject.FromObject(message);
 
             return Task.Run(() =>

@@ -17,12 +17,7 @@
                 throw new ArgumentNullException(nameof(serviceProvider));
             }
 
-            if (null == templateFile)
-            {
-                throw new ArgumentNullException(nameof(templateFile));
-            }
-
-            if (string.Empty == templateFile)
+            if (string.IsNullOrWhiteSpace(templateFile))
             {
                 throw new ArgumentException("Parameter cannot be empty!", nameof(templateFile));
             }
