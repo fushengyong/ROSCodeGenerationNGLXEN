@@ -8,8 +8,8 @@
 
     public class Subscriber<TRosMessage> : IRosSubscriber<TRosMessage> where TRosMessage : class, new()
     {
-        private IMessageDispatcher _messageDispatcher;
-        private readonly string _uniqueId;
+        private readonly IMessageDispatcher _messageDispatcher;
+        protected internal readonly string _uniqueId;
 
         public event RosMessageReceivedHandler<TRosMessage> RosMessageReceived;
 
@@ -65,11 +65,12 @@
         {
             if (null != args)
             {
-                RosPublishMessage receivedPublishMessage = args.RosBridgeMessage.ToObject<RosPublishMessage>();
+                RosPublishMessage receivedPublishMessage = args.RosbridgeMessage.ToObject<RosPublishMessage>();
 
                 if (null != RosMessageReceived && null != receivedPublishMessage && !string.IsNullOrEmpty(receivedPublishMessage.Topic) && receivedPublishMessage.Topic.Equals(this.Topic))
                 {
                     TRosMessage receivedRosMessage = receivedPublishMessage.Message.ToObject<TRosMessage>();
+
                     RosMessageReceived(this, new RosMessageReceivedEventArgs<TRosMessage>(receivedRosMessage));
                 }
             }

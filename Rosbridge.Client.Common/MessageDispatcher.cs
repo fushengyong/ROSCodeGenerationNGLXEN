@@ -80,18 +80,11 @@
             {
                 while (_socket.IsConnected && _currentState == States.Started)
                 {
-                    try
-                    {
-                        byte[] buffer = await _socket.ReceiveAsync();
+                    byte[] buffer = await _socket.ReceiveAsync();
 
-                        JObject message = _serializer.Deserialize(buffer);
+                    JObject message = _serializer.Deserialize(buffer);
 
-                        MessageReceived?.Invoke(this, new RosbridgeMessageReceivedEventArgs(message));
-                    }
-                    catch
-                    {
-                        // ignored
-                    }
+                    MessageReceived?.Invoke(this, new RosbridgeMessageReceivedEventArgs(message));
                 }
             });
 
@@ -187,7 +180,6 @@
                 }
                 catch
                 {
-                    // ignored
                 }
             });
 

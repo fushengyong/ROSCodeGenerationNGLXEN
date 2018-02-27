@@ -88,6 +88,8 @@
             SyntaxTree parsedTemplateOutput = _templateCompiler.ParseTemplateOutput(templateOutput);
             Assembly compiledAssembly = _templateCompiler.CompileSyntaxTree(parsedTemplateOutput, DefaultCompilationOptions, DefaultReferences, MethodBase.GetCurrentMethod().Name);
 
+            _templateCompiler.CompilationInfo.Success.Should().BeTrue();
+
             compiledAssembly.Should().NotBeNull();
             compiledAssembly.DefinedTypes.Should().NotBeNull();
             compiledAssembly.DefinedTypes.Should().HaveCount(1);

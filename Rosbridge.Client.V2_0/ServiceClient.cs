@@ -9,16 +9,17 @@
 
     public class ServiceClient<TServiceRequest, TServiceResponse> : IRosServiceClient<TServiceRequest, TServiceResponse> where TServiceRequest : class, new() where TServiceResponse : class, new()
     {
+        private readonly IMessageDispatcher _messageDispatcher;
+        private readonly IMessageSerializer _messageSerializer;
         private readonly string _uniqueId;
-        private IMessageDispatcher _messageDispatcher;
 
-        public string Service { get; private set; }
+        public string ServiceName { get; private set; }
 
-        public ServiceClient(string service, IMessageDispatcher messageDispatcher)
+        public ServiceClient(string serviceName, IMessageDispatcher messageDispatcher, IMessageSerializer messageSerializer)
         {
-            if (string.IsNullOrWhiteSpace(service))
+            if (string.IsNullOrWhiteSpace(serviceName))
             {
-                throw new ArgumentException("Argument cannot be empty!", nameof(service));
+                throw new ArgumentException("Argument cannot be empty!", nameof(serviceName));
             }
 
             if (null == messageDispatcher)
@@ -26,7 +27,14 @@
                 throw new ArgumentNullException(nameof(messageDispatcher));
             }
 
+            if (null == messageSerializer)
+            {
+                throw new ArgumentNullException(nameof(messageSerializer));
+            }
+
+            ServiceName = serviceName;
             _messageDispatcher = messageDispatcher;
+            _messageSerializer = messageSerializer;
             _uniqueId = _messageDispatcher.GetNewUniqueID();
         }
 
@@ -38,16 +46,18 @@
             {
                 if (null != args)
                 {
-                    RosServiceResponseMessage rosbridgeServiceResponse = args.RosBridgeMessage.ToObject<RosServiceResponseMessage>();
+                    RosServiceResponseMessage rosServiceResponse = args.RosbridgeMessage.ToObject<RosServiceResponseMessage>();
 
-                    if (null != rosbridgeServiceResponse && rosbridgeServiceResponse.Id.Equals(_uniqueId))
+                    if (null != rosServiceResponse && rosServiceResponse.Id.Equals(_uniqueId))
                     {
-                        if (null != rosbridgeServiceResponse.ValueList)
+                        if (null != rosServiceResponse.ValueList)
                         {
-                            JObject responseObject = new JObject(rosbridgeServiceResponse.ValueList);
-                            TServiceResponse rosServiceResponse = responseObject.ToObject<TServiceResponse>();
+                            JObject responseObject = JObject.FromObject(rosServiceResponse.ValueList);
 
-                            taskCompletion.SetResult(rosServiceResponse);
+                            TServiceResponse rosServiceResponseObject =
+                                responseObject.ToObject<TServiceResponse>();
+
+                            taskCompletion.SetResult(rosServiceResponseObject);
                         }
                         else
                         {
@@ -66,17 +76,17 @@
                     await _messageDispatcher.SendAsync(new RosCallServiceMessage()
                     {
                         Id = _uniqueId,
-                        Service = this.Service
+                        Service = ServiceName
                     });
                 }
                 else
                 {
-                    JArray arguments = new JArray(request);
+                    JArray arguments = JArray.FromObject(request);
 
                     await _messageDispatcher.SendAsync(new RosCallServiceMessage()
                     {
                         Id = _uniqueId,
-                        Service = this.Service,
+                        Service = ServiceName,
                         Arguments = arguments
                     });
                 }

@@ -87,6 +87,7 @@
             }
             catch
             {
+                // ignored
             }
         }
 

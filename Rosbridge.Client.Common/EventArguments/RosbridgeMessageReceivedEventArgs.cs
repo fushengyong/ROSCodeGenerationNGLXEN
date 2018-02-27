@@ -8,7 +8,7 @@
     /// </summary>
     public class RosbridgeMessageReceivedEventArgs : EventArgs
     {
-        public JObject RosBridgeMessage { get; private set; }
+        public JObject RosbridgeMessage { get; private set; }
 
         public RosbridgeMessageReceivedEventArgs(JObject message)
         {
@@ -17,7 +17,7 @@
                 throw new ArgumentNullException(nameof(message));
             }
 
-            RosBridgeMessage = message;
+            RosbridgeMessage = message;
         }
     }
 }

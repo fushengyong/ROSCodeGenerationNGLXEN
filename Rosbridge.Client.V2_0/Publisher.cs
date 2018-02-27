@@ -8,8 +8,8 @@
 
     public class Publisher<TRosMessage> : IRosPublisher<TRosMessage> where TRosMessage : class, new()
     {
-        private IMessageDispatcher _messageDispatcher;
-        private readonly string _uniqueId;
+        private readonly IMessageDispatcher _messageDispatcher;
+        protected internal readonly string _uniqueId;
 
         public string Topic { get; private set; }
 
