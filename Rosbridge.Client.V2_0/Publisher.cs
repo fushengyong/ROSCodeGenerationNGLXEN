@@ -66,14 +66,11 @@
 
             JObject jsonMessage = JObject.FromObject(message);
 
-            return Task.Run(() =>
+            return _messageDispatcher.SendAsync(new RosPublishMessage()
             {
-                _messageDispatcher.SendAsync(new RosPublishMessage()
-                {
-                    Id = _uniqueId,
-                    Topic = Topic,
-                    Message = jsonMessage
-                });
+                Id = _uniqueId,
+                Topic = Topic,
+                Message = jsonMessage
             });
         }
     }

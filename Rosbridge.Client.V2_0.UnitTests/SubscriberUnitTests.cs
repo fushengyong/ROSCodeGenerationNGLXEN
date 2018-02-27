@@ -124,7 +124,7 @@ namespace Rosbridge.Client.V2_0.UnitTests
             _messageDispatcherMock.Verify(dispatcher => dispatcher.SendAsync(It.Is<RosSubscribeMessage>(message =>
                 message.Id == uniqueId &&
                 message.Topic == testTopic &&
-                message.Type == testRosMessageType)));
+                message.Type == testRosMessageType)), Times.Once);
         }
 
         [Test]
@@ -154,7 +154,7 @@ namespace Rosbridge.Client.V2_0.UnitTests
             result.Should().Be(resultTask);
             _messageDispatcherMock.Verify(dispatcher => dispatcher.SendAsync(It.Is<RosUnsubscribeMessage>(message =>
                 message.Id == uniqueId &&
-                message.Topic == testTopic)));
+                message.Topic == testTopic)), Times.Once);
         }
     }
 }
