@@ -45,7 +45,7 @@ namespace Rosbridge.Client.V2_0.UnitTests
         }
 
         [Test]
-        public void Constructor_UnitTest_TopicIsNull_ShouldThrowArgumentNullException()
+        public void Constructor_UnitTest_TopicIsNull_ShouldThrowArgumentException()
         {
             //arrange
             string testTopic = null;
@@ -58,7 +58,7 @@ namespace Rosbridge.Client.V2_0.UnitTests
         }
 
         [Test]
-        public void Constructor_UnitTest_TopicIsEmpty_ShouldThrowArgumentNullException()
+        public void Constructor_UnitTest_TopicIsEmpty_ShouldThrowArgumentException()
         {
             //arrange
             string testTopic = string.Empty;
