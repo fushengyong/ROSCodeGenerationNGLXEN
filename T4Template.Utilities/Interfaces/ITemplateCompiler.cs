@@ -1,4 +1,6 @@
-﻿namespace T4Template.Utilities.Interfaces
+﻿using Microsoft.CodeAnalysis.Emit;
+
+namespace T4Template.Utilities.Interfaces
 {
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp;
@@ -8,13 +10,17 @@
     public interface ITemplateCompiler
     {
         /// <summary>
-        /// Parse the given template output into a syntax tree.
+        /// Compilation info
+        /// </summary>
+        EmitResult CompilationInfo { get; }
+        /// <summary>
+        /// Parse the given template output into a syntax tree
         /// </summary>
         /// <param name="templateOutput"></param>
         /// <returns></returns>
         SyntaxTree ParseTemplateOutput(string templateOutput);
         /// <summary>
-        /// Compile the given syntax tree.
+        /// Compile the given syntax tree
         /// </summary>
         /// <param name="syntaxTreeToCompile"></param>
         /// <param name="compilationOptions"></param>

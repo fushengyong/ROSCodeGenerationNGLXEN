@@ -12,7 +12,7 @@
         /// <summary>
         /// The service to call
         /// </summary>
-        string Service { get; }
+        string ServiceName { get; }
         /// <summary>
         /// Call the service with a specific request
         /// </summary>

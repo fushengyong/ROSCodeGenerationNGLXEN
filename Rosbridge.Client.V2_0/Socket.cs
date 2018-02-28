@@ -1,6 +1,7 @@
 ﻿namespace Rosbridge.Client.V2_0
 {
     using Exceptions;
+    using Interfaces;
     using Rosbridge.Client.Common.Interfaces;
     using System;
     using System.IO;
@@ -10,9 +11,9 @@
 
     public class Socket : ISocket
     {
+        private readonly IClientWebSocket _webSocket;
         private readonly CancellationTokenSource _cancellationTokenSource;
-        private readonly ClientWebSocket _webSocket;
-        private bool _disposed;
+        protected internal bool _disposed;
 
         public bool IsConnected
         {
@@ -24,15 +25,25 @@
 
         public Uri URI { get; private set; }
 
-        public Socket(Uri uri)
+        public Socket(Uri uri, IClientWebSocket webSocket, CancellationTokenSource cancellationTokenSource)
         {
             if (null == uri)
             {
                 throw new ArgumentNullException(nameof(uri));
             }
 
-            _cancellationTokenSource = new CancellationTokenSource();
-            _webSocket = new ClientWebSocket();
+            if (null == webSocket)
+            {
+                throw new ArgumentNullException(nameof(webSocket));
+            }
+
+            if (null == cancellationTokenSource)
+            {
+                throw new ArgumentNullException(nameof(cancellationTokenSource));
+            }
+
+            _webSocket = webSocket;
+            _cancellationTokenSource = cancellationTokenSource;
             _disposed = false;
             URI = uri;
         }
@@ -73,23 +84,6 @@
             });
         }
 
-        public void Dispose()
-        {
-            _disposed = true;
-
-            try
-            {
-                if (null != _webSocket)
-                {
-                    _webSocket.Abort();
-                    _webSocket.Dispose();
-                }
-            }
-            catch
-            {
-            }
-        }
-
         public Task<byte[]> ReceiveAsync()
         {
             if (_disposed)
@@ -108,21 +102,25 @@
                     do
                     {
                         byte[] tmpBuffer = new byte[65535];
+
                         result = await _webSocket.ReceiveAsync(new ArraySegment<byte>(tmpBuffer), _cancellationTokenSource.Token);
 
-                        if (result.MessageType == WebSocketMessageType.Close)
+                        if (null != result)
                         {
-                            await _webSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "OK", _cancellationTokenSource.Token);
-                            taskCompletion.SetException(new SocketException("Connection closed by the server!"));
-                        }
+                            if (result.MessageType == WebSocketMessageType.Close)
+                            {
+                                await _webSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "OK", _cancellationTokenSource.Token);
+                                taskCompletion.SetException(new SocketException("Connection closed by the server!"));
+                            }
 
-                        if (result.MessageType == WebSocketMessageType.Binary)
-                        {
-                            await _webSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "OK", _cancellationTokenSource.Token);
-                            taskCompletion.SetException(new SocketException("Server sent binary data!"));
-                        }
+                            if (result.MessageType == WebSocketMessageType.Binary)
+                            {
+                                await _webSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "OK", _cancellationTokenSource.Token);
+                                taskCompletion.SetException(new SocketException("Server sent binary data!"));
+                            }
 
-                        buffer.Write(tmpBuffer, 0, result.Count);
+                            buffer.Write(tmpBuffer, 0, result.Count);
+                        }
                     } while (null != result && !result.EndOfMessage);
 
                     taskCompletion.SetResult(buffer.ToArray());
@@ -145,6 +143,24 @@
             }
 
             return _webSocket.SendAsync(new ArraySegment<byte>(buffer), WebSocketMessageType.Text, true, _cancellationTokenSource.Token);
+        }
+
+        public void Dispose()
+        {
+            _disposed = true;
+
+            try
+            {
+                if (null != _webSocket)
+                {
+                    _webSocket.Abort();
+                    _webSocket.Dispose();
+                }
+            }
+            catch
+            {
+                // ignored
+            }
         }
     }
 }

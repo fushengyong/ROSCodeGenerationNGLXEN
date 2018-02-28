@@ -21,7 +21,7 @@
         /// </summary>
         public DirectoryInfo PackageDirectoryInfo { get; private set; }
         /// <summary>
-        /// ROS file filcontent. In YAML format
+        /// ROS file content. In YAML format
         /// </summary>
         public string FileContent { get; private set; }
         /// <summary>
@@ -29,7 +29,7 @@
         /// </summary>
         public MessageType Type { get; private set; }
 
-        public RosFile(FileInfo file)
+        protected RosFile(FileInfo file)
         {
             if (null == file)
             {
@@ -49,31 +49,21 @@
             Type = new MessageType(namespaceName, className);
         }
 
-        public RosFile(string fileContent, string className, string namespaceName)
+        protected RosFile(string fileContent, string className, string namespaceName)
         {
             if (null == fileContent)
             {
                 throw new ArgumentNullException(nameof(fileContent));
             }
 
-            if (null == className)
-            {
-                throw new ArgumentNullException(nameof(className));
-            }
-
-            if (null == namespaceName)
-            {
-                throw new ArgumentNullException(nameof(namespaceName));
-            }
-
             //FileContent can be empty (service with no response)
 
-            if (string.Empty == className)
+            if (string.IsNullOrWhiteSpace(className))
             {
                 throw new ArgumentException("Parameter cannot be empty!", nameof(className));
             }
 
-            if (string.Empty == namespaceName)
+            if (string.IsNullOrWhiteSpace(namespaceName))
             {
                 throw new ArgumentException("Parameter cannot be empty!", nameof(namespaceName));
             }
@@ -84,15 +74,9 @@
 
         public override bool Equals(object obj)
         {
-            if (obj != null && obj is RosFile)
+            if (obj is RosFile)
             {
-
                 RosFile item = obj as RosFile;
-
-                if (item == null)
-                {
-                    return false;
-                }
 
                 return this.Type == item.Type;
             }

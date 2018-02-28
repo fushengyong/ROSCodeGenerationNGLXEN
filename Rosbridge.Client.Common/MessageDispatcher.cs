@@ -14,6 +14,7 @@
         private IMessageSerializer _serializer;
         protected internal bool _disposed;
         protected internal Task _receivingTask;
+        protected internal Task _disposingTask;
         protected internal States _currentState;
 
         public event MessageReceivedHandler MessageReceived;
@@ -79,15 +80,11 @@
             {
                 while (_socket.IsConnected && _currentState == States.Started)
                 {
-                    try
-                    {
-                        byte[] buffer = await _socket.ReceiveAsync();
+                    byte[] buffer = await _socket.ReceiveAsync();
 
-                        JObject message = _serializer.Deserialize(buffer);
+                    JObject message = _serializer.Deserialize(buffer);
 
-                        MessageReceived?.Invoke(this, new RosbridgeMessageReceivedEventArgs(message));
-                    }
-                    catch { }
+                    MessageReceived?.Invoke(this, new RosbridgeMessageReceivedEventArgs(message));
                 }
             });
 
@@ -155,7 +152,7 @@
             _disposed = true;
             _currentState = States.Stopped;
 
-            Task.Run(async () =>
+            _disposingTask = Task.Run(async () =>
             {
                 try
                 {
@@ -181,7 +178,9 @@
                         _serializer = null;
                     }
                 }
-                catch { }
+                catch
+                {
+                }
             });
 
             GC.SuppressFinalize(this);

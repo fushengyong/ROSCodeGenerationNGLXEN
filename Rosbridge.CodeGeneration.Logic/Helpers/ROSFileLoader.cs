@@ -11,11 +11,11 @@
     /// <summary>
     /// FileLoader for load ROS files (.msg, .srv)
     /// </summary>
-    public class FileLoader
+    public class ROSFileLoader
     {
         private IYAMLParser _yamlParser;
 
-        public FileLoader(IYAMLParser yamlParser)
+        public ROSFileLoader(IYAMLParser yamlParser)
         {
             if (null == yamlParser)
             {
@@ -43,12 +43,7 @@
                 throw new ArgumentNullException(nameof(serviceFileSet));
             }
 
-            if (null == directoryPath)
-            {
-                throw new ArgumentNullException(nameof(directoryPath));
-            }
-
-            if (string.Empty == directoryPath)
+            if (string.IsNullOrWhiteSpace(directoryPath))
             {
                 throw new ArgumentException("Parameter cannot be empty!", nameof(directoryPath));
             }

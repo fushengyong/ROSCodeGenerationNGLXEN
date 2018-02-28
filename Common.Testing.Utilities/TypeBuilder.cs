@@ -1,4 +1,4 @@
-﻿namespace Rosbridge.Client.Common.UnitTests.Utilities
+﻿namespace Common.Testing.Utilities
 {
     using System;
     using System.Reflection;
@@ -15,15 +15,27 @@
 
         public TypeBuilder(AppDomain appDomainToUse, string assemblyName, AssemblyBuilderAccess assemblyBuilderAccess, string moduleName) : this(assemblyName, assemblyBuilderAccess, moduleName)
         {
+            if (null == appDomainToUse)
+            {
+                throw new ArgumentNullException(nameof(appDomainToUse));
+            }
+
             _appDomain = appDomainToUse;
         }
 
         public TypeBuilder(string assemblyName, AssemblyBuilderAccess assemblyBuilderAccess, string moduleName)
         {
-            if (null == _appDomain)
+            if (string.IsNullOrWhiteSpace(assemblyName))
             {
-                _appDomain = Thread.GetDomain();
+                throw new ArgumentException("Parameter cannot be empty!", nameof(assemblyName));
             }
+
+            if (string.IsNullOrWhiteSpace(moduleName))
+            {
+                throw new ArgumentException("Parameter cannot be empty!", nameof(moduleName));
+            }
+
+            _appDomain = Thread.GetDomain();
             _assemblyName = new AssemblyName(assemblyName);
             _assemblyBuilder = _appDomain.DefineDynamicAssembly(_assemblyName, assemblyBuilderAccess);
             _moduleBuilder = _assemblyBuilder.DefineDynamicModule(moduleName);
@@ -31,12 +43,22 @@
 
         public TypeBuilder Inicialize(string typeName, TypeAttributes typeAttributes, Type[] implementedInterfaces)
         {
+            if (string.IsNullOrWhiteSpace(typeName))
+            {
+                throw new ArgumentException("Parameter cannot be empty!", nameof(typeName));
+            }
+
             _typeBuilder = _moduleBuilder.DefineType(typeName, typeAttributes, null, implementedInterfaces);
             return this;
         }
 
         public TypeBuilder SetParent(Type parent)
         {
+            if (null == parent)
+            {
+                throw new ArgumentNullException(nameof(parent));
+            }
+
             _typeBuilder.SetParent(parent);
             return this;
         }
@@ -46,6 +68,16 @@
             if (null == attributeType)
             {
                 throw new ArgumentNullException(nameof(attributeType));
+            }
+
+            if (null == attributeConstructorParameters)
+            {
+                throw new ArgumentNullException(nameof(attributeConstructorParameters));
+            }
+
+            if (null == attributeConstuctorArgs)
+            {
+                throw new ArgumentNullException(nameof(attributeConstuctorArgs));
             }
 
             ConstructorInfo ctorInfo = attributeType.GetConstructor(attributeConstructorParameters);

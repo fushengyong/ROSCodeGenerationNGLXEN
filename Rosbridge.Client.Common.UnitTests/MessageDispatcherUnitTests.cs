@@ -1,8 +1,7 @@
-﻿namespace RosbridgeClientCommon.UnitTests
+﻿namespace Rosbridge.Client.Common.UnitTests
 {
     using FluentAssertions;
     using Moq;
-    using Newtonsoft.Json.Linq;
     using NUnit.Framework;
     using Rosbridge.Client.Common;
     using Rosbridge.Client.Common.Enums;
@@ -24,6 +23,13 @@
             _socketMock = new Mock<ISocket>();
             _serializerMock = new Mock<IMessageSerializer>();
             _testClassPartialMock = new Mock<MessageDispatcher>(_socketMock.Object, _serializerMock.Object);
+        }
+
+        [TearDown]
+        public void StockReceivingTask()
+        {
+            _testClassPartialMock.Object._currentState = States.Stopped;
+            _socketMock.SetupGet(socket => socket.IsConnected).Returns(false);
         }
 
         [Test]
@@ -109,29 +115,6 @@
         }
 
         [Test]
-        public async Task StartAsync_UnitTest_EverythingOk_ShouldReceiveEvent()
-        {
-            //arrange
-            byte[] bufferMock = new byte[1];
-            Task<byte[]> receiveAsyncTask = new Task<byte[]>(() => { return bufferMock; });
-            JObject messageMock = new JObject();
-
-            _testClassPartialMock.Object._currentState = States.Stopped;
-            _socketMock.SetupGet(socket => socket.IsConnected).Returns(true);
-            _socketMock.Setup(socket => socket.ReceiveAsync()).Returns(receiveAsyncTask);
-            _serializerMock.Setup(serializer => serializer.Deserialize(bufferMock)).Returns(messageMock);
-
-            //act
-            Task result = _testClassPartialMock.Object.StartAsync();
-
-            //assert
-            await result;
-            _testClassPartialMock.Object.CurrentState.Should().Be(States.Started);
-
-            _socketMock.Verify(socket => socket.ConnectAsync(), Times.Once());
-        }
-
-        [Test]
         public void StopAsync_UnitTest_ObjectDisposed_ShouldThrowObjectDisposedException()
         {
             //arrange
@@ -173,11 +156,122 @@
             _socketMock.Verify(socket => socket.DisconnectAsync(), Times.Once());
         }
 
-        [TearDown]
-        public void StockReceivingTask()
+        [Test]
+        public async Task StopAsync_UnitTest_ReceivingTaskNotNull_ReceivingTaskShouldBeDisposed()
         {
+            //arrange
+            _testClassPartialMock.Object._currentState = States.Started;
+            _testClassPartialMock.Object._receivingTask = Task.Run(() => { });
+
+            //act
+            Task result = _testClassPartialMock.Object.StopAsync();
+
+            //assert
+            await result;
+            result.Should().NotBeNull();
+            _testClassPartialMock.Object._receivingTask.Should().BeNull();
+        }
+
+        [Test]
+        public void SendAsync_UnitTest_ParameterOk_ShouldCallSocketSendAsync()
+        {
+            //arrange
+            object testMessage = new object();
+            byte[] serializedMessage = new byte[1];
+
+            _testClassPartialMock.Object._currentState = States.Started;
+            _serializerMock.Setup(serializer => serializer.Serialize(testMessage)).Returns(serializedMessage);
+
+            //act
+            Task result = _testClassPartialMock.Object.SendAsync(testMessage);
+
+            //assert
+            result.Should().NotBeNull();
+
+            _serializerMock.Verify(serializer => serializer.Serialize(testMessage), Times.Once);
+            _socketMock.Verify(socket => socket.SendAsync(serializedMessage), Times.Once);
+        }
+
+        [Test]
+        public void SendAsync_UnitTest_MessageNull_ShouldThrowArgumentNullException()
+        {
+            //arrange
+            object testMessage = null;
+
+            _testClassPartialMock.Object._currentState = States.Started;
+
+            //act
+            Action act = () => _testClassPartialMock.Object.SendAsync(testMessage);
+
+            //assert
+            act.Should().ThrowExactly<ArgumentNullException>();
+        }
+
+        [Test]
+        public void SendAsync_UnitTest_DisposedIsTrue_ShouldThrowObjectDisposedException()
+        {
+            //arrange
+            object testMessage = new object();
+
+            _testClassPartialMock.Object._disposed = true;
+            _testClassPartialMock.Object._currentState = States.Started;
+
+            //act
+            Action act = () => _testClassPartialMock.Object.SendAsync(testMessage);
+
+            //assert
+            act.Should().ThrowExactly<ObjectDisposedException>();
+        }
+
+        [Test]
+        public void SendAsync_UnitTest_TestClassNotInStartedCase_ShouldThrowMessageDispatcherException()
+        {
+            //arrange
+            object testMessage = new object();
+
             _testClassPartialMock.Object._currentState = States.Stopped;
-            _socketMock.SetupGet(socket => socket.IsConnected).Returns(false);
+
+            //act
+            Action act = () => _testClassPartialMock.Object.SendAsync(testMessage);
+
+            //assert
+            act.Should().ThrowExactly<MessageDispatcherException>();
+        }
+
+        [Test]
+        public void Dispose_UnitTest_AlreadyDisposed_ShouldNotDoAnything()
+        {
+            //arrange
+            _testClassPartialMock.Object._disposed = true;
+            _testClassPartialMock.Object._currentState = States.Started;
+
+            //act
+            _testClassPartialMock.Object.Dispose();
+
+            //assert
+            _testClassPartialMock.Object._currentState.Should().Be(States.Started);
+
+            _socketMock.Verify(socket => socket.DisconnectAsync(), Times.Never);
+            _socketMock.Verify(socket => socket.Dispose(), Times.Never);
+        }
+
+        [Test]
+        public async Task Dispose_UnitTest_NotDisposedYet_ShouldDispose()
+        {
+            //arrange
+            _testClassPartialMock.Object._receivingTask = Task.Run(() => { });
+
+            //act
+            _testClassPartialMock.Object.Dispose();
+
+            //assert
+            await _testClassPartialMock.Object._disposingTask;
+            _testClassPartialMock.Object._disposed.Should().BeTrue();
+            _testClassPartialMock.Object._currentState.Should().Be(States.Stopped);
+            _testClassPartialMock.Object._receivingTask.Should().BeNull();
+
+            _socketMock.Verify(socket => socket.DisconnectAsync(), Times.Once);
+            _socketMock.Verify(socket => socket.Dispose(), Times.Once);
         }
     }
 }

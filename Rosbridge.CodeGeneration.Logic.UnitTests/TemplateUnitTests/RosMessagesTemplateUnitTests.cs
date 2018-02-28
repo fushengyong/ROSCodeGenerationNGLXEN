@@ -1,5 +1,6 @@
 ﻿namespace Rosbridge.CodeGeneration.Logic.UnitTests.TemplateUnitTests
 {
+    using Common.Testing.Utilities.Extensions;
     using FluentAssertions;
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp;
@@ -13,7 +14,6 @@
     using System.IO;
     using System.Linq;
     using System.Reflection;
-    using T4Template.Utilities.Extensions;
     using T4Template.Utilities.Interfaces;
     using T4Template.Utilities.TemplateCompile;
     using T4Template.Utilities.TemplateProcess;
@@ -107,6 +107,7 @@
             //assert
             SyntaxTree parsedTemplateOutput = _templateCompiler.ParseTemplateOutput(templateOutput);
             Assembly compiledAssembly = _templateCompiler.CompileSyntaxTree(parsedTemplateOutput, DefaultCompilationOptions, DefaultReferences, MethodBase.GetCurrentMethod().Name);
+            _templateCompiler.CompilationInfo.Success.Should().BeTrue();
 
             compiledAssembly.Should().NotBeNull();
             compiledAssembly.DefinedTypes.Should().NotBeNull();
@@ -185,6 +186,8 @@
             //assert
             SyntaxTree parsedTemplateOutput = _templateCompiler.ParseTemplateOutput(templateOutput);
             Assembly compiledAssembly = _templateCompiler.CompileSyntaxTree(parsedTemplateOutput, DefaultCompilationOptions, DefaultReferences, MethodBase.GetCurrentMethod().Name);
+
+            _templateCompiler.CompilationInfo.Success.Should().BeTrue();
 
             compiledAssembly.Should().NotBeNull();
             compiledAssembly.DefinedTypes.Should().NotBeNull();

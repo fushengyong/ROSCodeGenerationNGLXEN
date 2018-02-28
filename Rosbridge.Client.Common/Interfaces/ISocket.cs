@@ -4,41 +4,41 @@
     using System.Threading.Tasks;
 
     /// <summary>
-    /// Websocket connection handler
+    /// WebSocket connection handler
     /// </summary>
     public interface ISocket : IDisposable
     {
         /// <summary>
-        /// Rosbridge server URI
+        /// Server URI
         /// </summary>
         Uri URI { get; }
 
         /// <summary>
-        /// Is connected to Rosbridge
+        /// Is connected to server
         /// </summary>
         bool IsConnected { get; }
 
         /// <summary>
-        /// Open a Rosbridge server connection
+        /// Open a server connection
         /// </summary>
         /// <returns></returns>
         Task ConnectAsync();
 
         /// <summary>
-        /// Coloses Rosbridge server connection
+        /// Closes server connection
         /// </summary>
         /// <returns></returns>
         Task DisconnectAsync();
 
         /// <summary>
-        /// Sends message to Rosbridge server
+        /// Sends message to server
         /// </summary>
         /// <param name="buffer"></param>
         /// <returns></returns>
         Task SendAsync(byte[] buffer);
 
         /// <summary>
-        /// Receive message from Rosbridge server
+        /// Receive message from server
         /// </summary>
         /// <returns></returns>
         Task<byte[]> ReceiveAsync();

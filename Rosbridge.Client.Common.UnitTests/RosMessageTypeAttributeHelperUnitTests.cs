@@ -1,10 +1,11 @@
-﻿namespace Rosbridge.Client.Common.UnitTests
+﻿using Common.Testing.Utilities;
+
+namespace Rosbridge.Client.Common.UnitTests
 {
     using FluentAssertions;
     using NUnit.Framework;
     using Rosbridge.Client.Common.Attributes;
     using Rosbridge.Client.Common.Exceptions;
-    using Rosbridge.Client.Common.UnitTests.Utilities;
     using System;
 
     [TestFixture]

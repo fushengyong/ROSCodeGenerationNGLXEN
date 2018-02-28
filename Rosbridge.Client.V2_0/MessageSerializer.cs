@@ -16,6 +16,7 @@
             }
 
             string jsonString = Encoding.ASCII.GetString(buffer, 0, buffer.Length);
+
             return JObject.Parse(jsonString);
         }
 
@@ -27,6 +28,7 @@
             }
 
             string jsonString = JsonConvert.SerializeObject(message);
+
             return Encoding.ASCII.GetBytes(jsonString);
         }
     }

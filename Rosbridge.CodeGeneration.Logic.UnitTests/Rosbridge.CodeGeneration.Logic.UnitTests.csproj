@@ -193,6 +193,10 @@
     <Compile Include="Utilities\ExecutingProjectFinder.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Common.Testing.Utilities\Common.Testing.Utilities.csproj">
+      <Project>{7115af9b-9e38-45da-bb38-2d68cfadff16}</Project>
+      <Name>Common.Testing.Utilities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Rosbridge.Client.Common\Rosbridge.Client.Common.csproj">
       <Project>{b03d0cd3-6bca-4643-a366-d47fe84f87c1}</Project>
       <Name>Rosbridge.Client.Common</Name>

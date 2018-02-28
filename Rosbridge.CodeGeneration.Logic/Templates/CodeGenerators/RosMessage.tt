@@ -11,27 +11,15 @@
 <#@ parameter type="System.Collections.Generic.IEnumerable<Tuple<string, string, int>>" name="ArrayFieldList" #>
 <#@ parameter type="System.Collections.Generic.IDictionary<string, string>" name="FieldList" #>
 <#
-    if(null == MessageTypeAttributeName){
-        throw new ArgumentNullException(nameof(MessageTypeAttributeName));
-    }
-
-    if(string.Empty == MessageTypeAttributeName){
+    if(string.IsNullOrWhiteSpace(MessageTypeAttributeName)){
         throw new ArgumentException("Parameter cannot be empty!", nameof(MessageTypeAttributeName));
     }
     
-    if(null == MessageTypeAttributeNamespace){
-        throw new ArgumentNullException(nameof(MessageTypeAttributeNamespace));
-    }
-
-    if(string.Empty == MessageTypeAttributeNamespace){
+    if(string.IsNullOrWhiteSpace(MessageTypeAttributeNamespace)){
         throw new ArgumentException("Parameter cannot be empty!", nameof(MessageTypeAttributeNamespace));
     }
 
-    if(null == NamespacePrefix){
-        throw new ArgumentNullException(nameof(NamespacePrefix));
-    }
-
-    if(string.Empty == NamespacePrefix){
+    if(string.IsNullOrWhiteSpace(NamespacePrefix)){
         throw new ArgumentException("Parameter cannot be empty!", nameof(NamespacePrefix));
     }
 
@@ -39,19 +27,11 @@
         throw new ArgumentNullException(nameof(DependencyList));
     }
 
-    if(null == Namespace){
-        throw new ArgumentNullException(nameof(Namespace));
-    }
-
-    if(string.Empty == Namespace){
+    if(string.IsNullOrWhiteSpace(Namespace)){
         throw new ArgumentException("Parameter cannot be empty!", nameof(Namespace));
     }
 
-    if(null == Type){
-        throw new ArgumentNullException(nameof(Type));
-    }
-
-    if(string.Empty == Type){
+    if(string.IsNullOrWhiteSpace(Type)){
         throw new ArgumentException("Parameter cannot be empty!", nameof(Type));
     }
 

@@ -24,12 +24,7 @@
                 throw new ArgumentNullException(nameof(@namespace));
             }
 
-            if (null == type)
-            {
-                throw new ArgumentNullException(nameof(type));
-            }
-
-            if (string.Empty == type)
+            if (string.IsNullOrWhiteSpace(type))
             {
                 throw new ArgumentException("Parameter cannot be empty!", nameof(type));
             }

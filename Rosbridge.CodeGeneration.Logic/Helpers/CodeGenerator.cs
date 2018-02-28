@@ -53,32 +53,17 @@
                 throw new ArgumentNullException(nameof(solutionManager));
             }
 
-            if (null == rosMessagesProjectName)
-            {
-                throw new ArgumentNullException(nameof(rosMessagesProjectName));
-            }
-
-            if (string.Empty == rosMessagesProjectName)
+            if (string.IsNullOrWhiteSpace(rosMessagesProjectName))
             {
                 throw new ArgumentException("Parameter cannot be empty!", nameof(rosMessagesProjectName));
             }
 
-            if (null == rosMessageTypeAttributeName)
-            {
-                throw new ArgumentNullException(nameof(rosMessageTypeAttributeName));
-            }
-
-            if (string.Empty == rosMessageTypeAttributeName)
+            if (string.IsNullOrWhiteSpace(rosMessageTypeAttributeName))
             {
                 throw new ArgumentException("Parameter cannot be empty!", nameof(rosMessageTypeAttributeName));
             }
 
-            if (null == rosMessageTypeAttributeNamespace)
-            {
-                throw new ArgumentNullException(nameof(rosMessageTypeAttributeNamespace));
-            }
-
-            if (string.Empty == rosMessageTypeAttributeNamespace)
+            if (string.IsNullOrWhiteSpace(rosMessageTypeAttributeNamespace))
             {
                 throw new ArgumentException("Parameter cannot be empty!", nameof(rosMessageTypeAttributeNamespace));
             }

@@ -8,8 +8,8 @@
 
     public class Publisher<TRosMessage> : IRosPublisher<TRosMessage> where TRosMessage : class, new()
     {
-        private IMessageDispatcher _messageDispatcher;
-        private readonly string _uniqueId;
+        private readonly IMessageDispatcher _messageDispatcher;
+        protected internal readonly string _uniqueId;
 
         public string Topic { get; private set; }
 
@@ -17,11 +17,6 @@
 
         public Publisher(string topic, IMessageDispatcher messageDispatcher, IRosMessageTypeAttributeHelper rosMessageTypeAttributeHelper)
         {
-            if (null == topic)
-            {
-                throw new ArgumentNullException(nameof(topic));
-            }
-
             if (string.IsNullOrWhiteSpace(topic))
             {
                 throw new ArgumentException("Argument cannot be empty!", nameof(topic));
@@ -64,16 +59,18 @@
 
         public Task PublishAsync(TRosMessage message)
         {
+            if (null == message)
+            {
+                throw new ArgumentNullException(nameof(message));
+            }
+
             JObject jsonMessage = JObject.FromObject(message);
 
-            return Task.Run(() =>
+            return _messageDispatcher.SendAsync(new RosPublishMessage()
             {
-                _messageDispatcher.SendAsync(new RosPublishMessage()
-                {
-                    Id = _uniqueId,
-                    Topic = Topic,
-                    Message = jsonMessage
-                });
+                Id = _uniqueId,
+                Topic = Topic,
+                Message = jsonMessage
             });
         }
     }

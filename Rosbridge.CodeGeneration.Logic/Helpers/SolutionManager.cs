@@ -33,32 +33,17 @@
                 throw new ArgumentNullException(nameof(serviceProvider));
             }
 
-            if (null == projectName)
-            {
-                throw new ArgumentNullException(nameof(projectName));
-            }
-
-            if (string.Empty == projectName)
+            if (string.IsNullOrWhiteSpace(projectName))
             {
                 throw new ArgumentException("Parameter cannot be empty!", nameof(projectName));
             }
 
-            if (null == rosMessageTypeAttributeProjectName)
-            {
-                throw new ArgumentNullException(nameof(rosMessageTypeAttributeProjectName));
-            }
-
-            if (string.Empty == rosMessageTypeAttributeProjectName)
+            if (string.IsNullOrWhiteSpace(rosMessageTypeAttributeProjectName))
             {
                 throw new ArgumentException("Parameter cannot be empty!", nameof(rosMessageTypeAttributeProjectName));
             }
 
-            if (null == projectTemplateAndFrameworkVersion)
-            {
-                throw new ArgumentNullException(nameof(projectTemplateAndFrameworkVersion));
-            }
-
-            if (string.Empty == projectTemplateAndFrameworkVersion)
+            if (string.IsNullOrWhiteSpace(projectTemplateAndFrameworkVersion))
             {
                 throw new ArgumentException("Parameter cannot be empty!", nameof(projectTemplateAndFrameworkVersion));
             }
@@ -118,12 +103,7 @@
                 throw new ArgumentNullException(nameof(projectItem));
             }
 
-            if (null == filePath)
-            {
-                throw new ArgumentNullException(nameof(filePath));
-            }
-
-            if (string.Empty == filePath)
+            if (string.IsNullOrWhiteSpace(filePath))
             {
                 throw new ArgumentException("Property cannot be empty!", nameof(filePath));
             }
@@ -145,15 +125,10 @@
         {
             if (null == _project)
             {
-                throw new InvalidOperationException("Project not initialized yet!");
+                throw new InvalidOperationException("Project is not initialized yet!");
             }
 
-            if (null == newDirectoryName)
-            {
-                throw new ArgumentNullException(nameof(newDirectoryName));
-            }
-
-            if (string.Empty == newDirectoryName)
+            if (string.IsNullOrWhiteSpace(newDirectoryName))
             {
                 throw new ArgumentException("Property cannot be empty!", nameof(newDirectoryName));
             }
@@ -165,6 +140,11 @@
 
         public string GetProjectItemFullPath(ProjectItem projectItem)
         {
+            if (null == projectItem)
+            {
+                throw new ArgumentNullException(nameof(projectItem));
+            }
+
             return projectItem.Properties.Item(FULL_PATH_ITEM_PROPERTY).Value.ToString();
         }
 

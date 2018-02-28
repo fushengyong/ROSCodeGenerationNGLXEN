@@ -14,9 +14,9 @@
     public class TemplateCompiler : ITemplateCompiler
     {
         /// <summary>
-        /// Result of the compilation
+        /// Compilation info
         /// </summary>
-        public EmitResult Result { get; private set; }
+        public EmitResult CompilationInfo { get; private set; }
 
         /// <summary>
         /// Compile the given Syntax Tree with the given parameters. Load the compiled assembly to the current AppDomain
@@ -32,8 +32,8 @@
             compilation = compilation.WithReferences(references);
             using (MemoryStream stream = new MemoryStream())
             {
-                Result = compilation.Emit(stream);
-                if (Result.Success)
+                CompilationInfo = compilation.Emit(stream);
+                if (CompilationInfo.Success)
                 {
                     Assembly loadedAssembly = Assembly.Load(stream.GetBuffer());
                     return loadedAssembly;

@@ -1,4 +1,4 @@
-﻿namespace T4Template.Utilities.Extensions
+﻿namespace Common.Testing.Utilities.Extensions
 {
     using System;
     using System.CodeDom.Compiler;
@@ -13,6 +13,11 @@
         /// <returns></returns>
         public static bool Any(this CompilerErrorCollection errorCollection, Func<CompilerError, bool> predicate)
         {
+            if (null == predicate)
+            {
+                throw new ArgumentNullException();
+            }
+
             foreach (CompilerError error in errorCollection)
             {
                 if (predicate(error))
