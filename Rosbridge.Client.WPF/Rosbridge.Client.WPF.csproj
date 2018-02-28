@@ -127,6 +127,10 @@
       <Project>{FBC42B0A-715F-4ABF-881E-6F7E0E8BF54A}</Project>
       <Name>Rosbridge.Client.V2_0</Name>
     </ProjectReference>
+    <ProjectReference Include="..\RosMessages\RosMessages.csproj">
+      <Project>{3830d6d6-d3c4-471a-8026-35f5d3aa6815}</Project>
+      <Name>RosMessages</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

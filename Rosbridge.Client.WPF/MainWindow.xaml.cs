@@ -8,6 +8,8 @@ using System.Windows;
 
 namespace Rosbridge.Client.WPF
 {
+    using System.Threading;
+
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
@@ -81,7 +83,7 @@ namespace Rosbridge.Client.WPF
                     {
                         try
                         {
-                            _messageDispatcher = new MessageDispatcher(new Socket(rosbridgeUri), new MessageSerializer());
+                            _messageDispatcher = new MessageDispatcher(new Socket(rosbridgeUri, new ClientWebSocketWrapper(), new CancellationTokenSource()), new MessageSerializer());
                             await _messageDispatcher.StartAsync();
 
                             if (_messageDispatcher.CurrentState == Rosbridge.Client.Common.Enums.States.Started)

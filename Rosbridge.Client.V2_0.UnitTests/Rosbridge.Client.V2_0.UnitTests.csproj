@@ -70,6 +70,7 @@
     <Compile Include="MessageSerializerUnitTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PublisherUnitTests.cs" />
+    <Compile Include="SocketUnitTests.cs" />
     <Compile Include="SubscriberUnitTests.cs" />
   </ItemGroup>
   <ItemGroup>
