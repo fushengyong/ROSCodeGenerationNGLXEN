@@ -7,10 +7,10 @@
 
     public class TypeBuilder
     {
-        private AppDomain _appDomain;
-        private AssemblyName _assemblyName;
-        private AssemblyBuilder _assemblyBuilder;
-        private ModuleBuilder _moduleBuilder;
+        private readonly AppDomain _appDomain;
+        private readonly AssemblyName _assemblyName;
+        private readonly AssemblyBuilder _assemblyBuilder;
+        private readonly ModuleBuilder _moduleBuilder;
         private System.Reflection.Emit.TypeBuilder _typeBuilder;
 
         public TypeBuilder(AppDomain appDomainToUse, string assemblyName, AssemblyBuilderAccess assemblyBuilderAccess, string moduleName) : this(assemblyName, assemblyBuilderAccess, moduleName)
