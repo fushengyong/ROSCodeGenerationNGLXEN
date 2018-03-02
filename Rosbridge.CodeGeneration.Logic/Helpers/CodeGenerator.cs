@@ -19,16 +19,16 @@
         private const string ROS_MESSAGE_CODE_GENERATION_TEMPLATE_RELATIVE_PATH = @"CodeGenerators\RosMessage.tt";
         private const string CUSTOM_TIME_DATA_TEMPLATE_RELATIVE_PATH = @"CodeGenerators\TimeData.tt";
 
-        private ITextTemplatingEngineHost _textTemplatingEngineHost;
-        private ITextTemplating _textTemplating;
-        private ITextTemplatingSessionHost _textTemplatingSessionHost;
-        private ISolutionManager _solutionManager;
-        private string _defaultNamespace;
-        private string _rosMessageTypeAttributeName;
-        private string _rosMessageTypeAttributeNamespace;
-        private string _rosMessageCodeGenerationTemplatePath;
-        private string _customTimeDataTemplatePath;
-        private string _rosMessageCodeGenerationTemplateContent;
+        private readonly ITextTemplatingEngineHost _textTemplatingEngineHost;
+        private readonly ITextTemplating _textTemplating;
+        private readonly ITextTemplatingSessionHost _textTemplatingSessionHost;
+        private readonly ISolutionManager _solutionManager;
+        private readonly string _defaultNamespace;
+        private readonly string _rosMessageTypeAttributeName;
+        private readonly string _rosMessageTypeAttributeNamespace;
+        private readonly string _rosMessageCodeGenerationTemplatePath;
+        private readonly string _customTimeDataTemplatePath;
+        private readonly string _rosMessageCodeGenerationTemplateContent;
 
         public CodeGenerator(ITextTemplatingEngineHost host, ITextTemplatingSessionHost textTemplatingSessionHost, ITextTemplating textTemplating, ISolutionManager solutionManager, string rosMessagesProjectName, string rosMessageTypeAttributeName, string rosMessageTypeAttributeNamespace)
         {
