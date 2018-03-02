@@ -8,7 +8,7 @@
     /// <summary>
     /// DTO for an .srv file
     /// </summary>
-    public class SrvFile : RosFile
+    public class SrvFile : RosFile, ISrvFile
     {
         private const string INPUT_OUTPUT_SEPARATOR = "---";
         private const string REQUEST_NAME = "Request";
@@ -16,18 +16,17 @@
         private const string TYPE_SEPARATOR = "__";
 
         /// <summary>
-        /// Service request message
-        /// </summary>
-        public MsgFile Request { get; private set; }
-        /// <summary>
-        /// Service response message
-        /// </summary>
-        public MsgFile Response { get; private set; }
-
-        /// <summary>
         /// YAML parser
         /// </summary>
         private IYAMLParser _yamlParser;
+        /// <summary>
+        /// Service request message
+        /// </summary>
+        public IMsgFile Request { get; private set; }
+        /// <summary>
+        /// Service response message
+        /// </summary>
+        public IMsgFile Response { get; private set; }
 
         public SrvFile(IYAMLParser yamlParser, FileInfo file) : base(file)
         {

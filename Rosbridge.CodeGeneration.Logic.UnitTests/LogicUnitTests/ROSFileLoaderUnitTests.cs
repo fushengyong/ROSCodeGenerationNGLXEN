@@ -1,6 +1,5 @@
 ﻿namespace Rosbridge.CodeGeneration.Logic.UnitTests.LogicUnitTests
 {
-    using BaseClasses;
     using Constants;
     using FluentAssertions;
     using Helpers;
@@ -28,15 +27,15 @@
         public void LoadRosFiles_UnitTest_ArgumentsOK_ReturnCorrectSetsAllHelperMethodsCalled()
         {
             //arrange
-            ISet<MsgFile> messageFileSet = new HashSet<MsgFile>();
-            ISet<SrvFile> serviceFileSet = new HashSet<SrvFile>();
+            ISet<IMsgFile> messageFileSet = new HashSet<IMsgFile>();
+            ISet<ISrvFile> serviceFileSet = new HashSet<ISrvFile>();
             string directoryPath = "testDirectoryPath";
 
             ISet<FileInfo> messageFileInfoSet = new HashSet<FileInfo>();
             ISet<FileInfo> serviceFileInfoSet = new HashSet<FileInfo>();
 
-            IEnumerable<MsgFile> messageFileCollection = new List<MsgFile>();
-            IEnumerable<SrvFile> serviceFileCollection = new List<SrvFile>();
+            IEnumerable<IMsgFile> messageFileCollection = new List<IMsgFile>();
+            IEnumerable<ISrvFile> serviceFileCollection = new List<ISrvFile>();
 
             _testClassPartialMock.Setup(fileLoader => fileLoader.IsDirectoryExists(directoryPath)).Returns(true);
             _testClassPartialMock.Setup(fileLoader => fileLoader.LoadFiles(
@@ -68,8 +67,8 @@
         public void LoadRosFiles_UnitTest_MessageFileSetIsNull_ShouldThrowArgumentNullException()
         {
             //arrange
-            ISet<MsgFile> messageFileSet = null;
-            ISet<SrvFile> serviceFileSet = new HashSet<SrvFile>();
+            ISet<IMsgFile> messageFileSet = null;
+            ISet<ISrvFile> serviceFileSet = new HashSet<ISrvFile>();
             string directoryPath = "testDirectoryPath";
 
             //act
@@ -83,8 +82,8 @@
         public void LoadRosFiles_UnitTest_ServiceFileSetIsNull_ShouldThrowArgumentNullException()
         {
             //arrange
-            ISet<MsgFile> messageFileSet = new HashSet<MsgFile>();
-            ISet<SrvFile> serviceFileSet = null;
+            ISet<IMsgFile> messageFileSet = new HashSet<IMsgFile>();
+            ISet<ISrvFile> serviceFileSet = null;
             string directoryPath = "testDirectoryPath";
 
             //act
@@ -98,8 +97,8 @@
         public void LoadRosFiles_UnitTest_DirectoryPathIsNull_ShouldThrowArgumentNullException()
         {
             //arrange
-            ISet<MsgFile> messageFileSet = new HashSet<MsgFile>();
-            ISet<SrvFile> serviceFileSet = new HashSet<SrvFile>();
+            ISet<IMsgFile> messageFileSet = new HashSet<IMsgFile>();
+            ISet<ISrvFile> serviceFileSet = new HashSet<ISrvFile>();
             string directoryPath = null;
 
             //act
@@ -113,8 +112,8 @@
         public void LoadRosFiles_UnitTest_DirectoryPathIsEmpty_ShouldThrowArgumentNullException()
         {
             //arrange
-            ISet<MsgFile> messageFileSet = new HashSet<MsgFile>();
-            ISet<SrvFile> serviceFileSet = new HashSet<SrvFile>();
+            ISet<IMsgFile> messageFileSet = new HashSet<IMsgFile>();
+            ISet<ISrvFile> serviceFileSet = new HashSet<ISrvFile>();
             string directoryPath = string.Empty;
 
             //act
@@ -128,8 +127,8 @@
         public void LoadRosFiles_UnitTest_IsDirectoryExistsMethodReturnFalse_ShouldThrowDirectoryNotFoundException()
         {
             //arrange
-            ISet<MsgFile> messageFileSet = new HashSet<MsgFile>();
-            ISet<SrvFile> serviceFileSet = new HashSet<SrvFile>();
+            ISet<IMsgFile> messageFileSet = new HashSet<IMsgFile>();
+            ISet<ISrvFile> serviceFileSet = new HashSet<ISrvFile>();
             string directoryPath = "testDirectoryPath";
 
             _testClassPartialMock.Setup(fileLoader => fileLoader.IsDirectoryExists(directoryPath)).Returns(false);

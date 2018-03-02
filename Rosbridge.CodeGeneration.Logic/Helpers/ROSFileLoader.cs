@@ -31,7 +31,7 @@
         /// <param name="messageFileSet"></param>
         /// <param name="serviceFileSet"></param>
         /// <param name="directoryPath"></param>
-        public void LoadRosFiles(ISet<MsgFile> messageFileSet, ISet<SrvFile> serviceFileSet, string directoryPath)
+        public void LoadRosFiles(ISet<IMsgFile> messageFileSet, ISet<ISrvFile> serviceFileSet, string directoryPath)
         {
             if (null == messageFileSet)
             {
@@ -77,12 +77,12 @@
                 .Select(filePath => new FileInfo(filePath)));
         }
 
-        protected internal virtual IEnumerable<MsgFile> CreateMessageFileCollection(ISet<FileInfo> messageFileInfoSet)
+        protected internal virtual IEnumerable<IMsgFile> CreateMessageFileCollection(ISet<FileInfo> messageFileInfoSet)
         {
             return messageFileInfoSet.Select(fileInfo => new MsgFile(_yamlParser, fileInfo));
         }
 
-        protected internal virtual IEnumerable<SrvFile> CreateServiceFileCollection(ISet<FileInfo> serviceFileInfoSet)
+        protected internal virtual IEnumerable<ISrvFile> CreateServiceFileCollection(ISet<FileInfo> serviceFileInfoSet)
         {
             return serviceFileInfoSet.Select(fileInfo => new SrvFile(_yamlParser, fileInfo));
         }

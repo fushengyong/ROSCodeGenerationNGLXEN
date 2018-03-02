@@ -9,7 +9,7 @@
     /// <summary>
     /// DTO for an .msg file
     /// </summary>
-    public class MsgFile : RosFile
+    public class MsgFile : RosFile, IMsgFile
     {
         /// <summary>
         /// Value of the standard namespace property
@@ -31,7 +31,7 @@
         /// <summary>
         /// Message dependeny collection
         /// </summary>
-        public ISet<MessageType> DependencySet { get; private set; }
+        public ISet<RosType> DependencySet { get; private set; }
         /// <summary>
         /// Message field collection
         /// </summary>
@@ -56,7 +56,7 @@
             this.FieldSet = new HashSet<MessageField>();
             this.ConstantFieldSet = new HashSet<MessageField>();
             this.ArrayFieldSet = new HashSet<MessageField>();
-            this.DependencySet = new HashSet<MessageType>();
+            this.DependencySet = new HashSet<RosType>();
             ProcessFields();
         }
 
@@ -71,7 +71,7 @@
             this.FieldSet = new HashSet<MessageField>();
             this.ConstantFieldSet = new HashSet<MessageField>();
             this.ArrayFieldSet = new HashSet<MessageField>();
-            this.DependencySet = new HashSet<MessageType>();
+            this.DependencySet = new HashSet<RosType>();
             ProcessFields();
         }
 
@@ -104,7 +104,7 @@
 
                 if (!string.IsNullOrEmpty(field.Type.Namespace) && this.Type.Namespace != field.Type.Namespace)
                 {
-                    DependencySet.Add(new MessageType(field.Type.Namespace, field.Type.Type));
+                    DependencySet.Add(new RosType(field.Type.Namespace, field.Type.Type));
                 }
             }
         }

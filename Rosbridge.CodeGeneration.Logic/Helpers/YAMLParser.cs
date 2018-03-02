@@ -18,7 +18,7 @@
         private const string YAMLParserRegexString = @"^\s*(?:(?<" + NamespaceRegexGroupName + @">\w+)\/)?(?<" + TypeRegexGroupName + @">\w+)\b(?<" + IsArrayRegexGroupName + @">\[(?<" + ElementCountRegexGroupName + @">\d*)\])?\s+(?<" + VariableNameRegexGroupName + @">\w+)(?:\s*=\s*(?<" + ConstantValueRegexGroupName + @">\w+))?";
         private static Regex YAMLParserRegex = new Regex(YAMLParserRegexString, RegexOptions.IgnoreCase | RegexOptions.Multiline | RegexOptions.Compiled);
 
-        private readonly IDictionary<string, string> _primitiveTypeDictionary;
+        protected internal readonly IDictionary<string, string> _primitiveTypeDictionary;
 
         public YAMLParser(IDictionary<string, string> primitiveTypeDictionary)
         {
@@ -30,7 +30,7 @@
             _primitiveTypeDictionary = primitiveTypeDictionary;
         }
 
-        public void SetMsgFileFieldsFromYAMLString(string yamlString, MsgFile msgFile)
+        public void SetMsgFileFieldsFromYAMLString(string yamlString, IMsgFile msgFile)
         {
             if (null == yamlString)
             {
@@ -42,7 +42,7 @@
                 throw new ArgumentNullException(nameof(msgFile));
             }
 
-            foreach (Match currentMatch in YAMLParserRegex.Matches(yamlString))
+            foreach (Match currentMatch in RegexMatch(yamlString))
             {
                 if (currentMatch.Success)
                 {
@@ -50,7 +50,7 @@
                     string type = currentMatch.Groups[TypeRegexGroupName].Value;
                     bool isArray = currentMatch.Groups[IsArrayRegexGroupName].Success;
                     int elementCount = 0;
-                    bool hasCount = int.TryParse(currentMatch.Groups[ElementCountRegexGroupName].Value, out elementCount);
+                    int.TryParse(currentMatch.Groups[ElementCountRegexGroupName].Value, out elementCount);
                     string name = currentMatch.Groups[VariableNameRegexGroupName].Value;
                     string memberValue = currentMatch.Groups[ConstantValueRegexGroupName].Value;
 
@@ -70,6 +70,11 @@
                     }
                 }
             }
+        }
+
+        protected internal MatchCollection RegexMatch(string yamlString)
+        {
+            return YAMLParserRegex.Matches(yamlString);
         }
     }
 }

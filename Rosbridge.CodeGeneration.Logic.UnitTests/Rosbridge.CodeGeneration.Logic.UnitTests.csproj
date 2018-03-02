@@ -190,8 +190,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="LogicUnitTests\ConfigFinderUnitTests.cs" />
     <Compile Include="LogicUnitTests\ROSFileLoaderUnitTests.cs" />
+    <Compile Include="LogicUnitTests\YAMLParserUnitTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TemplateUnitTests\RosMessagesTemplateUnitTests.cs" />
     <Compile Include="TemplateUnitTests\TimeDataTemplateUnitTests.cs" />

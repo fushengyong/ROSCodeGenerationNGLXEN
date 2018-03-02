@@ -1,7 +1,5 @@
 ﻿namespace Rosbridge.CodeGeneration.Logic.Interfaces
 {
-    using Rosbridge.CodeGeneration.Logic.BaseClasses;
-
     /// <summary>
     /// YAML string parser
     /// </summary>
@@ -12,6 +10,6 @@
         /// </summary>
         /// <param name="yamlString"></param>
         /// <param name="msgFile"></param>
-        void SetMsgFileFieldsFromYAMLString(string yamlString, MsgFile msgFile);
+        void SetMsgFileFieldsFromYAMLString(string yamlString, IMsgFile msgFile);
     }
 }
