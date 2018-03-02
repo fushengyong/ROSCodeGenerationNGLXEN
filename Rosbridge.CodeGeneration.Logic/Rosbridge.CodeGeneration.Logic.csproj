@@ -13,16 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="Templates\CodeGenerators\RosMessage.txt" />
     <None Remove="Templates\CodeGenerators\TimeData.txt" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Include="Templates\CodeGenerators\RosMessage.txt">
-      <DependentUpon>RosMessage.tt</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
   </ItemGroup>
 
   <ItemGroup>
@@ -51,13 +42,13 @@
       <Generator>TextTemplatingFileGenerator</Generator>
     </None>
     <None Update="Templates\Main.tt">
-      <LastGenOutput>Main.txt</LastGenOutput>
       <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Main.txt</LastGenOutput>
     </None>
     <None Update="Templates\Main.txt">
-      <DependentUpon>Main.tt</DependentUpon>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
+      <DependentUpon>Main.tt</DependentUpon>
     </None>
   </ItemGroup>
 

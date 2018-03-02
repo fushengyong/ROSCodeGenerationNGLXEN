@@ -30,7 +30,7 @@
             {
                 if (Regex.IsMatch(projectItem.Name, "(app|web).config", RegexOptions.IgnoreCase | RegexOptions.Compiled))
                 {
-                    configFilePath = projectItem.get_FileNames(0);
+                    configFilePath = projectItem.FileNames[0];
                 }
             }
 

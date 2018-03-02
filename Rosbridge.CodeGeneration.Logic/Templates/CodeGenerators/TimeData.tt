@@ -16,8 +16,15 @@ namespace <#= Namespace #>{
         public uint sec { get; set; }
         public uint nsec { get; set; }
 
-        public bool Equals(<#= Type #> other){
-            return (sec == other.sec && nsec == other.nsec);
+        public override bool Equals(object obj){
+            if(!(obj is <#= Type #>))
+            {
+                return false;
+            }
+            
+            <#= Type #> other = (<#= Type #>) obj;           
+
+            return (this.sec == other.sec && this.nsec == other.nsec);
         }    
     }
 }

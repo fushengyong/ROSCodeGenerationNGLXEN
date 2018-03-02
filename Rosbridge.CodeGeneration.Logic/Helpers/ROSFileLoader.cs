@@ -48,27 +48,43 @@
                 throw new ArgumentException("Parameter cannot be empty!", nameof(directoryPath));
             }
 
-            if (!Directory.Exists(directoryPath))
+            if (!IsDirectoryExists(directoryPath))
             {
                 throw new DirectoryNotFoundException(directoryPath);
             }
 
-            ISet<FileInfo> msgFileInfoSet = new HashSet<FileInfo>(
-                Directory.GetFiles(
-                    directoryPath,
-                    $"*.{RosConstants.FileExtensions.MSG_FILE_EXTENSION}",
-                    SearchOption.AllDirectories
-                ).Select(filePath => new FileInfo(filePath)));
+            ISet<FileInfo> msgFileInfoSet = LoadFiles(directoryPath, RosConstants.FileExtensions.MSG_FILE_EXTENSION,
+                SearchOption.AllDirectories);
 
-            ISet<FileInfo> srvFileInfoSet = new HashSet<FileInfo>(
-                Directory.GetFiles(
-                    directoryPath,
-                    $"*.{RosConstants.FileExtensions.MSG_FILE_EXTENSION}",
-                    SearchOption.AllDirectories
-                ).Select(filePath => new FileInfo(filePath)));
+            ISet<FileInfo> srvFileInfoSet = LoadFiles(directoryPath, RosConstants.FileExtensions.SRV_FILE_EXTENSION,
+                SearchOption.AllDirectories);
 
-            messageFileSet.UnionWith(msgFileInfoSet.Select(FileInfo => new MsgFile(_yamlParser, FileInfo)));
-            serviceFileSet.UnionWith(srvFileInfoSet.Select(FileInfo => new SrvFile(_yamlParser, FileInfo)));
+            messageFileSet.UnionWith(CreateMessageFileCollection(msgFileInfoSet));
+            serviceFileSet.UnionWith(CreateServiceFileCollection(srvFileInfoSet));
+        }
+
+        protected internal virtual bool IsDirectoryExists(string directoryPath)
+        {
+            return Directory.Exists(directoryPath);
+        }
+
+        protected internal virtual ISet<FileInfo> LoadFiles(string directoryPath, string fileExtension, SearchOption searchOption)
+        {
+            return new HashSet<FileInfo>(Directory.GetFiles(
+                    directoryPath,
+                    $"*.{fileExtension}",
+                    searchOption)
+                .Select(filePath => new FileInfo(filePath)));
+        }
+
+        protected internal virtual IEnumerable<MsgFile> CreateMessageFileCollection(ISet<FileInfo> messageFileInfoSet)
+        {
+            return messageFileInfoSet.Select(fileInfo => new MsgFile(_yamlParser, fileInfo));
+        }
+
+        protected internal virtual IEnumerable<SrvFile> CreateServiceFileCollection(ISet<FileInfo> serviceFileInfoSet)
+        {
+            return serviceFileInfoSet.Select(fileInfo => new SrvFile(_yamlParser, fileInfo));
         }
     }
 }

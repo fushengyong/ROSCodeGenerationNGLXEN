@@ -1,1 +1,17 @@
-﻿
+﻿namespace wpf_msgs{
+    public struct WindowState{
+        public uint sec { get; set; }
+        public uint nsec { get; set; }
+
+        public override bool Equals(object obj){
+            if(!(obj is WindowState))
+            {
+                return false;
+            }
+            
+            WindowState other = (WindowState) obj;           
+
+            return (this.sec == other.sec && this.nsec == other.nsec);
+        }    
+    }
+}
