@@ -71,9 +71,6 @@
                 WebSocketMessageType.Text,
                 true,
                 _cancellationTokenSource.Token));
-            _clientWebSocketMock.Verify(clientWebSocket => clientWebSocket.ReceiveAsync(
-                It.IsAny<ArraySegment<byte>>(),
-                _cancellationTokenSource.Token), Times.Once);
         }
 
         [Test]
@@ -101,9 +98,6 @@
                 WebSocketMessageType.Text,
                 true,
                 _cancellationTokenSource.Token));
-            _clientWebSocketMock.Verify(clientWebSocket => clientWebSocket.ReceiveAsync(
-                It.IsAny<ArraySegment<byte>>(),
-                _cancellationTokenSource.Token), Times.Once);
         }
     }
 }
