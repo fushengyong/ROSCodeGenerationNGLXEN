@@ -11,12 +11,15 @@
         throw new ArgumentException("The argument cannot be empty!", nameof(Type));
     }
 #>
-namespace <#= Namespace #>{
-    public struct <#= Type #>{
+namespace <#= Namespace #>
+{
+    public struct <#= Type #>
+    {
         public uint sec { get; set; }
         public uint nsec { get; set; }
 
-        public override bool Equals(object obj){
+        public override bool Equals(object obj)
+        {
             if(!(obj is <#= Type #>))
             {
                 return false;
@@ -27,17 +30,23 @@ namespace <#= Namespace #>{
             return (this.sec == other.sec && this.nsec == other.nsec);
         }
 
-        public static bool operator ==(<#= Type #> obj1, <#= Type #> obj2) {
-            if (object.ReferenceEquals(null, obj1)){
+        public static bool operator ==(<#= Type #> obj1, <#= Type #> obj2)
+        {
+            if (object.ReferenceEquals(null, obj1))
+            {
                 return object.ReferenceEquals(null, obj2);
             }
+
             return obj1.Equals(obj2);
         }
 
-        public static bool operator !=(<#= Type #> obj1, <#= Type #> obj2) {
-            if (object.ReferenceEquals(null, obj1)){
+        public static bool operator !=(<#= Type #> obj1, <#= Type #> obj2)
+        {
+            if (object.ReferenceEquals(null, obj1))
+            {
                 return !object.ReferenceEquals(null, obj2);
             }
+
             return !obj1.Equals(obj2);
         }  
     }
