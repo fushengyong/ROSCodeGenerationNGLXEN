@@ -99,6 +99,12 @@
             resultType.Name.Should().Be(testType);
             resultType.IsValueType.Should().BeTrue();
 
+            MethodInfo equalsMethod = resultType.GetMethod("Equals");
+            equalsMethod.Should().NotBeNull();
+            equalsMethod.ReturnType.Should().Be(typeof(Boolean));
+            equalsMethod.IsPublic.Should().BeTrue();
+            equalsMethod.IsVirtual.Should().BeTrue();
+
             IEnumerable<MethodInfo> resultMethodCollection = resultType.GetMethods();
             resultMethodCollection.Should().NotBeNull();
 

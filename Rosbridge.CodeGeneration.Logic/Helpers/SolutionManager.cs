@@ -20,11 +20,11 @@
         private const string PROJECT_LANGUAGE = "CSharp";
         private const string DEFAULT_CLASS_NAME = "Class1.cs";
 
-        private Solution2 _solution;
+        private readonly Solution2 _solution;
+        private readonly string _projectName;
+        private readonly string _rosMessageTypeAttributeProjectName;
+        private readonly string _projectTemplateAndFrameworkVersion;
         private Project _project;
-        private string _projectName;
-        private string _projectTemplateAndFrameworkVersion;
-        private string _rosMessageTypeAttributeProjectName;
 
         public SolutionManager(IServiceProvider serviceProvider, string projectName, string rosMessageTypeAttributeProjectName, string projectTemplateAndFrameworkVersion)
         {
@@ -85,8 +85,8 @@
 
             if (null != clientProject)
             {
-                VSProject newProjectVSProj = (VSProject)newProject.Object;
-                newProjectVSProj.References.AddProject(clientProject);
+                VSProject newProjectVSProject = (VSProject)newProject.Object;
+                newProjectVSProject.References.AddProject(clientProject);
             }
             else
             {

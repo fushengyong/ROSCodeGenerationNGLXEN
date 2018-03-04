@@ -6,7 +6,7 @@
     /// <summary>
     /// ROS message type class. Contains type's namespace and type's name
     /// </summary>
-    public class MessageType
+    public class RosType
     {
         /// <summary>
         /// Type's namespace
@@ -17,7 +17,7 @@
         /// </summary>
         public string Type { get; set; }
 
-        public MessageType(string @namespace, string type)
+        public RosType(string @namespace, string type)
         {
             if (null == @namespace)
             {
@@ -35,9 +35,9 @@
 
         public override bool Equals(object obj)
         {
-            if (obj is MessageType)
+            if (obj is RosType)
             {
-                MessageType other = obj as MessageType;
+                RosType other = obj as RosType;
                 return this.Namespace == other.Namespace && this.Type == other.Type;
             }
             return false;

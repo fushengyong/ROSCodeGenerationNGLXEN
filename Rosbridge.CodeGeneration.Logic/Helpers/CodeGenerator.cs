@@ -3,7 +3,6 @@
     using EnvDTE;
     using Microsoft.VisualStudio.TextTemplating;
     using Microsoft.VisualStudio.TextTemplating.VSHost;
-    using Rosbridge.CodeGeneration.Logic.BaseClasses;
     using Rosbridge.CodeGeneration.Logic.Constants;
     using Rosbridge.CodeGeneration.Logic.Exceptions;
     using Rosbridge.CodeGeneration.Logic.Interfaces;
@@ -20,16 +19,16 @@
         private const string ROS_MESSAGE_CODE_GENERATION_TEMPLATE_RELATIVE_PATH = @"CodeGenerators\RosMessage.tt";
         private const string CUSTOM_TIME_DATA_TEMPLATE_RELATIVE_PATH = @"CodeGenerators\TimeData.tt";
 
-        private ITextTemplatingEngineHost _textTemplatingEngineHost;
-        private ITextTemplating _textTemplating;
-        private ITextTemplatingSessionHost _textTemplatingSessionHost;
-        private ISolutionManager _solutionManager;
-        private string _defaultNamespace;
-        private string _rosMessageTypeAttributeName;
-        private string _rosMessageTypeAttributeNamespace;
-        private string _rosMessageCodeGenerationTemplatePath;
-        private string _customTimeDataTemplatePath;
-        private string _rosMessageCodeGenerationTemplateContent;
+        private readonly ITextTemplatingEngineHost _textTemplatingEngineHost;
+        private readonly ITextTemplating _textTemplating;
+        private readonly ITextTemplatingSessionHost _textTemplatingSessionHost;
+        private readonly ISolutionManager _solutionManager;
+        private readonly string _defaultNamespace;
+        private readonly string _rosMessageTypeAttributeName;
+        private readonly string _rosMessageTypeAttributeNamespace;
+        private readonly string _rosMessageCodeGenerationTemplatePath;
+        private readonly string _customTimeDataTemplatePath;
+        private readonly string _rosMessageCodeGenerationTemplateContent;
 
         public CodeGenerator(ITextTemplatingEngineHost host, ITextTemplatingSessionHost textTemplatingSessionHost, ITextTemplating textTemplating, ISolutionManager solutionManager, string rosMessagesProjectName, string rosMessageTypeAttributeName, string rosMessageTypeAttributeNamespace)
         {
@@ -82,7 +81,7 @@
             _solutionManager.Initialize();
         }
 
-        public void GenerateRosMessages(ISet<MsgFile> messageSet, string standardNamespace)
+        public void GenerateRosMessages(ISet<IMsgFile> messageSet, string standardNamespace)
         {
             if (null == messageSet)
             {
@@ -94,11 +93,11 @@
                 throw new NoStandardNamespaceException();
             }
 
-            IEnumerable<IGrouping<string, MsgFile>> messageGroupList = messageSet.GroupBy(msg => msg.Type.Namespace);
+            IEnumerable<IGrouping<string, IMsgFile>> messageGroupList = messageSet.GroupBy(msg => msg.Type.Namespace);
 
             GenerateStandardNamespaceMessages(messageGroupList, standardNamespace);
 
-            foreach (IGrouping<string, MsgFile> messageGroup in messageGroupList.Where(group => group.Key != standardNamespace))
+            foreach (IGrouping<string, IMsgFile> messageGroup in messageGroupList.Where(group => group.Key != standardNamespace))
             {
                 string @namespace = messageGroup.Key;
 
@@ -106,9 +105,9 @@
             }
         }
 
-        private void GenerateStandardNamespaceMessages(IEnumerable<IGrouping<string, MsgFile>> messageGroupList, string standardNamespace)
+        private void GenerateStandardNamespaceMessages(IEnumerable<IGrouping<string, IMsgFile>> messageGroupList, string standardNamespace)
         {
-            IGrouping<string, MsgFile> standardNamespaceGroup = messageGroupList.SingleOrDefault(group => group.Key == standardNamespace);
+            IGrouping<string, IMsgFile> standardNamespaceGroup = messageGroupList.SingleOrDefault(group => group.Key == standardNamespace);
 
             if (null == standardNamespaceGroup)
             {
@@ -129,7 +128,7 @@
             TransformTemplateToFile(session, standardNamespaceDirectoryProjectItem, _customTimeDataTemplatePath, File.ReadAllText(_customTimeDataTemplatePath), RosConstants.MessageTypes.CUSTOM_TIME_PRIMITIVE_TYPE);
         }
 
-        private ProjectItem GenerateMessagesByNamespace(string @namespace, IGrouping<string, MsgFile> messageGroup, string standardNamespace)
+        private ProjectItem GenerateMessagesByNamespace(string @namespace, IGrouping<string, IMsgFile> messageGroup, string standardNamespace)
         {
             ProjectItem groupDirectoryProjectItem = _solutionManager.AddNewDirectoryToProject(@namespace);
 
@@ -138,9 +137,9 @@
             return groupDirectoryProjectItem;
         }
 
-        private void GenerateMessages(ProjectItem directoryProjectItem, IEnumerable<MsgFile> messageList, string standardNamespace)
+        private void GenerateMessages(ProjectItem directoryProjectItem, IEnumerable<IMsgFile> messageList, string standardNamespace)
         {
-            foreach (MsgFile message in messageList)
+            foreach (IMsgFile message in messageList)
             {
                 ITextTemplatingSession session = _textTemplatingSessionHost.CreateSession();
 

@@ -40,8 +40,8 @@
     IYAMLParser yamlParser = new YAMLParser(RosConstants.MessageTypes.PrimitiveTypeDictionary);
     ROSFileLoader fileLoader = new ROSFileLoader(yamlParser);
 
-    ISet<MsgFile> messageFileSet = new HashSet<MsgFile>();
-    ISet<SrvFile> serviceFileSet = new HashSet<SrvFile>();
+    ISet<IMsgFile> messageFileSet = new HashSet<IMsgFile>();
+    ISet<ISrvFile> serviceFileSet = new HashSet<ISrvFile>();
 
     fileLoader.LoadRosFiles(messageFileSet, serviceFileSet, rosMessagesDirectoryPath);
 

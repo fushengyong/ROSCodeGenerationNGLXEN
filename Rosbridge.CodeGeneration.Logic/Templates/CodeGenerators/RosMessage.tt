@@ -49,12 +49,13 @@
 #>
 namespace <#= AddPrefixToNamespace(Namespace) #> {
     using System;
+    using System.Linq;
     using <#= MessageTypeAttributeNamespace #>;
 <# foreach(string dependencyNamespace in DependencyList){ #>
     using <#= AddPrefixToNamespace(dependencyNamespace) #>;     
 <# }#>
     [<#= MessageTypeAttributeName #>("<#= Namespace #>/<#= Type #>")]
-    public class <#= Type #> { 
+    public sealed class <#= Type #> { 
 <# foreach(Tuple<string, string, string> constantField in ConstantFieldList){ #>
         public const <#= constantField.Item1 #> <#= constantField.Item2 #> = <# if(constantField.Item1.ToLower() == "char"){ #>'<#= constantField.Item3 #>'<# }else if(constantField.Item1.ToLower() == "string"){ #>"<#= constantField.Item3 #>"<# } else { #><#= constantField.Item3 #><# } #>;
 <# } foreach(Tuple<string, string, int> arrayField in ArrayFieldList){ #>
@@ -67,8 +68,38 @@ namespace <#= AddPrefixToNamespace(Namespace) #> {
 <# foreach(Tuple<string, string, int> arrayField in ArrayFieldList){ #>
 <# if(arrayField.Item3 > 0){ #>
             this.<#= arrayField.Item2 #> = new <#= arrayField.Item1 #>[<#= arrayField.Item3 #>];
-<# } #>
-<# } #>
+<# }} #>
+        }
+
+        public override bool Equals(object obj){
+            if(!(obj is <#= Type #>)){
+                return false;
+            }
+    
+            <#= Type #> other = (<#= Type #>) obj;
+
+            bool fieldsEquals = true;
+
+<# foreach(Tuple<string, string, int> arrayField in ArrayFieldList){ #>
+            fieldsEquals &= this.<#= arrayField.Item2 #>.SequenceEqual(other.<#= arrayField.Item2 #>);
+<# } foreach(KeyValuePair<string, string> field in FieldList){ #>
+            fieldsEquals &= this.<#= field.Key #>.Equals(other.<#= field.Key #>);
+<# } #>            
+            return fieldsEquals;
+        }
+
+        public static bool operator ==(<#= Type #> obj1, <#= Type #> obj2) {
+            if (object.ReferenceEquals(null, obj1)){
+                return object.ReferenceEquals(null, obj2);
+            }
+            return obj1.Equals(obj2);
+        }
+
+        public static bool operator !=(<#= Type #> obj1, <#= Type #> obj2) {
+            if (object.ReferenceEquals(null, obj1)){
+                return !object.ReferenceEquals(null, obj2);
+            }
+            return !obj1.Equals(obj2);
         }
     }
 }

@@ -10,7 +10,7 @@
     /// </summary>
     public class TemplateProcessor : ITemplateProcessor
     {
-        private ICustomTextTemplatingEngineHost _textTemplatingEngineHost;
+        private readonly ICustomTextTemplatingEngineHost _textTemplatingEngineHost;
 
         public TemplateProcessor(ICustomTextTemplatingEngineHost textTemplatingEngineHost)
         {

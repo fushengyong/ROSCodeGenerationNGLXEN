@@ -13,16 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="Templates\CodeGenerators\RosMessage.txt" />
     <None Remove="Templates\CodeGenerators\TimeData.txt" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Include="Templates\CodeGenerators\RosMessage.txt">
-      <DependentUpon>RosMessage.tt</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
   </ItemGroup>
 
   <ItemGroup>
@@ -40,10 +31,21 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Reference Include="Microsoft.JScript">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\Microsoft.JScript.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
     <None Update="Templates\CodeGenerators\RosMessage.tt">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <LastGenOutput>RosMessage.txt</LastGenOutput>
       <Generator>TextTemplatingFileGenerator</Generator>
+    </None>
+    <None Update="Templates\CodeGenerators\RosMessage.txt">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>RosMessage.tt</DependentUpon>
     </None>
     <None Update="Templates\CodeGenerators\TimeData.tt">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
@@ -51,13 +53,13 @@
       <Generator>TextTemplatingFileGenerator</Generator>
     </None>
     <None Update="Templates\Main.tt">
-      <LastGenOutput>Main.txt</LastGenOutput>
       <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Main.txt</LastGenOutput>
     </None>
     <None Update="Templates\Main.txt">
-      <DependentUpon>Main.tt</DependentUpon>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
+      <DependentUpon>Main.tt</DependentUpon>
     </None>
   </ItemGroup>
 

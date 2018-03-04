@@ -11,7 +11,7 @@
         /// <summary>
         /// Type of the message field
         /// </summary>
-        public MessageType Type { get; private set; }
+        public RosType Type { get; private set; }
         /// <summary>
         /// Field variable name
         /// </summary>
@@ -56,7 +56,7 @@
 
             }
 
-            this.Type = new MessageType(@namespace, type);
+            this.Type = new RosType(@namespace, type);
             this.FieldName = fieldName;
             this.IsArray = isArray;
             this.ArrayElementCount = arrayElementCount;

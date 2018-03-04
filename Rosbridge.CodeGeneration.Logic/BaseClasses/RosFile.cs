@@ -1,5 +1,6 @@
 ﻿namespace Rosbridge.CodeGeneration.Logic.BaseClasses
 {
+    using Interfaces;
     using System;
     using System.Collections.Generic;
     using System.IO;
@@ -8,7 +9,7 @@
     /// <summary>
     /// DTO base for a ROS file (.msg, .srv)
     /// </summary>
-    public abstract class RosFile
+    public abstract class RosFile : IRosFile
     {
         private readonly string[] RosPackageFolderNameArray = { "msg", "srv", "msgs", "srvs" };
 
@@ -27,7 +28,7 @@
         /// <summary>
         /// ROS file type
         /// </summary>
-        public MessageType Type { get; private set; }
+        public RosType Type { get; private set; }
 
         protected RosFile(FileInfo file)
         {
@@ -46,7 +47,7 @@
             SetPackageDirectoryInfo();
             string namespaceName = this.PackageDirectoryInfo.Name;
             string className = Path.GetFileNameWithoutExtension(this.RosFileInfo.Name);
-            Type = new MessageType(namespaceName, className);
+            Type = new RosType(namespaceName, className);
         }
 
         protected RosFile(string fileContent, string className, string namespaceName)
@@ -69,7 +70,7 @@
             }
 
             this.FileContent = fileContent;
-            Type = new MessageType(namespaceName, className);
+            Type = new RosType(namespaceName, className);
         }
 
         public override bool Equals(object obj)
@@ -80,6 +81,7 @@
 
                 return this.Type == item.Type;
             }
+
             return false;
         }
 
@@ -102,7 +104,7 @@
 
         public override int GetHashCode()
         {
-            return 2049151605 + EqualityComparer<MessageType>.Default.GetHashCode(Type);
+            return 2049151605 + EqualityComparer<RosType>.Default.GetHashCode(Type);
         }
     }
 }
