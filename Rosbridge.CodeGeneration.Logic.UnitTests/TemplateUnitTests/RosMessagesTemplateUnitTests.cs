@@ -120,6 +120,12 @@
             resultType.IsValueType.Should().BeFalse();
             resultType.CustomAttributes.Should().Contain(attribute => attribute.AttributeType == rosMessageTypeAttributeType);
 
+            MethodInfo equalsMethod = resultType.GetMethod("Equals");
+            equalsMethod.Should().NotBeNull();
+            equalsMethod.ReturnType.Should().Be(typeof(Boolean));
+            equalsMethod.IsPublic.Should().BeTrue();
+            equalsMethod.IsVirtual.Should().BeTrue();
+
             IEnumerable<FieldInfo> resultConstantFieldCollection = resultType.GetFields().Where(field => field.IsLiteral && !field.IsInitOnly).ToList();
             resultConstantFieldCollection.Should().NotBeNull();
             resultConstantFieldCollection.Should().HaveCount(1);
@@ -199,6 +205,12 @@
             resultType.Namespace.Should().Be($"{namespacePrefix}.{testNamespace}");
             resultType.IsValueType.Should().BeFalse();
             resultType.CustomAttributes.Should().Contain(attribute => attribute.AttributeType == rosMessageTypeAttributeType);
+
+            MethodInfo equalsMethod = resultType.GetMethod("Equals");
+            equalsMethod.Should().NotBeNull();
+            equalsMethod.ReturnType.Should().Be(typeof(Boolean));
+            equalsMethod.IsPublic.Should().BeTrue();
+            equalsMethod.IsVirtual.Should().BeTrue();
 
             IEnumerable<FieldInfo> resultConstantFieldCollection = resultType.GetFields().Where(field => field.IsLiteral && !field.IsInitOnly).ToList();
             resultConstantFieldCollection.Should().NotBeNull();
