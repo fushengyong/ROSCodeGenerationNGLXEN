@@ -42,6 +42,11 @@
       <LastGenOutput>RosMessage.txt</LastGenOutput>
       <Generator>TextTemplatingFileGenerator</Generator>
     </None>
+    <None Update="Templates\CodeGenerators\RosMessage.txt">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>RosMessage.tt</DependentUpon>
+    </None>
     <None Update="Templates\CodeGenerators\TimeData.tt">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <LastGenOutput>TimeData.txt</LastGenOutput>

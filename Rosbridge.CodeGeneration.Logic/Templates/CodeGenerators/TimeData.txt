@@ -12,6 +12,20 @@
             WindowState other = (WindowState) obj;           
 
             return (this.sec == other.sec && this.nsec == other.nsec);
-        }    
+        }
+
+        public static bool operator ==(WindowState obj1, WindowState obj2) {
+            if (object.ReferenceEquals(null, obj1)){
+                return object.ReferenceEquals(null, obj2);
+            }
+            return obj1.Equals(obj2);
+        }
+
+        public static bool operator !=(WindowState obj1, WindowState obj2) {
+            if (object.ReferenceEquals(null, obj1)){
+                return !object.ReferenceEquals(null, obj2);
+            }
+            return !obj1.Equals(obj2);
+        }  
     }
 }
