@@ -15,10 +15,10 @@
     /// </summary>
     public class SolutionManager : ISolutionManager
     {
-        protected internal const string PROJECT_DIRECTORY_GUID = "{6BB5F8EF-4483-11D3-8BCF-00C04F8EC28C}";
-        protected internal const string FULL_PATH_ITEM_PROPERTY = "FullPath";
-        protected internal const string PROJECT_LANGUAGE = "CSharp";
-        protected internal const string DEFAULT_CLASS_NAME = "Class1.cs";
+        internal const string PROJECT_DIRECTORY_GUID = "{6BB5F8EF-4483-11D3-8BCF-00C04F8EC28C}";
+        internal const string FULL_PATH_ITEM_PROPERTY = "FullPath";
+        internal const string PROJECT_LANGUAGE = "CSharp";
+        internal const string DEFAULT_CLASS_NAME = "Class1.cs";
 
         protected internal readonly Solution2 _solution;
         protected internal readonly string _projectName;
