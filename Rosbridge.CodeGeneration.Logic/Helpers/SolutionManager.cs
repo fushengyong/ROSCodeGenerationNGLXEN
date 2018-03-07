@@ -15,16 +15,16 @@
     /// </summary>
     public class SolutionManager : ISolutionManager
     {
-        private const string PROJECT_DIRECTORY_GUID = "{6BB5F8EF-4483-11D3-8BCF-00C04F8EC28C}";
-        private const string FULL_PATH_ITEM_PROPERTY = "FullPath";
-        private const string PROJECT_LANGUAGE = "CSharp";
-        private const string DEFAULT_CLASS_NAME = "Class1.cs";
+        internal const string PROJECT_DIRECTORY_GUID = "{6BB5F8EF-4483-11D3-8BCF-00C04F8EC28C}";
+        internal const string FULL_PATH_ITEM_PROPERTY = "FullPath";
+        internal const string PROJECT_LANGUAGE = "CSharp";
+        internal const string DEFAULT_CLASS_NAME = "Class1.cs";
 
-        private readonly Solution2 _solution;
-        private readonly string _projectName;
-        private readonly string _rosMessageTypeAttributeProjectName;
-        private readonly string _projectTemplateAndFrameworkVersion;
-        private Project _project;
+        protected internal readonly Solution2 _solution;
+        protected internal readonly string _projectName;
+        protected internal readonly string _rosMessageTypeAttributeProjectName;
+        protected internal readonly string _projectTemplateAndFrameworkVersion;
+        protected internal Project _project;
 
         public SolutionManager(IServiceProvider serviceProvider, string projectName, string rosMessageTypeAttributeProjectName, string projectTemplateAndFrameworkVersion)
         {
@@ -113,7 +113,7 @@
                 throw new InvalidOperationException("The given project item is not a directory!");
             }
 
-            if (!File.Exists(filePath))
+            if (!IsFileExists(filePath))
             {
                 throw new FileNotFoundException("File not found!", filePath);
             }
@@ -148,28 +148,24 @@
             return projectItem.Properties.Item(FULL_PATH_ITEM_PROPERTY).Value.ToString();
         }
 
-        private void TryDeleteDirectory(string directoryPath, bool recursive = true)
+        protected internal virtual void DeleteDefaultClass(Project project)
         {
-            try
+            if (null == project)
             {
-                Directory.Delete(directoryPath, recursive);
+                throw new ArgumentNullException(nameof(project));
             }
-            catch (DirectoryNotFoundException e) { Debug.WriteLine(e.Message); }
-        }
 
-        private void DeleteDefaultClass(Project project)
-        {
             foreach (ProjectItem projectItem in project.ProjectItems)
             {
                 if (projectItem.Name == DEFAULT_CLASS_NAME)
                 {
-                    File.Delete(GetProjectItemFullPath(projectItem));
+                    DeleteFile(GetProjectItemFullPath(projectItem));
                     projectItem.Remove();
                 }
             }
         }
 
-        private Project GetProjectByName(string projectName)
+        protected internal virtual Project GetProjectByName(string projectName)
         {
             foreach (Project project in _solution.Projects)
             {
@@ -183,7 +179,7 @@
             return null;
         }
 
-        private Project GetProjectByNameRecursively(Project solutionProject, string projectName)
+        protected internal virtual Project GetProjectByNameRecursively(Project solutionProject, string projectName)
         {
             if (solutionProject.Kind == ProjectKinds.vsProjectKindSolutionFolder)
             {
@@ -209,6 +205,25 @@
             }
 
             return null;
+        }
+
+        protected internal virtual bool IsFileExists(string filePath)
+        {
+            return File.Exists(filePath);
+        }
+
+        protected internal virtual void DeleteFile(string filePath)
+        {
+            File.Delete(filePath);
+        }
+
+        protected internal virtual void TryDeleteDirectory(string directoryPath, bool recursive = true)
+        {
+            try
+            {
+                Directory.Delete(directoryPath, recursive);
+            }
+            catch (DirectoryNotFoundException e) { Debug.WriteLine(e.Message); }
         }
     }
 }

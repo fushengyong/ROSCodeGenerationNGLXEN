@@ -16,8 +16,8 @@
     /// </summary>
     public class CodeGenerator
     {
-        private const string ROS_MESSAGE_CODE_GENERATION_TEMPLATE_RELATIVE_PATH = @"CodeGenerators\RosMessage.tt";
-        private const string CUSTOM_TIME_DATA_TEMPLATE_RELATIVE_PATH = @"CodeGenerators\TimeData.tt";
+        internal const string ROS_MESSAGE_CODE_GENERATION_TEMPLATE_RELATIVE_PATH = @"CodeGenerators\RosMessage.tt";
+        internal const string CUSTOM_TIME_DATA_TEMPLATE_RELATIVE_PATH = @"CodeGenerators\TimeData.tt";
 
         private readonly ITextTemplatingEngineHost _textTemplatingEngineHost;
         private readonly ITextTemplating _textTemplating;
@@ -76,7 +76,7 @@
 
             _defaultNamespace = rosMessagesProjectName;
             _rosMessageCodeGenerationTemplatePath = _textTemplatingEngineHost.ResolvePath(ROS_MESSAGE_CODE_GENERATION_TEMPLATE_RELATIVE_PATH);
-            _rosMessageCodeGenerationTemplateContent = File.ReadAllText(_rosMessageCodeGenerationTemplatePath);
+            _rosMessageCodeGenerationTemplateContent = ReadAllTextFromFile(_rosMessageCodeGenerationTemplatePath);
             _customTimeDataTemplatePath = _textTemplatingEngineHost.ResolvePath(CUSTOM_TIME_DATA_TEMPLATE_RELATIVE_PATH);
             _solutionManager.Initialize();
         }
@@ -99,13 +99,11 @@
 
             foreach (IGrouping<string, IMsgFile> messageGroup in messageGroupList.Where(group => group.Key != standardNamespace))
             {
-                string @namespace = messageGroup.Key;
-
-                ProjectItem groupDirectoryProjectItem = GenerateMessagesByNamespace(@namespace, messageGroup, standardNamespace);
+                GenerateMessagesByNamespace(messageGroup, standardNamespace);
             }
         }
 
-        private void GenerateStandardNamespaceMessages(IEnumerable<IGrouping<string, IMsgFile>> messageGroupList, string standardNamespace)
+        protected internal virtual void GenerateStandardNamespaceMessages(IEnumerable<IGrouping<string, IMsgFile>> messageGroupList, string standardNamespace)
         {
             IGrouping<string, IMsgFile> standardNamespaceGroup = messageGroupList.SingleOrDefault(group => group.Key == standardNamespace);
 
@@ -114,30 +112,30 @@
                 throw new NoStandardNamespaceException();
             }
 
-            ProjectItem standardNamespaceDirectoryProjectItem = GenerateMessagesByNamespace(standardNamespace, standardNamespaceGroup, standardNamespace);
+            ProjectItem standardNamespaceDirectoryProjectItem = GenerateMessagesByNamespace(standardNamespaceGroup, standardNamespace);
 
             GenerateCustomTimePrimitiveType(standardNamespaceDirectoryProjectItem, standardNamespace);
         }
 
-        private void GenerateCustomTimePrimitiveType(ProjectItem standardNamespaceDirectoryProjectItem, string standardNamespace)
+        protected internal virtual void GenerateCustomTimePrimitiveType(ProjectItem standardNamespaceDirectoryProjectItem, string standardNamespace)
         {
             ITextTemplatingSession session = _textTemplatingSessionHost.CreateSession();
             session[TemplateParameterConstants.TimeData.NAMESPACE] = $"{_defaultNamespace}.{standardNamespace}";
             session[TemplateParameterConstants.TimeData.TYPE] = RosConstants.MessageTypes.CUSTOM_TIME_PRIMITIVE_TYPE;
 
-            TransformTemplateToFile(session, standardNamespaceDirectoryProjectItem, _customTimeDataTemplatePath, File.ReadAllText(_customTimeDataTemplatePath), RosConstants.MessageTypes.CUSTOM_TIME_PRIMITIVE_TYPE);
+            TransformTemplateToFile(session, standardNamespaceDirectoryProjectItem, _customTimeDataTemplatePath, ReadAllTextFromFile(_customTimeDataTemplatePath), RosConstants.MessageTypes.CUSTOM_TIME_PRIMITIVE_TYPE);
         }
 
-        private ProjectItem GenerateMessagesByNamespace(string @namespace, IGrouping<string, IMsgFile> messageGroup, string standardNamespace)
+        protected internal virtual ProjectItem GenerateMessagesByNamespace(IGrouping<string, IMsgFile> messageGroup, string standardNamespace)
         {
-            ProjectItem groupDirectoryProjectItem = _solutionManager.AddNewDirectoryToProject(@namespace);
+            ProjectItem groupDirectoryProjectItem = _solutionManager.AddNewDirectoryToProject(messageGroup.Key);
 
             GenerateMessages(groupDirectoryProjectItem, messageGroup, standardNamespace);
 
             return groupDirectoryProjectItem;
         }
 
-        private void GenerateMessages(ProjectItem directoryProjectItem, IEnumerable<IMsgFile> messageList, string standardNamespace)
+        protected internal virtual void GenerateMessages(ProjectItem directoryProjectItem, IEnumerable<IMsgFile> messageList, string standardNamespace)
         {
             foreach (IMsgFile message in messageList)
             {
@@ -160,7 +158,7 @@
             };
         }
 
-        private void TransformTemplateToFile(ITextTemplatingSession session, ProjectItem groupDirectoryProjectItem, string templatePath, string templateContent, string typeName)
+        protected internal virtual void TransformTemplateToFile(ITextTemplatingSession session, ProjectItem groupDirectoryProjectItem, string templatePath, string templateContent, string typeName)
         {
             string directoryPath = _solutionManager.GetProjectItemFullPath(groupDirectoryProjectItem);
 
@@ -173,13 +171,23 @@
             _solutionManager.AddFileToDirectoryProjectItem(groupDirectoryProjectItem, newFilePath);
         }
 
-        private string WriteToFile(string directoryPath, string typeName, string fileContent)
+        protected internal virtual string WriteToFile(string directoryPath, string typeName, string fileContent)
         {
             string newFilePath = Path.Combine(directoryPath, $"{typeName}.cs");
 
-            File.WriteAllText(newFilePath, fileContent);
+            WriteAllTextToFile(newFilePath, fileContent);
 
             return newFilePath;
+        }
+
+        protected internal virtual string ReadAllTextFromFile(string filePath)
+        {
+            return File.ReadAllText(filePath);
+        }
+
+        protected internal virtual void WriteAllTextToFile(string filePath, string textToWrite)
+        {
+            File.WriteAllText(filePath, textToWrite);
         }
     }
 }
