@@ -6,7 +6,7 @@
     using System;
     using System.Threading.Tasks;
 
-    public class Subscriber<TRosMessage> : IRosSubscriber<TRosMessage> where TRosMessage : class, new()
+    public class RosSubscriber<TRosMessage> : IRosSubscriber<TRosMessage> where TRosMessage : class, new()
     {
         private readonly IMessageDispatcher _messageDispatcher;
         protected internal readonly string _uniqueId;
@@ -17,7 +17,7 @@
 
         public string Type { get; private set; }
 
-        public Subscriber(string topic, IMessageDispatcher messageDispatcher, IRosMessageTypeAttributeHelper rosMessageTypeAttributeHelper)
+        public RosSubscriber(string topic, IMessageDispatcher messageDispatcher, IRosMessageTypeAttributeHelper rosMessageTypeAttributeHelper)
         {
             if (string.IsNullOrWhiteSpace(topic))
             {

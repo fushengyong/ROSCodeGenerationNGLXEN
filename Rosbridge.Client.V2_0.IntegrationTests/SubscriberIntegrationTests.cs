@@ -26,7 +26,7 @@
         private Socket _socket;
         private MessageSerializer _messageSerializer;
         private MessageDispatcher _messageDispatcher;
-        private Subscriber<object> _subscriber;
+        private RosSubscriber<object> _subscriber;
 
         [SetUp]
         public void SetUp()
@@ -42,7 +42,7 @@
             _rosMessageTypeAttributeHelperMock
                 .Setup(helper => helper.GetRosMessageTypeFromTypeAttribute(typeof(object))).Returns(TYPE);
 
-            _subscriber = new Subscriber<object>(TOPIC, _messageDispatcher, _rosMessageTypeAttributeHelperMock.Object);
+            _subscriber = new RosSubscriber<object>(TOPIC, _messageDispatcher, _rosMessageTypeAttributeHelperMock.Object);
         }
 
         [Test]

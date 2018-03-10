@@ -36,7 +36,7 @@ namespace Rosbridge.Client.V2_0.UnitTests
                 attributeHelper.GetRosMessageTypeFromTypeAttribute(It.IsAny<Type>())).Returns(testRosMessageType);
 
             //act
-            Subscriber<object> testClass = new Subscriber<object>(testTopic, _messageDispatcherMock.Object, _rosMessageTypeAttributeHelperMock.Object);
+            RosSubscriber<object> testClass = new RosSubscriber<object>(testTopic, _messageDispatcherMock.Object, _rosMessageTypeAttributeHelperMock.Object);
 
             //assert
             testClass._uniqueId.Should().Be(uniqueId);
@@ -51,7 +51,7 @@ namespace Rosbridge.Client.V2_0.UnitTests
             string testTopic = null;
 
             //act
-            Action act = () => new Subscriber<object>(testTopic, _messageDispatcherMock.Object, _rosMessageTypeAttributeHelperMock.Object);
+            Action act = () => new RosSubscriber<object>(testTopic, _messageDispatcherMock.Object, _rosMessageTypeAttributeHelperMock.Object);
 
             //assert
             act.Should().ThrowExactly<ArgumentException>();
@@ -64,7 +64,7 @@ namespace Rosbridge.Client.V2_0.UnitTests
             string testTopic = string.Empty;
 
             //act
-            Action act = () => new Subscriber<object>(testTopic, _messageDispatcherMock.Object, _rosMessageTypeAttributeHelperMock.Object);
+            Action act = () => new RosSubscriber<object>(testTopic, _messageDispatcherMock.Object, _rosMessageTypeAttributeHelperMock.Object);
 
             //assert
             act.Should().ThrowExactly<ArgumentException>();
@@ -77,7 +77,7 @@ namespace Rosbridge.Client.V2_0.UnitTests
             string testTopic = "testTopic";
 
             //act
-            Action act = () => new Subscriber<object>(testTopic, null, _rosMessageTypeAttributeHelperMock.Object);
+            Action act = () => new RosSubscriber<object>(testTopic, null, _rosMessageTypeAttributeHelperMock.Object);
 
             //assert
             act.Should().ThrowExactly<ArgumentNullException>();
@@ -90,7 +90,7 @@ namespace Rosbridge.Client.V2_0.UnitTests
             string testTopic = "testTopic";
 
             //act
-            Action act = () => new Subscriber<object>(testTopic, _messageDispatcherMock.Object, null);
+            Action act = () => new RosSubscriber<object>(testTopic, _messageDispatcherMock.Object, null);
 
             //assert
             act.Should().ThrowExactly<ArgumentNullException>();
@@ -112,7 +112,7 @@ namespace Rosbridge.Client.V2_0.UnitTests
             _rosMessageTypeAttributeHelperMock.Setup(attributeHelper =>
                 attributeHelper.GetRosMessageTypeFromTypeAttribute(typeof(object))).Returns(testRosMessageType);
 
-            Subscriber<object> testClass = new Subscriber<object>(testTopic, _messageDispatcherMock.Object, _rosMessageTypeAttributeHelperMock.Object);
+            RosSubscriber<object> testClass = new RosSubscriber<object>(testTopic, _messageDispatcherMock.Object, _rosMessageTypeAttributeHelperMock.Object);
 
 
             //act
@@ -143,7 +143,7 @@ namespace Rosbridge.Client.V2_0.UnitTests
             _rosMessageTypeAttributeHelperMock.Setup(attributeHelper =>
                 attributeHelper.GetRosMessageTypeFromTypeAttribute(typeof(object))).Returns(testRosMessageType);
 
-            Subscriber<object> testClass = new Subscriber<object>(testTopic, _messageDispatcherMock.Object, _rosMessageTypeAttributeHelperMock.Object);
+            RosSubscriber<object> testClass = new RosSubscriber<object>(testTopic, _messageDispatcherMock.Object, _rosMessageTypeAttributeHelperMock.Object);
 
 
             //act

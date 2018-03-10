@@ -6,7 +6,7 @@
     using System;
     using System.Threading.Tasks;
 
-    public class Publisher<TRosMessage> : IRosPublisher<TRosMessage> where TRosMessage : class, new()
+    public class RosPublisher<TRosMessage> : IRosPublisher<TRosMessage> where TRosMessage : class, new()
     {
         private readonly IMessageDispatcher _messageDispatcher;
         protected internal readonly string _uniqueId;
@@ -15,7 +15,7 @@
 
         public string Type { get; private set; }
 
-        public Publisher(string topic, IMessageDispatcher messageDispatcher, IRosMessageTypeAttributeHelper rosMessageTypeAttributeHelper)
+        public RosPublisher(string topic, IMessageDispatcher messageDispatcher, IRosMessageTypeAttributeHelper rosMessageTypeAttributeHelper)
         {
             if (string.IsNullOrWhiteSpace(topic))
             {

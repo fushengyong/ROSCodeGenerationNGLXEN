@@ -27,7 +27,7 @@
         private ISocket _socket;
         private IMessageSerializer _messageSerializer;
         private IMessageDispatcher _messageDispatcher;
-        private Publisher<object> _publisher;
+        private RosPublisher<object> _publisher;
 
         [SetUp]
         public void SetUp()
@@ -43,7 +43,7 @@
             _rosMessageTypeAttributeHelperMock
                 .Setup(helper => helper.GetRosMessageTypeFromTypeAttribute(typeof(object))).Returns(TYPE);
 
-            _publisher = new Publisher<object>(TOPIC, _messageDispatcher, _rosMessageTypeAttributeHelperMock.Object);
+            _publisher = new RosPublisher<object>(TOPIC, _messageDispatcher, _rosMessageTypeAttributeHelperMock.Object);
         }
 
         [Test]

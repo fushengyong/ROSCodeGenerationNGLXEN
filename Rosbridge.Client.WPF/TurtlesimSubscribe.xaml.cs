@@ -20,7 +20,7 @@ namespace Rosbridge.Client.WPF
         {
             InitializeComponent();
             _viewModel = new TurtlesimSubscribeViewModel(topic);
-            _subscriber = new Subscriber<Twist>(topic, messageDispatcher, new RosMessageTypeAttributeHelper());
+            _subscriber = new RosSubscriber<Twist>(topic, messageDispatcher, new RosMessageTypeAttributeHelper());
             _subscriber.RosMessageReceived += _subscriber_RosMessageReceived;
             _viewModel.Type = _subscriber.Type;
             Loaded += TurtlesimSubscribe_Loaded;

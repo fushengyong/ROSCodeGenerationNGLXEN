@@ -35,7 +35,7 @@
                 .Returns(testType);
 
             //act
-            Publisher<object> testClass = new Publisher<object>(testTopic, _messageDispatcherMock.Object, _rosMessageAttributeHelper.Object);
+            RosPublisher<object> testClass = new RosPublisher<object>(testTopic, _messageDispatcherMock.Object, _rosMessageAttributeHelper.Object);
 
             //assert
             testClass.Topic.Should().Be(testTopic);
@@ -50,7 +50,7 @@
             string testTopic = null;
 
             //act
-            Action act = () => new Publisher<object>(testTopic, _messageDispatcherMock.Object, _rosMessageAttributeHelper.Object);
+            Action act = () => new RosPublisher<object>(testTopic, _messageDispatcherMock.Object, _rosMessageAttributeHelper.Object);
 
             //assert
             act.Should().ThrowExactly<ArgumentException>();
@@ -63,7 +63,7 @@
             string testTopic = string.Empty;
 
             //act
-            Action act = () => new Publisher<object>(testTopic, _messageDispatcherMock.Object, _rosMessageAttributeHelper.Object);
+            Action act = () => new RosPublisher<object>(testTopic, _messageDispatcherMock.Object, _rosMessageAttributeHelper.Object);
 
             //assert
             act.Should().ThrowExactly<ArgumentException>();
@@ -76,7 +76,7 @@
             string testTopic = "testTopic";
 
             //act
-            Action act = () => new Publisher<object>(testTopic, null, _rosMessageAttributeHelper.Object);
+            Action act = () => new RosPublisher<object>(testTopic, null, _rosMessageAttributeHelper.Object);
 
             //assert
             act.Should().ThrowExactly<ArgumentNullException>();
@@ -89,7 +89,7 @@
             string testTopic = "testTopic";
 
             //act
-            Action act = () => new Publisher<object>(testTopic, _messageDispatcherMock.Object, null);
+            Action act = () => new RosPublisher<object>(testTopic, _messageDispatcherMock.Object, null);
 
             //assert
             act.Should().ThrowExactly<ArgumentNullException>();
@@ -109,7 +109,7 @@
                 .Returns(testType);
             _messageDispatcherMock.Setup(dispatcher => dispatcher.SendAsync(It.IsAny<RosAdvertiseMessage>())).Returns(resultTask);
 
-            Publisher<object> testClass = new Publisher<object>(testTopic, _messageDispatcherMock.Object, _rosMessageAttributeHelper.Object);
+            RosPublisher<object> testClass = new RosPublisher<object>(testTopic, _messageDispatcherMock.Object, _rosMessageAttributeHelper.Object);
 
             //act
             Task result = testClass.AdvertiseAsync();
@@ -137,7 +137,7 @@
                 .Returns(testType);
             _messageDispatcherMock.Setup(dispatcher => dispatcher.SendAsync(It.IsAny<RosUnadvertiseMessage>())).Returns(resultTask);
 
-            Publisher<object> testClass = new Publisher<object>(testTopic, _messageDispatcherMock.Object, _rosMessageAttributeHelper.Object);
+            RosPublisher<object> testClass = new RosPublisher<object>(testTopic, _messageDispatcherMock.Object, _rosMessageAttributeHelper.Object);
 
             //act
             Task result = testClass.UnadvertiseAsync();
@@ -166,7 +166,7 @@
                 .Returns(testType);
             _messageDispatcherMock.Setup(dispatcher => dispatcher.SendAsync(It.IsAny<RosPublishMessage>())).Returns(resultTask);
 
-            Publisher<object> testClass = new Publisher<object>(testTopic, _messageDispatcherMock.Object, _rosMessageAttributeHelper.Object);
+            RosPublisher<object> testClass = new RosPublisher<object>(testTopic, _messageDispatcherMock.Object, _rosMessageAttributeHelper.Object);
 
             //act
             Task result = testClass.PublishAsync(messageObject);
@@ -192,7 +192,7 @@
             _rosMessageAttributeHelper.Setup(helper => helper.GetRosMessageTypeFromTypeAttribute(It.IsAny<Type>()))
                 .Returns(testType);
 
-            Publisher<object> testClass = new Publisher<object>(testTopic, _messageDispatcherMock.Object, _rosMessageAttributeHelper.Object);
+            RosPublisher<object> testClass = new RosPublisher<object>(testTopic, _messageDispatcherMock.Object, _rosMessageAttributeHelper.Object);
 
             //act
             Action act = () => testClass.PublishAsync(null);

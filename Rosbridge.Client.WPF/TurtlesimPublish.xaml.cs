@@ -23,7 +23,7 @@ namespace Rosbridge.Client.WPF
             InitializeComponent();
             Loaded += TurtlesimPublish_Loaded;
             Closing += TurtlesimPublish_Closing;
-            _publisher = new Publisher<Twist>(topic, messageDispatcher, new RosMessageTypeAttributeHelper());
+            _publisher = new RosPublisher<Twist>(topic, messageDispatcher, new RosMessageTypeAttributeHelper());
             _viewModel = new TurtlesimPublishViewModel(topic, MIN_STEP, MAX_STEP);
         }
 

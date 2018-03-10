@@ -7,15 +7,14 @@
     using System;
     using System.Threading.Tasks;
 
-    public class ServiceClient<TServiceRequest, TServiceResponse> : IRosServiceClient<TServiceRequest, TServiceResponse> where TServiceRequest : class, new() where TServiceResponse : class, new()
+    public class RosServiceClient<TServiceRequest, TServiceResponse> : IRosServiceClient<TServiceRequest, TServiceResponse> where TServiceRequest : class, new() where TServiceResponse : class, new()
     {
         private readonly IMessageDispatcher _messageDispatcher;
-        private readonly IMessageSerializer _messageSerializer;
         private readonly string _uniqueId;
 
         public string ServiceName { get; private set; }
 
-        public ServiceClient(string serviceName, IMessageDispatcher messageDispatcher, IMessageSerializer messageSerializer)
+        public RosServiceClient(string serviceName, IMessageDispatcher messageDispatcher)
         {
             if (string.IsNullOrWhiteSpace(serviceName))
             {
@@ -27,14 +26,8 @@
                 throw new ArgumentNullException(nameof(messageDispatcher));
             }
 
-            if (null == messageSerializer)
-            {
-                throw new ArgumentNullException(nameof(messageSerializer));
-            }
-
             ServiceName = serviceName;
             _messageDispatcher = messageDispatcher;
-            _messageSerializer = messageSerializer;
             _uniqueId = _messageDispatcher.GetNewUniqueID();
         }
 
