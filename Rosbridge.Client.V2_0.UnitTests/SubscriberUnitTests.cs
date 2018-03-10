@@ -23,7 +23,7 @@ namespace Rosbridge.Client.V2_0.UnitTests
         }
 
         [Test]
-        public void Constructor_UnitTest_AllConstructorArgumentsOk_ShouldSetProperties()
+        public void Constructor_ShouldSetFields()
         {
             //arrange
             string testTopic = "testTopic";
@@ -45,7 +45,7 @@ namespace Rosbridge.Client.V2_0.UnitTests
         }
 
         [Test]
-        public void Constructor_UnitTest_TopicIsNull_ShouldThrowArgumentException()
+        public void Constructor_TopicIsNull_ShouldThrowArgumentException()
         {
             //arrange
             string testTopic = null;
@@ -58,7 +58,7 @@ namespace Rosbridge.Client.V2_0.UnitTests
         }
 
         [Test]
-        public void Constructor_UnitTest_TopicIsEmpty_ShouldThrowArgumentException()
+        public void Constructor_TopicIsEmpty_ShouldThrowArgumentException()
         {
             //arrange
             string testTopic = string.Empty;
@@ -71,7 +71,7 @@ namespace Rosbridge.Client.V2_0.UnitTests
         }
 
         [Test]
-        public void Constructor_UnitTest_MessageDispatcherIsNull_ShouldThrowArgumentNullException()
+        public void Constructor_MessageDispatcherIsNull_ShouldThrowArgumentNullException()
         {
             //arrange
             string testTopic = "testTopic";
@@ -84,7 +84,7 @@ namespace Rosbridge.Client.V2_0.UnitTests
         }
 
         [Test]
-        public void Constructor_UnitTest_RosMessageTypeAttributeHelperIsNull_ShouldThrowArgumentNullException()
+        public void Constructor_RosMessageTypeAttributeHelperIsNull_ShouldThrowArgumentNullException()
         {
             //arrange
             string testTopic = "testTopic";
@@ -97,7 +97,7 @@ namespace Rosbridge.Client.V2_0.UnitTests
         }
 
         [Test]
-        public void SubscribeAsync_UnitTest_DependenciesOk_MessageDispatcherSendAsyncShouldCalledWithAppropriateObject()
+        public void SubscribeAsync_MessageDispatcherSendAsyncShouldCalledWithAppropriateObject()
         {
             //arrange
             string testTopic = "testTopic";
@@ -128,7 +128,7 @@ namespace Rosbridge.Client.V2_0.UnitTests
         }
 
         [Test]
-        public void UnsubscribeAsync_UnitTest_DependenciesOk_MessageDispatcherSendAsyncShouldCalledWithAppropriateObject()
+        public void UnsubscribeAsync_MessageDispatcherSendAsyncShouldCalledWithAppropriateObject()
         {
             //arrange
             string testTopic = "testTopic";

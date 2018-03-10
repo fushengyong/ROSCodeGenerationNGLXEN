@@ -22,7 +22,7 @@
         }
 
         [Test]
-        public void Constructor_UnitTest_ArgumentOK_FieldsShouldSetCorrectly()
+        public void Constructor_FieldsShouldSetCorrectly()
         {
             //arrange
             IDictionary<string, string> primitiveTypeDictionary = new Dictionary<string, string>();
@@ -35,7 +35,7 @@
         }
 
         [Test]
-        public void Constructor_UnitTest_ArgumentIsNull_ShouldThrowArgumentNullException()
+        public void Constructor_PrimitiveTypeDictionaryArgumentIsNull_ShouldThrowArgumentNullException()
         {
             //arrange
             IDictionary<string, string> primitiveTypeDictionary = null;
@@ -48,7 +48,7 @@
         }
 
         [Test]
-        public void SetMsgFileFieldFromYAMLString_UnitTest_YamlStringIsNull_ShouldThrowArgumentNullException()
+        public void SetMsgFileFieldFromYAMLString_YamlStringIsNull_ShouldThrowArgumentNullException()
         {
             //arrange
             string yamlString = null;
@@ -61,7 +61,7 @@
         }
 
         [Test]
-        public void SetMsgFileFieldFromYAMLString_UnitTest_MsgFileIsNull_ShouldThrowArgumentNullException()
+        public void SetMsgFileFieldFromYAMLString_MsgFileIsNull_ShouldThrowArgumentNullException()
         {
             //arrange
             string yamlString = "testYamlString";
