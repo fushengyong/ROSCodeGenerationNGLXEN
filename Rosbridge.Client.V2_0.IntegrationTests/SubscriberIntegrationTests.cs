@@ -46,7 +46,7 @@
         }
 
         [Test]
-        public async Task SubscribeAsync_IntegrationTest_MessageDispatcherStarted_WebSocketShouldSendCorrectByteArray()
+        public async Task SubscribeAsync_MessageDispatcherStarted_WebSocketShouldSendCorrectByteArray()
         {
             //arrange
             RosSubscribeMessage rosAdvertiseMessage = new RosSubscribeMessage()
@@ -74,7 +74,7 @@
         }
 
         [Test]
-        public async Task UnsubscribeAsync_IntegrationTest_MessageDispatcherStarted_WebSocketShouldSendCorrectByteArray()
+        public async Task UnsubscribeAsync_MessageDispatcherStarted_WebSocketShouldSendCorrectByteArray()
         {
             //arrange
             RosUnsubscribeMessage rosAdvertiseMessage = new RosUnsubscribeMessage()

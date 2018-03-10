@@ -23,7 +23,7 @@
         }
 
         [Test]
-        public void Constructor_UnitTest_ArgumentsOK_ParametersOK()
+        public void Constructor_ShouldSetFields()
         {
             //arrange
             string testTopic = "testTopic";
@@ -44,7 +44,7 @@
         }
 
         [Test]
-        public void Constructor_UnitTest_TopicIsNull_ShouldThrowArgumentException()
+        public void Constructor_TopicIsNull_ShouldThrowArgumentException()
         {
             //arrange
             string testTopic = null;
@@ -57,7 +57,7 @@
         }
 
         [Test]
-        public void Constructor_UnitTest_TopicIsEmpty_ShouldThrowArgumentException()
+        public void Constructor_TopicIsEmpty_ShouldThrowArgumentException()
         {
             //arrange
             string testTopic = string.Empty;
@@ -70,7 +70,7 @@
         }
 
         [Test]
-        public void Constructor_UnitTest_MessageDispatcherIsNull_ShouldThrowArgumentNullException()
+        public void Constructor_MessageDispatcherIsNull_ShouldThrowArgumentNullException()
         {
             //arrange
             string testTopic = "testTopic";
@@ -83,7 +83,7 @@
         }
 
         [Test]
-        public void Constructor_UnitTest_RosMessageTypeAttributeHelperIsNull_ShouldThrowArgumentNullException()
+        public void Constructor_RosMessageTypeAttributeHelperIsNull_ShouldThrowArgumentNullException()
         {
             //arrange
             string testTopic = "testTopic";
@@ -96,7 +96,7 @@
         }
 
         [Test]
-        public void AdvertiseAsync_UnitTest_DependenciesOK_MessageDispatcherSendAsyncShouldCalledWithAppropriateObject()
+        public void AdvertiseAsync_MessageDispatcherSendAsyncShouldCalledWithAppropriateObject()
         {
             //arrange
             string testTopic = "testTopic";
@@ -124,7 +124,7 @@
         }
 
         [Test]
-        public void UnadvertiseAsync_UnitTest_DependenciesOK_MessageDispatcherSendAsyncShouldCalledWithAppropriateObject()
+        public void UnadvertiseAsync_MessageDispatcherSendAsyncShouldCalledWithAppropriateObject()
         {
             //arrange
             string testTopic = "testTopic";
@@ -151,7 +151,7 @@
         }
 
         [Test]
-        public void PublishAsync_UnitTest_MessageOk_MessageDispatcherShouldSendAppropriateObject()
+        public void PublishAsync_MessageDispatcherShouldSendAppropriateObject()
         {
             //arrange
             string testTopic = "testTopic";
@@ -181,7 +181,7 @@
         }
 
         [Test]
-        public void PublishAsync_UnitTest_MessageIsNull_ShouldThrowArgumentNullException()
+        public void PublishAsync_MessageIsNull_ShouldThrowArgumentNullException()
         {
             //arrange
             string testTopic = "testTopic";

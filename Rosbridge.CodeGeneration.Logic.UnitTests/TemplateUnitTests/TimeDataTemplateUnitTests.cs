@@ -74,7 +74,7 @@
         }
 
         [Test]
-        public void TimeDataTemplate_UnitTest_ParametersOK_TemplateCreatesAppropriateOutput()
+        public void TimeDataTemplate_ShouldCreatesAppropriateType()
         {
             //arrange
             string testNamespace = "testNamespace";
@@ -125,7 +125,7 @@
         }
 
         [Test]
-        public void TimeDataTemplate_UnitTest_NamespaceParameterEmpty_TemplateShouldThrowArgumentException()
+        public void TimeDataTemplate_NamespaceParameterEmpty_TemplateShouldThrowArgumentException()
         {
             //arrange
             string testNamespace = string.Empty;
@@ -142,7 +142,7 @@
         }
 
         [Test]
-        public void TimeDataTemplate_UnitTest_TypeParameterEmpty_TemplateShouldThrowArgumentException()
+        public void TimeDataTemplate_TypeParameterEmpty_TemplateShouldThrowArgumentException()
         {
             //arrange
             string testNamespace = "testNamespace";

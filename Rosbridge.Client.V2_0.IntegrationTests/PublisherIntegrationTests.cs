@@ -47,7 +47,7 @@
         }
 
         [Test]
-        public async Task AdvertiseAsync_IntegrationTest_MessageDispatcherStarted_WebSocketShouldSendCorrectByteArray()
+        public async Task AdvertiseAsync_MessageDispatcherStarted_WebSocketShouldSendCorrectByteArray()
         {
             //arrange
             RosAdvertiseMessage rosAdvertiseMessage = new RosAdvertiseMessage()
@@ -75,7 +75,7 @@
         }
 
         [Test]
-        public async Task UnadvertiseAsync_IntegrationTest_MessageDispatcherStarted_WebSocketShouldSendCorrectByteArray()
+        public async Task UnadvertiseAsync_MessageDispatcherStarted_WebSocketShouldSendCorrectByteArray()
         {
             //arrange
             RosUnadvertiseMessage rosUnadvertiseMessage = new RosUnadvertiseMessage()
@@ -102,7 +102,7 @@
         }
 
         [Test]
-        public async Task SendAsync_IntegrationTest_MessageDispatcherStarted_WebSocketShouldSendCorrectByteArray()
+        public async Task SendAsync_MessageDispatcherStarted_WebSocketShouldSendCorrectByteArray()
         {
             //arrange
             object message = new { Test = "testMessage" };

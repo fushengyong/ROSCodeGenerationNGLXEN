@@ -73,7 +73,7 @@
         }
 
         [Test]
-        public void RosMessagesTemplate_UnitTest_TpyeInfosConstantFieldInfosArrayAndNormalPropertyInfosSetAsSessionParameters_TemplateCreatesAppropriateTypeWithConstantFieldsArrayAndNormalProperties()
+        public void RosMessageTemplate_ShouldCreateAppropriateType()
         {
             //arrange
             Type rosMessageTypeAttributeType = typeof(RosMessageTypeAttribute);
@@ -161,7 +161,7 @@
         }
 
         [Test]
-        public void RosMessagesTemplate_UnitTest_TypeInfoWithoutConstantFieldInfoOrPropertyInfo_TemplateCreatesAppropriateTypeWithoutConstantFieldsOrProperties()
+        public void RosMessageTemplate_NoFieldsDefined_ShouldCreateAppropriateTypeWithoutFields()
         {
             //arrange
             Type rosMessageTypeAttributeType = typeof(RosMessageTypeAttribute);
@@ -222,7 +222,7 @@
         }
 
         [Test]
-        public void RosMessageTemplate_UnitTest_RosMessageTypeAttributeTypeNamespaceIsEmpty_ShouldThrowArgumentException()
+        public void RosMessageTemplate_RosMessageTypeAttributeTypeNamespaceIsEmpty_ShouldThrowArgumentException()
         {
             //arrange
             Type rosMessageTypeAttributeType = typeof(RosMessageTypeAttribute);
@@ -260,7 +260,7 @@
         }
 
         [Test]
-        public void RosMessageTemplate_UnitTest_RosMessageTypeAttributeTypeNameIsEmpty_ShouldThrowArgumentException()
+        public void RosMessageTemplate_RosMessageTypeAttributeTypeNameIsEmpty_ShouldThrowArgumentException()
         {
             //arrange
             Type rosMessageTypeAttributeType = typeof(RosMessageTypeAttribute);
@@ -298,7 +298,7 @@
         }
 
         [Test]
-        public void RosMessageTemplate_UnitTest_NamespacePrefixIsEmpty_ShouldThrowArgumentException()
+        public void RosMessageTemplate_NamespacePrefixIsEmpty_ShouldThrowArgumentException()
         {
             //arrange
             Type rosMessageTypeAttributeType = typeof(RosMessageTypeAttribute);
@@ -336,7 +336,7 @@
         }
 
         [Test]
-        public void RosMessageTemplate_UnitTest_MessageNamespaceIsEmpty_ShouldThrowArgumentException()
+        public void RosMessageTemplate_MessageNamespaceIsEmpty_ShouldThrowArgumentException()
         {
             //arrange
             Type rosMessageTypeAttributeType = typeof(RosMessageTypeAttribute);
@@ -374,7 +374,7 @@
         }
 
         [Test]
-        public void RosMessageTemplate_UnitTest_MessageTypeIsEmpty_ShouldThrowArgumentException()
+        public void RosMessageTemplate_MessageTypeIsEmpty_ShouldThrowArgumentException()
         {
             //arrange
             Type rosMessageTypeAttributeType = typeof(RosMessageTypeAttribute);
