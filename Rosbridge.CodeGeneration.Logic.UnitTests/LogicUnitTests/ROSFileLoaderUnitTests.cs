@@ -24,7 +24,7 @@
         }
 
         [Test]
-        public void LoadRosFiles_UnitTest_ArgumentsOK_ReturnCorrectSetsAllHelperMethodsCalled()
+        public void LoadRosFiles_ReturnCorrectSetsAllHelperMethodsCalled()
         {
             //arrange
             ISet<IMsgFile> messageFileSet = new HashSet<IMsgFile>();
@@ -64,7 +64,7 @@
         }
 
         [Test]
-        public void LoadRosFiles_UnitTest_MessageFileSetIsNull_ShouldThrowArgumentNullException()
+        public void LoadRosFiles_MessageFileSetIsNull_ShouldThrowArgumentNullException()
         {
             //arrange
             ISet<IMsgFile> messageFileSet = null;
@@ -79,7 +79,7 @@
         }
 
         [Test]
-        public void LoadRosFiles_UnitTest_ServiceFileSetIsNull_ShouldThrowArgumentNullException()
+        public void LoadRosFiles_ServiceFileSetIsNull_ShouldThrowArgumentNullException()
         {
             //arrange
             ISet<IMsgFile> messageFileSet = new HashSet<IMsgFile>();
@@ -94,7 +94,7 @@
         }
 
         [Test]
-        public void LoadRosFiles_UnitTest_DirectoryPathIsNull_ShouldThrowArgumentNullException()
+        public void LoadRosFiles_DirectoryPathIsNull_ShouldThrowArgumentNullException()
         {
             //arrange
             ISet<IMsgFile> messageFileSet = new HashSet<IMsgFile>();
@@ -109,7 +109,7 @@
         }
 
         [Test]
-        public void LoadRosFiles_UnitTest_DirectoryPathIsEmpty_ShouldThrowArgumentNullException()
+        public void LoadRosFiles_DirectoryPathIsEmpty_ShouldThrowArgumentNullException()
         {
             //arrange
             ISet<IMsgFile> messageFileSet = new HashSet<IMsgFile>();
@@ -124,7 +124,7 @@
         }
 
         [Test]
-        public void LoadRosFiles_UnitTest_IsDirectoryExistsMethodReturnFalse_ShouldThrowDirectoryNotFoundException()
+        public void LoadRosFiles_IsDirectoryExistsMethodReturnFalse_ShouldThrowDirectoryNotFoundException()
         {
             //arrange
             ISet<IMsgFile> messageFileSet = new HashSet<IMsgFile>();

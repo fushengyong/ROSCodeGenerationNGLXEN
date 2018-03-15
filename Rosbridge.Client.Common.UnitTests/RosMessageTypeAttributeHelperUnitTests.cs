@@ -22,7 +22,7 @@ namespace Rosbridge.Client.Common.UnitTests
         }
 
         [Test]
-        public void GetRosMessageTypeFromTypeAttribute_UnitTest_TypeOk_ShouldReturnProperRosMessageTypeString()
+        public void GetRosMessageTypeFromTypeAttribute_ShouldReturnProperRosMessageTypeString()
         {
             //arrange
             string typeName = "testType";
@@ -42,7 +42,7 @@ namespace Rosbridge.Client.Common.UnitTests
         }
 
         [Test]
-        public void GetRosMessageTypeFromTypeAttribute_UnitTest_ArgumentNull_ShouldThrowArgumentNullException()
+        public void GetRosMessageTypeFromTypeAttribute_TypeArgumentIsNull_ShouldThrowArgumentNullException()
         {
             //arrange
             Type testType = null;
@@ -55,7 +55,7 @@ namespace Rosbridge.Client.Common.UnitTests
         }
 
         [Test]
-        public void GetRosMessageTypeFromTypeAttribute_UnitTest_NoRosMessageTypeAttributeOnType_ShouldThrowRosMessageTypeAttributeNullException()
+        public void GetRosMessageTypeFromTypeAttribute_NoRosMessageTypeAttributeOnType_ShouldThrowRosMessageTypeAttributeNullException()
         {
             //arrange
             string typeName = "testType";
@@ -72,7 +72,7 @@ namespace Rosbridge.Client.Common.UnitTests
         }
 
         [Test]
-        public void GetRosMessageTypeFromTypeAttribute_UnitTest_EmptyRosMessageType_ShouldThrowRosMessageTypeAttributeEmptyException()
+        public void GetRosMessageTypeFromTypeAttribute_EmptyRosMessageType_ShouldThrowRosMessageTypeAttributeEmptyException()
         {
             //arrange
             string typeName = "testType";

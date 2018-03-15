@@ -20,7 +20,7 @@
         }
 
         [Test]
-        public void Deserialize_UnitTest_ArgumentOK_ShouldReturnAppropriateJObject()
+        public void Deserialize_ShouldReturnAppropriateJObject()
         {
             //arrange
             object message = new { Test = "test", Property = "property" };
@@ -37,7 +37,7 @@
         }
 
         [Test]
-        public void Deserialize_UnitTest_ArgumentIsNull_ShouldThrowArgumentNullException()
+        public void Deserialize_ByteArrayArgumentIsNull_ShouldThrowArgumentNullException()
         {
             //arrange
             byte[] buffer = null;
@@ -50,7 +50,7 @@
         }
 
         [Test]
-        public void Serialize_UnitTest_ArgumentOK_ShouldReturnAppropriateByteArray()
+        public void Serialize_ShouldReturnAppropriateByteArray()
         {
             //arrange
             object messageObject = new { Test = "test", Property = "property" };
@@ -68,7 +68,7 @@
         }
 
         [Test]
-        public void Serialize_UnitTest_ArgumentIsNull_ShouldThrowArgumentNullException()
+        public void Serialize_ObjectArgumentIsNull_ShouldThrowArgumentNullException()
         {
             //arrange
             object messageObject = null;

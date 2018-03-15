@@ -25,7 +25,7 @@
         }
 
         [Test]
-        public void Constructor_UnitTest_ArgumentsOK_FieldsSetCorrectly()
+        public void Constructor_FieldsSetCorrectly()
         {
             //arrange
             Uri uri = new Uri("http://localhost");
@@ -39,7 +39,7 @@
         }
 
         [Test]
-        public void Constructor_UnitTest_UriIsNull_ShouldThrowArgumentNullException()
+        public void Constructor_UriIsNull_ShouldThrowArgumentNullException()
         {
             //arrange
             Uri uri = null;
@@ -52,7 +52,7 @@
         }
 
         [Test]
-        public void Constructor_UnitTest_ClientWebSocketIsNull_ShouldThrowArgumentNullException()
+        public void Constructor_ClientWebSocketIsNull_ShouldThrowArgumentNullException()
         {
             //arrange
             Uri uri = new Uri("http://localhost");
@@ -65,7 +65,7 @@
         }
 
         [Test]
-        public void Constructor_UnitTest_CancellationTokenSourceIsNull_ShouldThrowArgumentNullException()
+        public void Constructor_CancellationTokenSourceIsNull_ShouldThrowArgumentNullException()
         {
             //arrange
             Uri uri = new Uri("http://localhost");
@@ -78,7 +78,7 @@
         }
 
         [Test]
-        public async Task ConnectAsync_UnitTest_DependenciesOK_ResultNotNullWebSocketConnectAsyncCalled()
+        public async Task ConnectAsync_ResultNotNullWebSocketConnectAsyncCalled()
         {
             //arrange
             Uri uri = new Uri("http://localhost");
@@ -98,7 +98,7 @@
         }
 
         [Test]
-        public void ConnectAsync_UnitTest_ObjectDisposed_ShouldThrowObjectDisposedException()
+        public void ConnectAsync_ObjectDisposed_ShouldThrowObjectDisposedException()
         {
             //arrange
             Uri uri = new Uri("http://localhost");
@@ -116,7 +116,7 @@
         }
 
         [Test]
-        public void ConnectAsync_UnitTest_WebSocketNotInOpenState_ShouldThrowSocketException()
+        public void ConnectAsync_WebSocketNotInOpenState_ShouldThrowSocketException()
         {
             //arrange
             Uri uri = new Uri("http://localhost");
@@ -133,7 +133,7 @@
         }
 
         [Test]
-        public async Task DisconnectAsync_UnitTest_DependenciesOK_ResultNotNullWebSocketConnectAsyncCalled()
+        public async Task DisconnectAsync_ResultIsNotNullWebSocketConnectAsyncCalled()
         {
             //arrange
             Uri uri = new Uri("http://localhost");
@@ -154,7 +154,7 @@
         }
 
         [Test]
-        public void DisconnectAsync_UnitTest_ObjectDisposed_ShouldThrowObjectDisposedException()
+        public void DisconnectAsync_ObjectDisposed_ShouldThrowObjectDisposedException()
         {
             //arrange
             Uri uri = new Uri("http://localhost");
@@ -172,7 +172,7 @@
         }
 
         [Test]
-        public void DisconnectAsync_UnitTest_WebSocketNotInClosedState_ShouldThrowSocketException()
+        public void DisconnectAsync_WebSocketIsNotInClosedState_ShouldThrowSocketException()
         {
             //arrange
             Uri uri = new Uri("http://localhost");
@@ -189,7 +189,7 @@
         }
 
         [Test]
-        public void SendAsync_UnitTest_ArgumentOK_ShouldCalledWebSocketSendAsync()
+        public void SendAsync__ShouldCalledWebSocketSendAsync()
         {
             //arrange
             Uri uri = new Uri("http://localhost");
@@ -206,7 +206,7 @@
         }
 
         [Test]
-        public void SendAsync_UnitTest_ObjectDisposed_ShouldThrowObjectDisposedException()
+        public void SendAsync_ObjectDisposed_ShouldThrowObjectDisposedException()
         {
             //arrange
             Uri uri = new Uri("http://localhost");
@@ -224,7 +224,7 @@
         }
 
         [Test]
-        public void SendAsync_UnitTest_BufferIsNull_ShouldThrowArgumentNullException()
+        public void SendAsync_BufferIsNull_ShouldThrowArgumentNullException()
         {
             //arrange
             Uri uri = new Uri("http://localhost");
@@ -240,7 +240,7 @@
         }
 
         [Test]
-        public void Dispose_UnitTest_ObjectNotDisposed_ShouldCallWebSocketAbortAndDisposeMethod()
+        public void Dispose_ObjectNotDisposed_ShouldCallWebSocketAbortAndDisposeMethod()
         {
             //arrange
             Uri uri = new Uri("http://localhost");

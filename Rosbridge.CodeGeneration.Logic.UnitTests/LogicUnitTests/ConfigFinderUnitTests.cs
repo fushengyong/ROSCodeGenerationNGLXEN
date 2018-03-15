@@ -13,7 +13,7 @@
     {
 
         [Test]
-        public void GetConfigFilePath_UnitTest_ArgumentsOK_ReturnConfigFile()
+        public void GetConfigFilePath_ShouldReturnConfigFile()
         {
             //arrange
             Mock<IServiceProvider> serviceProviderMock = new Mock<IServiceProvider>();
@@ -49,7 +49,7 @@
         }
 
         [Test]
-        public void GetConfigFilePath_UnitTest_ConfigFileNotFound_ShouldThrowFileNotFoundException()
+        public void GetConfigFilePath_ConfigFileNotFound_ShouldThrowFileNotFoundException()
         {
             //arrange
             Mock<IServiceProvider> serviceProviderMock = new Mock<IServiceProvider>();
@@ -84,7 +84,7 @@
         }
 
         [Test]
-        public void GetConfigFilePath_UnitTest_ServiceProviderIsNull_ShouldThrowArgumentNullException()
+        public void GetConfigFilePath_ServiceProviderIsNull_ShouldThrowArgumentNullException()
         {
             //arrange
             string templateFile = "testTemplateFile";
@@ -97,7 +97,7 @@
         }
 
         [Test]
-        public void GetConfigFilePath_UnitTest_TemplateFileIsNull_ShouldThrowArgumentException()
+        public void GetConfigFilePath_TemplateFileIsNull_ShouldThrowArgumentException()
         {
             //arrange
             Mock<IServiceProvider> serviceProviderMock = new Mock<IServiceProvider>();
@@ -111,7 +111,7 @@
         }
 
         [Test]
-        public void GetConfigFilePath_UnitTest_TemplateFileIsEmpty_ShouldThrowArgumentException()
+        public void GetConfigFilePath_TemplateFileIsEmpty_ShouldThrowArgumentException()
         {
             //arrange
             Mock<IServiceProvider> serviceProviderMock = new Mock<IServiceProvider>();

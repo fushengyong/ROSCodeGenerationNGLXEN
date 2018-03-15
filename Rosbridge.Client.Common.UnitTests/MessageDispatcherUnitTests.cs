@@ -33,7 +33,7 @@
         }
 
         [Test]
-        public void GetNewUniqueID_UnitTest_ShouldBeGuid()
+        public void GetNewUniqueID_ResultShouldBeGuid()
         {
             //arrange
 
@@ -47,7 +47,7 @@
         }
 
         [Test]
-        public void StartAsync_UnitTest_ClassDisposed_ShouldThrowObjectDisposedException()
+        public void StartAsync_ClassDisposed_ShouldThrowObjectDisposedException()
         {
             //arrange
             _testClassPartialMock.Object._disposed = true;
@@ -63,7 +63,7 @@
         }
 
         [Test]
-        public void StartAsync_UnitTest_CurrentStateIsNotStopped_ShouldThrowMessageDispatcherException()
+        public void StartAsync_CurrentStateIsNotStopped_ShouldThrowMessageDispatcherException()
         {
             //arrange
             _testClassPartialMock.Object._currentState = States.Started;
@@ -79,7 +79,7 @@
         }
 
         [Test]
-        public async Task StartAsync_UnitTest_EverythingOk_DispatcherShouldStarted()
+        public async Task StartAsync_DispatcherShouldStarted()
         {
             //arrange
             _testClassPartialMock.Object._currentState = States.Stopped;
@@ -98,7 +98,7 @@
         }
 
         [Test]
-        public void StartAsync_UnitTest_SocketThrowException_ShouldThrowExceptionDispatcherShouldStopped()
+        public void StartAsync_SocketThrowsException_ShouldThrowInvalidOperationExceptionDispatcherShouldStopped()
         {
             //arrange
             _testClassPartialMock.Object._currentState = States.Stopped;
@@ -115,7 +115,7 @@
         }
 
         [Test]
-        public void StopAsync_UnitTest_ObjectDisposed_ShouldThrowObjectDisposedException()
+        public void StopAsync_ObjectDisposed_ShouldThrowObjectDisposedException()
         {
             //arrange
             _testClassPartialMock.Object._disposed = true;
@@ -128,7 +128,7 @@
         }
 
         [Test]
-        public void StopAsync_UnitTest_ObjectNotInStartedState_ShouldThrowMessageDispatcherException()
+        public void StopAsync_ObjectNotInStartedState_ShouldThrowMessageDispatcherException()
         {
             //arrange
             _testClassPartialMock.Object._currentState = States.Stopped;
@@ -141,7 +141,7 @@
         }
 
         [Test]
-        public async Task StopAsync_UnitTest_Wait_ObjectShouldBeInStoppedState()
+        public async Task StopAsync_ObjectShouldBeInStoppedState()
         {
             //arrange
             _testClassPartialMock.Object._currentState = States.Started;
@@ -157,7 +157,7 @@
         }
 
         [Test]
-        public async Task StopAsync_UnitTest_ReceivingTaskNotNull_ReceivingTaskShouldBeDisposed()
+        public async Task StopAsync_ReceivingTaskNotNull_ReceivingTaskShouldBeDisposed()
         {
             //arrange
             _testClassPartialMock.Object._currentState = States.Started;
@@ -173,7 +173,7 @@
         }
 
         [Test]
-        public void SendAsync_UnitTest_ParameterOk_ShouldCallSocketSendAsync()
+        public void SendAsync_ShouldCallSocketSendAsync()
         {
             //arrange
             object testMessage = new object();
@@ -193,7 +193,7 @@
         }
 
         [Test]
-        public void SendAsync_UnitTest_MessageNull_ShouldThrowArgumentNullException()
+        public void SendAsync_MessageIsNull_ShouldThrowArgumentNullException()
         {
             //arrange
             object testMessage = null;
@@ -208,7 +208,7 @@
         }
 
         [Test]
-        public void SendAsync_UnitTest_DisposedIsTrue_ShouldThrowObjectDisposedException()
+        public void SendAsync_TestClassIsDisposed_ShouldThrowObjectDisposedException()
         {
             //arrange
             object testMessage = new object();
@@ -224,7 +224,7 @@
         }
 
         [Test]
-        public void SendAsync_UnitTest_TestClassNotInStartedCase_ShouldThrowMessageDispatcherException()
+        public void SendAsync_TestClassNotInStartedState_ShouldThrowMessageDispatcherException()
         {
             //arrange
             object testMessage = new object();
@@ -239,7 +239,7 @@
         }
 
         [Test]
-        public void Dispose_UnitTest_AlreadyDisposed_ShouldNotDoAnything()
+        public void Dispose_TestClassAlreadyDisposed_ShouldNotDoAnything()
         {
             //arrange
             _testClassPartialMock.Object._disposed = true;
@@ -256,7 +256,7 @@
         }
 
         [Test]
-        public async Task Dispose_UnitTest_NotDisposedYet_ShouldDispose()
+        public async Task Dispose_TestClassNotDisposedYet_ShouldDispose()
         {
             //arrange
             _testClassPartialMock.Object._receivingTask = Task.Run(() => { });

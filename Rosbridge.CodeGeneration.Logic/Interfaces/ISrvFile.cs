@@ -1,6 +1,6 @@
 ﻿namespace Rosbridge.CodeGeneration.Logic.Interfaces
 {
-    public interface ISrvFile
+    public interface ISrvFile : IRosFile
     {
         /// <summary>
         /// Service request message

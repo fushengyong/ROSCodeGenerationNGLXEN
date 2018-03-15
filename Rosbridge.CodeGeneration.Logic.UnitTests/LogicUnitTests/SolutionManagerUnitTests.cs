@@ -42,7 +42,7 @@
         }
 
         [Test]
-        public void Initialize_UnitTest_EverythingOK_ProjectFieldShouldSetMethodsShouldBeCalled()
+        public void Initialize_ProjectFieldShouldBeSetMethodsShouldBeCalled()
         {
             //arrange
             Mock<Project> currentProjectMock = new Mock<Project>();
@@ -86,7 +86,7 @@
         }
 
         [Test]
-        public void Initialize_UnitTest_ClientProjectIsNull_ShouldThrowProjectNotFoundException()
+        public void Initialize_ClientProjectIsNull_ShouldThrowProjectNotFoundException()
         {
             //arrange
             Mock<Project> currentProjectMock = new Mock<Project>();
@@ -119,7 +119,7 @@
         }
 
         [Test]
-        public void AddFileToDirectoryProjectItem_UnitTest_ArgumentsOK_ShouldCallProjectItemsAddFromFileMethod()
+        public void AddFileToDirectoryProjectItem_ShouldCallProjectItemsAddFromFileMethod()
         {
             //arrange
             Mock<ProjectItem> projectItemMock = new Mock<ProjectItem>();
@@ -141,7 +141,7 @@
         }
 
         [Test]
-        public void AddFileToDirectoryProjectItem_UnitTest_ProjectItemIsNull_ShouldThrowArgumentNullException()
+        public void AddFileToDirectoryProjectItem_ProjectItemIsNull_ShouldThrowArgumentNullException()
         {
             //arrange
             string filePath = "testPath";
@@ -154,7 +154,7 @@
         }
 
         [Test]
-        public void AddFileToDirectoryProjectItem_UnitTest_FilePathIsNull_ShouldThrowArgumentException()
+        public void AddFileToDirectoryProjectItem_FilePathIsNull_ShouldThrowArgumentException()
         {
             //arrange
             Mock<ProjectItem> projectItemMock = new Mock<ProjectItem>();
@@ -170,7 +170,7 @@
         }
 
         [Test]
-        public void AddFileToDirectoryProjectItem_UnitTest_FilePathIsEmpty_ShouldThrowArgumentException()
+        public void AddFileToDirectoryProjectItem_FilePathIsEmpty_ShouldThrowArgumentException()
         {
             //arrange
             Mock<ProjectItem> projectItemMock = new Mock<ProjectItem>();
@@ -186,7 +186,7 @@
         }
 
         [Test]
-        public void AddFileToDirectoryProjectItem_UnitTest_ProjectItemKindIsNotValid_ShouldThrowInvalidOperationException()
+        public void AddFileToDirectoryProjectItem_ProjectItemKindIsNotValid_ShouldThrowInvalidOperationException()
         {
             //arrange
             Mock<ProjectItem> projectItemMock = new Mock<ProjectItem>();
@@ -203,7 +203,7 @@
         }
 
         [Test]
-        public void AddFileToDirectoryProjectItem_UnitTest_FileNotExists_ShouldThrowFileNotFoundException()
+        public void AddFileToDirectoryProjectItem_FileNotExists_ShouldThrowFileNotFoundException()
         {
             //arrange
             Mock<ProjectItem> projectItemMock = new Mock<ProjectItem>();
@@ -220,7 +220,7 @@
         }
 
         [Test]
-        public void AddNewDirectoryToProject_UnitTest_ArgumentOK_TryDeleteDirectoryAndProjectItemsAddFolderMethodShouldCalled()
+        public void AddNewDirectoryToProject_TryDeleteDirectoryAndProjectItemsAddFolderMethodShouldCalled()
         {
             //arrange
             Mock<Project> projectMock = new Mock<Project>();
@@ -243,7 +243,7 @@
         }
 
         [Test]
-        public void AddNewDirectoryToProject_UnitTest_ProjectIsNull_ShouldThrowInvalidOperationException()
+        public void AddNewDirectoryToProject_ProjectIsNull_ShouldThrowInvalidOperationException()
         {
             //arrange
             string newDirectoryName = "testDirectory";
@@ -256,7 +256,7 @@
         }
 
         [Test]
-        public void AddNewDirectoryToProject_UnitTest_NewDirectoryNameIsNull_ShouldThrowArgumentException()
+        public void AddNewDirectoryToProject_NewDirectoryNameIsNull_ShouldThrowArgumentException()
         {
             //arrange
             Mock<Project> projectMock = new Mock<Project>();
@@ -272,7 +272,7 @@
         }
 
         [Test]
-        public void AddNewDirectoryToProject_UnitTest_NewDirectoryNameIsEmpty_ShouldThrowArgumentException()
+        public void AddNewDirectoryToProject_NewDirectoryNameIsEmpty_ShouldThrowArgumentException()
         {
             //arrange
             Mock<Project> projectMock = new Mock<Project>();
@@ -288,7 +288,7 @@
         }
 
         [Test]
-        public void GetProjectItemFullPath_UnitTest_ProjectItemOK_ShouldCallProjectItemsAppropriateProperty()
+        public void GetProjectItemFullPath_ShouldCallProjectItemsAppropriateProperty()
         {
             //arrange
             Mock<ProjectItem> projectItemMock = new Mock<ProjectItem>();
@@ -313,7 +313,7 @@
         }
 
         [Test]
-        public void GetProjectItemFullPath_UnitTest_ProjectItemIsNull_ShouldThrowArgumentNullException()
+        public void GetProjectItemFullPath_ProjectItemIsNull_ShouldThrowArgumentNullException()
         {
             //arrange
 
@@ -325,7 +325,7 @@
         }
 
         [Test]
-        public void Constructor_UnitTest_ArgumentsOK_FieldsShouldSetCorrectly()
+        public void Constructor_FieldsShouldSetCorrectly()
         {
             //arrange
             Mock<IServiceProvider> serviceProviderMock = new Mock<IServiceProvider>();
@@ -354,7 +354,7 @@
         }
 
         [Test]
-        public void Constructor_UnitTest_ServiceProviderIsNull_ShouldThrowArgumentNullException()
+        public void Constructor_ServiceProviderIsNull_ShouldThrowArgumentNullException()
         {
             //arrange
             string projectName = "testProject";
@@ -369,7 +369,7 @@
         }
 
         [Test]
-        public void Constructor_UnitTest_ProjectNameIsNull_ShouldThrowArgumentException()
+        public void Constructor_ProjectNameIsNull_ShouldThrowArgumentException()
         {
             //arrange
             Mock<IServiceProvider> serviceProviderMock = new Mock<IServiceProvider>();
@@ -385,7 +385,7 @@
         }
 
         [Test]
-        public void Constructor_UnitTest_ProjectNameIsEmpty_ShouldThrowArgumentException()
+        public void Constructor_ProjectNameIsEmpty_ShouldThrowArgumentException()
         {
             //arrange
             Mock<IServiceProvider> serviceProviderMock = new Mock<IServiceProvider>();
@@ -401,7 +401,7 @@
         }
 
         [Test]
-        public void Constructor_UnitTest_RosAttributeProjectNameIsNull_ShouldThrowArgumentException()
+        public void Constructor_RosAttributeProjectNameIsNull_ShouldThrowArgumentException()
         {
             //arrange
             Mock<IServiceProvider> serviceProviderMock = new Mock<IServiceProvider>();
@@ -417,7 +417,7 @@
         }
 
         [Test]
-        public void Constructor_UnitTest_RosAttributeProjectNameIsEmpty_ShouldThrowArgumentException()
+        public void Constructor_RosAttributeProjectNameIsEmpty_ShouldThrowArgumentException()
         {
             //arrange
             Mock<IServiceProvider> serviceProviderMock = new Mock<IServiceProvider>();
@@ -433,7 +433,7 @@
         }
 
         [Test]
-        public void Constructor_UnitTest_ProjectTemplateIsNull_ShouldThrowArgumentException()
+        public void Constructor_ProjectTemplateIsNull_ShouldThrowArgumentException()
         {
             //arrange
             Mock<IServiceProvider> serviceProviderMock = new Mock<IServiceProvider>();
@@ -449,7 +449,7 @@
         }
 
         [Test]
-        public void Constructor_UnitTest_ProjectTemplateIsEmpty_ShouldThrowArgumentException()
+        public void Constructor_ProjectTemplateIsEmpty_ShouldThrowArgumentException()
         {
             //arrange
             Mock<IServiceProvider> serviceProviderMock = new Mock<IServiceProvider>();

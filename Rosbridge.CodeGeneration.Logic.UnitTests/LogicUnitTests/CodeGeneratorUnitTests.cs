@@ -56,7 +56,7 @@
         }
 
         [Test]
-        public void GenerateRosMessages_UnitTest_ArgumentsOK_ShouldCallGenerateStandardNamespaceMessagesAndGenerateMessagesByNamespaceMethods()
+        public void GenerateRosMessages_ShouldCallGenerateStandardNamespaceMessagesAndGenerateMessagesByNamespaceMethods()
         {
             //arrange
             string testType = "testType";
@@ -84,7 +84,7 @@
         }
 
         [Test]
-        public void GenerateRosMessages_UnitTest_MessageSetIsNull_ShouldThrowArgumentNullException()
+        public void GenerateRosMessages_MessageSetIsNull_ShouldThrowArgumentNullException()
         {
             //arrange
             string standardNamespace = "testStandardNamespace";
@@ -98,7 +98,7 @@
         }
 
         [Test]
-        public void GenerateRosMessages_UnitTest_StandardNamespaceIsNull_ShouldThrowArgumentException()
+        public void GenerateRosMessages_StandardNamespaceIsNull_ShouldThrowArgumentException()
         {
             //arrange
             string standardNamespace = null;
@@ -112,7 +112,7 @@
         }
 
         [Test]
-        public void GenerateRosMessages_UnitTest_StandardNamespaceIsEmpty_ShouldThrowArgumentException()
+        public void GenerateRosMessages_StandardNamespaceIsEmpty_ShouldThrowArgumentException()
         {
             //arrange
             string standardNamespace = string.Empty;
@@ -126,7 +126,7 @@
         }
 
         [Test]
-        public void GenerateStandardNamespaceMessages_UnitTest_ArgumentsOK_ShouldCallGenerateMessagesByNamespaceAndGenerateCustomTimePrimitiveTypeMethod()
+        public void GenerateStandardNamespaceMessages_ShouldCallGenerateMessagesByNamespaceAndGenerateCustomTimePrimitiveTypeMethod()
         {
             //arrange
             string testType = "testType";
@@ -154,7 +154,7 @@
         }
 
         [Test]
-        public void GenerateStandardNamespaceMessages_UnitTest_NoStandardNamespaceGroup_ShouldThrowNoStandardNamespaceException()
+        public void GenerateStandardNamespaceMessages_NoStandardNamespaceGroup_ShouldThrowNoStandardNamespaceException()
         {
             //arrange
             string testType = "testType";
@@ -174,7 +174,7 @@
         }
 
         [Test]
-        public void GenerateCustomTimePrimitiveType_UnitTest_ArgumentsOK_ShouldCallTransformTemplateToFileWithAppropriateArguments()
+        public void GenerateCustomTimePrimitiveType_ShouldCallTransformTemplateToFileWithAppropriateArguments()
         {
             //arrange
             Mock<ProjectItem> standardNamespaceDirectoryProjectItemMock = new Mock<ProjectItem>();
@@ -207,7 +207,7 @@
         }
 
         [Test]
-        public void GenerateMessagesByNamespace_UnitTest_ArgumentsOK_ShouldCallAddNewDirectoryToProjectAndGenerateMessagesMethods()
+        public void GenerateMessagesByNamespace_ShouldCallAddNewDirectoryToProjectAndGenerateMessagesMethods()
         {
             //arrange
             string testType = "testType";
@@ -235,7 +235,7 @@
         }
 
         [Test]
-        public void GenerateMessages_UnitTest_ArgumentsOK_ShouldCallTransformTemplateToFileMethod()
+        public void GenerateMessages_ShouldCallTransformTemplateToFileMethod()
         {
             //arrange
             string messageType = "testType";
@@ -279,7 +279,7 @@
         }
 
         [Test]
-        public void TransformTemplateToFile_UnitTest_ArgumentsOK_ShouldCallMethodsWithAppropriateArguments()
+        public void TransformTemplateToFile_ShouldCallMethodsWithAppropriateArguments()
         {
             //arrange
             Mock<ITextTemplatingSession> textTemplatingSessionMock = new Mock<ITextTemplatingSession>();
@@ -312,7 +312,7 @@
         }
 
         [Test]
-        public void WriteToFile_UnitTest_ArgumentsOk_ShouldReturnCorrectPathShouldCallWriteAllTextToFileMethod()
+        public void WriteToFile_ShouldReturnCorrectPathShouldCallWriteAllTextToFileMethod()
         {
             //arrange
             string directoryPath = "testDirectoryPath";
