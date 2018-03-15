@@ -37,6 +37,11 @@
     string rosMessageTypeAttributeNamespace = appSettings["RosMessageTypeAttributeNamespace"].Value;
     string rosMessageTypeAttributeName = appSettings["RosMessageTypeAttributeName"].Value;
 
+    if(!Path.IsPathRooted(rosMessagesDirectoryPath)){
+        string templateProjectPath = this.Host.ResolveAssemblyReference("$(ProjectDir)");
+        rosMessagesDirectoryPath = Path.Combine(templateProjectPath, rosMessagesDirectoryPath);
+    }
+
     IYAMLParser yamlParser = new YAMLParser(RosConstants.MessageTypes.PrimitiveTypeDictionary);
     ROSFileLoader fileLoader = new ROSFileLoader(yamlParser);
 

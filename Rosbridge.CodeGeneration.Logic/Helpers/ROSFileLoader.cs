@@ -65,7 +65,7 @@
 
         protected internal virtual bool IsDirectoryExists(string directoryPath)
         {
-            return Directory.Exists(directoryPath);
+            return Directory.Exists(Path.GetDirectoryName(directoryPath));
         }
 
         protected internal virtual ISet<FileInfo> LoadFiles(string directoryPath, string fileExtension, SearchOption searchOption)
