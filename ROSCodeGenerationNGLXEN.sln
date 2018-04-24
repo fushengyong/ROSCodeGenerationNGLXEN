@@ -31,6 +31,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.Testing.Utilities", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rosbridge.Client.V2_0.IntegrationTests", "Rosbridge.Client.V2_0.IntegrationTests\Rosbridge.Client.V2_0.IntegrationTests.csproj", "{3E8DB7B0-3615-4C9D-869F-4459C28212D1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RosMessages", "RosMessages\RosMessages.csproj", "{9239A10A-0EB6-4861-82CD-65027B0CF475}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -70,6 +72,10 @@ Global
 		{3E8DB7B0-3615-4C9D-869F-4459C28212D1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3E8DB7B0-3615-4C9D-869F-4459C28212D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3E8DB7B0-3615-4C9D-869F-4459C28212D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9239A10A-0EB6-4861-82CD-65027B0CF475}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9239A10A-0EB6-4861-82CD-65027B0CF475}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9239A10A-0EB6-4861-82CD-65027B0CF475}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9239A10A-0EB6-4861-82CD-65027B0CF475}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -94,24 +94,9 @@ namespace <#= AddPrefixToNamespace(Namespace) #>
             return fieldsAreEqual;
         }
 
-        public static bool operator ==(<#= Type #> obj1, <#= Type #> obj2)
+        public override int GetHashCode()
         {
-            if (object.ReferenceEquals(null, obj1))
-            {
-                return object.ReferenceEquals(null, obj2);
-            }
-
-            return obj1.Equals(obj2);
-        }
-
-        public static bool operator !=(<#= Type #> obj1, <#= Type #> obj2)
-        {
-            if (object.ReferenceEquals(null, obj1))
-            {
-                return !object.ReferenceEquals(null, obj2);
-            }
-
-            return !obj1.Equals(obj2);
+            return 0;
         }
     }
 }
